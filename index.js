@@ -208,6 +208,14 @@ client.on('message', async message => {
             break;
         }
 
+        case 'resetrequirements':
+        case 'resetreqs': {
+            if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
+            reqs = 'No reqs for now!';
+
+            break;
+        }
+
         //Burgis Bucks
 
         case 'mybucks': {
