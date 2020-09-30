@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { prefix } = require('./config.json');
+const prefix = process.env.prefix;
 const client = new Discord.Client();
 
 const help1 = `PREFIX - ${prefix} \n\nhelp - shows this help page (${prefix}help [help page]) \n\ninfo - shows server info (${prefix}info) \n\nmyinfo - shows a users info (${prefix}myinfo [@user]) \n\nping - Pong! (${prefix}ping) \n\npig - Oink! (${prefix}pig) \n\ndelete - deletes a certain number of messages. If true, it shows the delete message, If false, it does not show the message (DEFAULT: true). PERMISSIONS: MANAGE_MESSAGES (${prefix}delete <number> [bool]) \n\nkick - kicks a person. PERMISSIONS: KICK_MEMBERS (${prefix}kick <@user>) \n\nban - bans a person. PERMISSOINS: BAN_MEMBERS (${prefix}ban <@user>)`;
