@@ -197,12 +197,12 @@ client.on('message', async message => {
             let authorName = message.author.id;
             message.channel.send('What should the requirements be?');
             message.channel.awaitMessages(m => m.author.id == message.author.id, {
-                max: 1, time: 3000
+                max: 1, time: 10000
             }).then(collected => {
                 reqs = collected.first().content;
                 message.channel.send(`Successfully set the guild requirements to ${reqs}!`);
             }).catch(err => {
-                message.reply('No reply in 3 seconds, resetting requirements');
+                message.reply('No reply in 10 seconds, resetting requirements');
             });
 
             break;
