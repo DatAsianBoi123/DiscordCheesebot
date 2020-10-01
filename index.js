@@ -180,8 +180,8 @@ client.on('message', async message => {
 
         case 'skylea': {
             if (!args[0]) return message.reply(`Incorrect command format! \n(b.skylea <string> [string])`);
-            if (!args[1]) message.channel.send(`https://www.sky.lea.moe/stats/${args[0]}`);
-            else message.channel.send(`https://www.sky.lea.moe/${args[0]}/${args[1]}`);
+            if (!args[1]) message.channel.send(`https://sky.lea.moe/stats/${args[0]}`);
+            else message.channel.send(`https://sky.lea.moe/${args[0]}/${args[1]}`);
 
             break;
         }
