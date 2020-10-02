@@ -188,7 +188,7 @@ client.on('message', async message => {
         }
 
         case 'gatorpog': {
-            message.channel.react('<:GatorPOG:761662766393589770>');
+            message.react(':GatorPOG:761662766393589770');
             message.channel.send('<:GatorPOG:761662766393589770>');
 
             break;
