@@ -194,6 +194,13 @@ client.on('message', async message => {
             break;
         }
 
+        case 'trianglepog': {
+            message.react(':TrianglePOG:761668890572226611');
+            message.channel.send('<:TrianglePOG:761668890572226611>');
+
+            break;
+        }
+
         //Requirements
 
         case 'requirements':
