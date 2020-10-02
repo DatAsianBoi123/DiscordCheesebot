@@ -187,16 +187,36 @@ client.on('message', async message => {
             break;
         }
 
-        case 'gatorpog': {
-            message.react(':GatorPOG:761662766393589770');
-            message.channel.send('<:GatorPOG:761662766393589770>');
+        case 'pog': {
+            if (!args[0]) return message.reply(`Incorrect command format! \n(b.pog <pog name>)`);
 
-            break;
-        }
+            let pog = args[0].toLocaleLowerCase;
+            switch (pog) {
+                case 'gator': {
+                    message.react(':GatorPOG:761662766393589770');
+                    message.channel.send('<:GatorPOG:761662766393589770>');
 
-        case 'trianglepog': {
-            message.react(':TrianglePOG:761668890572226611');
-            message.channel.send('<:TrianglePOG:761668890572226611>');
+                    break;
+                }
+
+                case 'triangle': {
+                    message.react(':TrianglePOG:761668890572226611');
+                    message.channel.send('<:TrianglePOG:761668890572226611>');
+        
+                    break;
+                }
+
+                case 'shaggy': {
+                    message.react(':ShaggyPOG:761672749667975208');
+                    message.channel.send('<:ShaggyPOG:761672749667975208>');
+
+                    break;
+                }
+
+                default: {
+                    message.reply(`Pog ${args[0]} doesn't exist!`);
+                }
+            }
 
             break;
         }
