@@ -187,6 +187,13 @@ client.on('message', async message => {
             break;
         }
 
+        case 'GatorPog': {
+            message.react('<:GatorPOG:761662766393589770>');
+            message.channel.send('<:GatorPOG:761662766393589770>');
+
+            break;
+        }
+
         //Requirements
 
         case 'requirements':
