@@ -178,6 +178,7 @@ client.on('message', async message => {
             break;
         }
 
+        case 'sl':
         case 'skylea': {
             if (!args[0]) return message.reply(`Incorrect command format! \n(b.skylea <string> [string])`);
             if (!args[1]) message.channel.send(`https://sky.lea.moe/stats/${args[0]}`);
