@@ -190,8 +190,7 @@ client.on('message', async message => {
         case 'pog': {
             if (!args[0]) return message.reply(`Incorrect command format! \n(b.pog <pog name>)`);
 
-            let pog = args[0].toLocaleLowerCase;
-            switch (pog) {
+            switch (args[0]) {
                 case 'gator': {
                     message.react(':GatorPOG:761662766393589770');
                     message.channel.send('<:GatorPOG:761662766393589770>');
