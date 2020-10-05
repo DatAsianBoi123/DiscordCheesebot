@@ -225,10 +225,21 @@ client.on('message', async message => {
                     break;
                 }
 
+                case 'imposter': {
+                    let impostermsg = await message.channel.send('<:ImpostorPOG:762163842473000981>');
+                    await shaggymsg.react(':ImpostorPOG:762163842473000981');
+
+                    message.delete().catch(err => {
+                        return;
+                    })
+                    
+                    break;
+                }
+
                 case 'list': {
                     let embedPog = new Discord.MessageEmbed()
                         .setTitle('List of pogs:')
-                        .setDescription('gator \ntriangle \nshaggy')
+                        .setDescription('gator \ntriangle \nshaggy \nimposter')
                         .setColor('#F0630F');
 
                     message.channel.send(embedPog);
