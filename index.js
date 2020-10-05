@@ -190,7 +190,7 @@ client.on('message', async message => {
 
         case 'pog': {
             if (!args[0]) return message.reply(`Incorrect command format! \n(b.pog <pog name>)`);
-            message.delete();
+            message.delete(1000);
 
             switch (args[0]) {
                 case 'gator': {
