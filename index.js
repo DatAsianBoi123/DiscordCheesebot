@@ -189,7 +189,7 @@ client.on('message', async message => {
 
         case 'pog': {
             if (!args[0]) return message.reply(`Incorrect command format! \n(b.pog <pog name>)`);
-            message.delete;
+            message.channel.delete;
 
             switch (args[0]) {
                 case 'gator': {
@@ -200,15 +200,15 @@ client.on('message', async message => {
                 }
 
                 case 'triangle': {
-                    message.react(':TrianglePOG:761668890572226611');
-                    message.channel.send('<:TrianglePOG:761668890572226611>');
+                    let trianglemsg = await message.channel.send('<:TrianglePOG:761668890572226611>');
+                    await trianglemsg.react(':TrianglePOG:761668890572226611');
         
                     break;
                 }
 
                 case 'shaggy': {
-                    message.react(':ShaggyPOG:761672749667975208');
-                    message.channel.send('<:ShaggyPOG:761672749667975208>');
+                    let shaggymsg = await message.channel.send('<:ShaggyPOG:761672749667975208>');
+                    await shaggymsg.react(':ShaggyPOG:761672749667975208');
 
                     break;
                 }
