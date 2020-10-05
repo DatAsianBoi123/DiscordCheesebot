@@ -23,7 +23,7 @@ let embedHelp2 = new Discord.MessageEmbed()
 client.once('ready', () => {
     console.log('Ready');
     client.user.setActivity('b.help');
-    client.users.cache.get('721020694493790330').message('Ready');
+    client.users.cache.get('721020694493790330').send('Ready');
 });
 
 client.on('message', async message => {
@@ -190,7 +190,7 @@ client.on('message', async message => {
 
         case 'pog': {
             if (!args[0]) return message.reply(`Incorrect command format! \n(b.pog <pog name>)`);
-            message.channel.delete();
+            message.delete();
 
             switch (args[0]) {
                 case 'gator': {
