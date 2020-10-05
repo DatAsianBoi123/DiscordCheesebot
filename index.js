@@ -189,11 +189,12 @@ client.on('message', async message => {
 
         case 'pog': {
             if (!args[0]) return message.reply(`Incorrect command format! \n(b.pog <pog name>)`);
+            message.delete;
 
             switch (args[0]) {
                 case 'gator': {
-                    message.react(':GatorPOG:761662766393589770');
-                    message.channel.send('<:GatorPOG:761662766393589770>');
+                    let gatormsg = await message.channel.send('<:GatorPOG:761662766393589770>');
+                    await gatormsg.react(':GatorPOG:761662766393589770');
 
                     break;
                 }
@@ -238,7 +239,6 @@ client.on('message', async message => {
         case 'changerequirements':
         case 'changereqs': {
             if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-            let authorName = message.author.id;
             message.channel.send('What should the requirements be?');
             message.channel.awaitMessages(m => m.author.id == message.author.id, {
                 max: 1, time: 10000
