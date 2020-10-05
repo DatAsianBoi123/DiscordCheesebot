@@ -225,6 +225,17 @@ client.on('message', async message => {
                     break;
                 }
 
+                case 'list': {
+                    let embedPog = new Discord.MessageEmbed()
+                        .setTitle('List of pogs:')
+                        .setDescription('gator \ntriangle \nshaggy')
+                        .setColor('#F0630F');
+
+                    message.channel.send(embedPog);
+                    
+                    break;
+                }
+
                 default: {
                     message.reply(`Pog ${args[0]} doesn't exist!`);
                 }
