@@ -227,7 +227,7 @@ client.on('message', async message => {
 
                 case 'imposter': {
                     let impostermsg = await message.channel.send('<:ImpostorPOG:762163842473000981>');
-                    await shaggymsg.react(':ImpostorPOG:762163842473000981');
+                    await impostermsg.react(':ImpostorPOG:762163842473000981');
 
                     message.delete().catch(err => {
                         return;
