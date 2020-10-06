@@ -141,6 +141,7 @@ client.on('message', async message => {
             break;
         }
 
+        case 'd':
         case 'delete': {
             let deleteNumber = Math.floor(parseFloat(args[0]));
 
