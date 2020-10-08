@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const prefix = process.env.prefix;
 const client = new Discord.Client();
 
-const help1 = `PREFIX - ${prefix} \n\nhelp - shows this help page (${prefix}help [help page]) \n\ninfo - shows server info (${prefix}info) \n\nmyinfo - shows a users info (${prefix}myinfo [@user]) \n\nping - Pong! (${prefix}ping) \n\npig - Oink! (${prefix}pig) \n\ndelete - deletes a certain number of messages. If true, it shows the delete message, If false, it does not show the message (DEFAULT: true). PERMISSIONS: MANAGE_MESSAGES (${prefix}delete <number> [bool]) \n\nkick - kicks a person. PERMISSIONS: KICK_MEMBERS (${prefix}kick <@user>) \n\nban - bans a person. PERMISSOINS: BAN_MEMBERS (${prefix}ban <@user>)`;
+const help1 = `PREFIX - ${prefix} \n\nhelp - shows this help page (${prefix}help [help page number]) \n\ninfo - shows server info (${prefix}info) \n\nmyinfo - shows a users info (${prefix}myinfo [@user]) \n\nping - Pong! (${prefix}ping) \n\npig - Oink! (${prefix}pig) \n\nskylea / sl - shows a player's https://sky.lea.moe (${prefix}skylea / sl <player name> [profile name]) \n\npog - displays a pog emote (${prefix}pog <pog name>)`;
 const help2 = `mybucks - Shows the amount of bucks this user has (${prefix}mybucks [@user]) \n\nbucklist - Shows everyone's burgis bucks on this server (${prefix}bucklist)`;
 var reqs = 'No reqs for now!';
 var PollID;
@@ -146,7 +146,7 @@ client.on('message', async message => {
         case 'delete': {
             let deleteNumber = Math.floor(parseFloat(args[0]));
 
-            if (isNaN(parseInt(args[0]))) return message.reply(`Incorrect command format! \n(${prefix}delete <integer>)`);
+            if (isNaN(parseInt(args[0]))) return message.reply(`Incorrect command format! \n(${prefix}delete <amount>)`);
             if (parseInt(deleteNumber) > 99) return message.reply("You cannot delete more than 99 messages at a time!");
             if (!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply("You do not have permission to use this command!");
 
@@ -164,7 +164,7 @@ client.on('message', async message => {
 
         case 'dm': {
             if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-            if (!args[1]) return;
+            if (!args[1]) return message.reply(`Incorrect command format! \n(${prefix}dm <@user> <message>)`);
 
             let sendSuccess = true;
             let dmMessage = args.slice(1).join(' ');
@@ -183,7 +183,7 @@ client.on('message', async message => {
 
         case 'sl':
         case 'skylea': {
-            if (!args[0]) return message.reply(`Incorrect command format! \n(b.skylea <string> [string])`);
+            if (!args[0]) return message.reply(`Incorrect command format! \n(b.skylea <player name> [profile name])`);
             if (!args[1]) message.channel.send(`https://sky.lea.moe/stats/${args[0]}`);
             else message.channel.send(`https://sky.lea.moe/stats/${args[0]}/${args[1]}`);
 
@@ -317,7 +317,7 @@ client.on('message', async message => {
             let addNumber = parseFloat(args[0]);
             if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply("You do not have permission to use this command!");
 
-            if (isNaN(parseInt(args[0]))) return message.reply(`Incorrect command format! \n${prefix}addbucks <integer> [@user]`);
+            if (isNaN(parseInt(args[0]))) return message.reply(`Incorrect command format! \n${prefix}addbucks <amount> [@user]`);
             if (Math.sign(args[0]) == 1) addNumber = Math.floor(addNumber);
             else if (Math.sign(args[0]) == -1) addNumber = Math.ceil(addNumber);
             else return message.reply('Please use a number greater or equal to 1.');
@@ -386,7 +386,7 @@ client.on('message', async message => {
 
         case 'addshop': {
             if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-            if (!args[2] || isNaN(parseInt(args[2])) || !message.mentions.channels.first()) return message.reply(`Incorrect command format! \n(${prefix}addshop <string> <#channel> <int> <string>`);
+            if (!args[2] || isNaN(parseInt(args[2])) || !message.mentions.channels.first()) return message.reply(`Incorrect command format! \n(${prefix}addshop <title> <#channel> <cost> <description>`);
 
             let shopDesc = args.slice(3).join(' ');
             let chan = message.mentions.channels.first();
@@ -405,7 +405,7 @@ client.on('message', async message => {
 
         case 'deleteshop': {
             if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-            if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}deleteshop <string>)`);
+            if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}deleteshop <shop title>)`);
 
             for (let i = 0; i <= ShopList.length; i ++) {
                 if (args[0] == ShopList[i]) {
@@ -437,7 +437,7 @@ client.on('message', async message => {
         }
 
         case 'buy': {
-            if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}buy <string>)`)
+            if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}buy <shop title>)`)
 
             for (let i = 0; i <= ShopList.length; i ++) {
                 if (ShopList[i] == args[0]) return message.channel.send(`You just bought ${ShopList[i]}!`);
@@ -449,6 +449,7 @@ client.on('message', async message => {
 
         case 'deleteshop': {
             if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
+            if (!args[0]) return message.reply(`Incorrrect command format! \n(${prefix}deleteshop <shop title>)`)
 
             for (let i = 0; i <= ShopList.length; i ++) {
                 if (ShopList[i] == args[0]) {
@@ -469,8 +470,8 @@ client.on('message', async message => {
             let channelName = message.mentions.channels.first();
 
             if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-            if (!args[1]) return message.reply('Incorrect command format! \n(b.addpoll <#channel> <string>');
-            if (channelName == undefined) return message.reply('Incorrect command format! \n(b.addpoll <#channel> <string>')
+            if (!args[1]) return message.reply('Incorrect command format! \n(b.addpoll <#channel> <poll>');
+            if (channelName == undefined) return message.reply('Incorrect command format! \n(b.addpoll <#channel> <poll>')
 
             let embedPoll = new Discord.MessageEmbed()
                 .setTitle('Poll:')
@@ -491,7 +492,7 @@ client.on('message', async message => {
 
         case 'changepollid': {
             if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-            if (isNaN(parseInt(args[0]))) return message.reply('Incorrect command format! \n(b.changepollid <int>)');
+            if (isNaN(parseInt(args[0]))) return message.reply('Incorrect command format! \n(b.changepollid <role ID>)');
             PollID = args[0];
             message.channel.send('Successfully set the poll role ID!');
 
