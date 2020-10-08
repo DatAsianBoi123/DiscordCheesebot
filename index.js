@@ -8,6 +8,7 @@ var reqs = 'No reqs for now!';
 var PollID;
 var BurgisBucks = {};
 var ShopList = [];
+var CostList = [];
 
 let embedHelp1 = new Discord.MessageEmbed()
     .setTitle('General Commands')
@@ -396,6 +397,7 @@ client.on('message', async message => {
                 .setColor('BLUE');
             
             ShopList.push(args[0]);
+            CostList.push(args[2]);
             chan.send(embedShop);
 
             break;
@@ -417,7 +419,12 @@ client.on('message', async message => {
         }
 
         case 'shops': {
-            let shops = ShopList.join('\n');
+            let shops = '';
+
+            for (let i = 0; i < ShopList.length; i ++) {
+                shops += `Name: ${ShopList[i]}; Cost: ${CostList[i]} \n`;
+            }
+
             let embedShop = new Discord.MessageEmbed()
                 .setTitle('All Shops:')
                 .setDescription(shops)
