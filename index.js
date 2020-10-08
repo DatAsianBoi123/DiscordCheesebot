@@ -422,7 +422,7 @@ client.on('message', async message => {
             let shops = '';
 
             for (let i = 0; i < ShopList.length; i ++) {
-                shops += `Name: ${ShopList[i]}; Cost: ${CostList[i]} \n`;
+                shops += `Name: ${ShopList[i]}, Cost: ${CostList[i]} \n`;
             }
 
             let embedShop = new Discord.MessageEmbed()
