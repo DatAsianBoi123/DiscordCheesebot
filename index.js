@@ -447,6 +447,22 @@ client.on('message', async message => {
             break;
         }
 
+        case 'deleteshop': {
+            if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
+
+            for (let i = 0; i <= ShopList.length; i ++) {
+                if (ShopList[i] == args[0]) {
+                    ShopList.splice(i, 1);
+                    CostList.splice(i, 1);
+                    message.channel.send(`You just deleted shop ${ShopList[i]}!`);
+                    return;
+                }
+                else return message.reply(`It seems like shop ${args[0]} doesn't exist. Double check if you typed it correctly(it is case sensitive)!`)
+            }
+
+            break;
+        }
+
         //Poll Commands
 
         case 'addpoll': {
