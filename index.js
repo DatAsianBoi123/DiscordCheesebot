@@ -4,7 +4,7 @@ const client = new Discord.Client();
 
 const help1 = `PREFIX - ${prefix} \n\nhelp - shows this help page (${prefix}help [help page number]) \n\ninfo - shows server info (${prefix}info) \n\nmyinfo - shows a users info (${prefix}myinfo [@user]) \n\nping - Pong! (${prefix}ping) \n\npig - Oink! (${prefix}pig) \n\nskylea / sl - shows a player's https://sky.lea.moe (${prefix}skylea / sl <player name> [profile name]) \n\npog - displays a pog emote (${prefix}pog <pog name>)`;
 const help2 = `mybucks - Shows the amount of bucks this user has (${prefix}mybucks [@user]) \n\nbucklist - Shows everyone's burgis bucks on this server (${prefix}bucklist)`;
-var reqs = 'No reqs for now!';
+var reqs = '50k slayer xp\n20mil net worth\nSkill avg of at least 18.5\nActive at least once a week unless u have a good excuse';
 var PollID;
 var BurgisBucks = {};
 var ShopList = [];
