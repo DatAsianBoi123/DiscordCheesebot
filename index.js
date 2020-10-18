@@ -82,7 +82,6 @@ client.on('message', async message => {
                 member.roles.add(role).catch(err => {
                     return message.channel.send('An error occured');
                 });
-                member.roles.remove('759211588904812556');
                 message.channel.send(`${member.displayName} has been muted.`);
             } else message.channel.send('Cannot mute this member!');
 
@@ -97,8 +96,9 @@ client.on('message', async message => {
             if (member === undefined) return message.reply(`Incorrect command format! \n(${prefix}mute <@user>)`)
             
             if (!member.hasPermission('ADMINISTRATOR') || message.member.roles.cache.some(role => role.name === 'Head Asian') && !(member.roles.cache.some(role => role.name === 'Guild Master'))) {
-                member.roles.remove(role);
-                member.roles.add('759211588904812556');
+                member.roles.remove(role).catch(err => {
+                    return message.channel.send('An error occured');
+                });
                 message.channel.send(`${member.displayName} has been unmuted.`);
             } else message.channel.send('Cannot mute this member!');
 
