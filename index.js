@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const prefix = process.env.prefix;
 const client = new Discord.Client();
 
-const help1 = `PREFIX - ${prefix} \n\nhelp - shows this help page (${prefix}help [help page number]) \n\ninfo - shows server info (${prefix}info) \n\nmyinfo - shows a users info (${prefix}myinfo [@user]) \n\nping - Pong! (${prefix}ping) \n\npig - Oink! (${prefix}pig) \n\nskylea / sl - shows a player's https://sky.lea.moe (${prefix}skylea / sl <player name> [profile name]) \n\npog - displays a pog emote (${prefix}pog <pog name>)`;
+const help1 = `PREFIX - ${prefix} \n\nhelp - shows this help page (${prefix}help [help page number]) \n\ninfo - shows server info (${prefix}info) \n\nmyinfo - shows a users info (${prefix}myinfo [@user]) \n\nping - Pong! (${prefix}ping) \n\npig - Oink! (${prefix}pig) \n\nskycrypt / sc - shows a player's https://sky.shiiyu.moe (${prefix}skycrypt / sc <player name> [profile name]) \n\npog - displays a pog emote (${prefix}pog <pog name>)`;
 const help2 = `mybucks - Shows the amount of bucks this user has (${prefix}mybucks [@user]) \n\nbucklist - Shows everyone's burgis bucks on this server (${prefix}bucklist)`;
 var reqs = '50k slayer xp\n20mil net worth\nSkill avg of at least 18.5\nActive at least once a week unless u have a good excuse';
 var PollID;
@@ -177,6 +177,12 @@ client.on('message', async message => {
             setTimeout(() => {
                 if (sendSuccess == true) message.channel.send(`Successfully DM'd ${args[0]} ${dmMessage}!`);
             }, 500);
+
+            break;
+        }
+
+        case 'source': {
+            message.channel.send('Here is my source code! \nhttps://github.com/DatAsianBoi123/DiscordCheesebot');
 
             break;
         }
