@@ -47,10 +47,14 @@ client.on('message', async message => {
       if (!message.member.hasPermission('ADMINISTRATOR')) return;
       if (!args[0]) return;
 
-      client.saves[message.author.username] = {
-        message: args[0]
+      //client.saves[message.author.username] = {
+      //  message: args[0]
+      //};
+      const newObject = {
+        message: 'Yes',
+        type: 'No'
       };
-      fs.writeFile('./saves.json', JSON.stringify(client.saves), err => {
+      fs.writeFile('./saves.json', JSON.stringify(newObject), err => {
         if (err) throw err;
         message.channel.send(`Message Written! \n${args[0]}`);
       });
