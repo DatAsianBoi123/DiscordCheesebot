@@ -55,7 +55,9 @@ client.on('message', async message => {
         type: 'No'
       };
       fs.writeFile('./saves.json', JSON.stringify(newObject), err => {
-        if (err) throw err;
+        if (err) {
+          console.log(err);
+        }
         message.channel.send(`Message Written! \n${args[0]}`);
       });
 
