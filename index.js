@@ -46,9 +46,10 @@ client.on('message', async message => {
     case 'test': {
       if (!message.member.hasPermission('ADMINISTRATOR')) return;
       if (!args[0]) return;
+      editedmessage = args[0];
 
       client.saves[message.author.username] = {
-        message: args[0]
+        message: editedmessage
       };
       fs.writeFile('./saves.json', JSON.stringify(client.saves, null, 4), err => {
         if (err) throw err;
