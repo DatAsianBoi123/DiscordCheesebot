@@ -53,7 +53,7 @@ client.on('message', async message => {
       };
       fs.writeFile('./saves.json', JSON.stringify(client.saves, null, 4), err => {
         if (err) throw err;
-        message.channel.send('Message Written!');
+        message.channel.send(`Message Written! \n${editedmessage}, ${args[0]}`);
       });
 
       break;
