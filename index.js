@@ -181,11 +181,11 @@ client.on('message', async message => {
             break;
         }
 
-        case 'sl':
-        case 'skylea': {
+        case 'sc':
+        case 'skycrypt': {
             if (!args[0]) return message.reply(`Incorrect command format! \n(b.skylea <player name> [profile name])`);
-            if (!args[1]) message.channel.send(`https://sky.lea.moe/stats/${args[0]}`);
-            else message.channel.send(`https://sky.lea.moe/stats/${args[0]}/${args[1]}`);
+            if (!args[1]) message.channel.send(`https://sky.shiiyu.moe/stats/${args[0]}`);
+            else message.channel.send(`https://sky.shiiyu.moe/stats/${args[0]}/${args[1]}`);
 
             break;
         }
