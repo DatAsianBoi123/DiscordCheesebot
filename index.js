@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const fs = require('fs');
 const prefix = process.env.prefix;
 const client = new Discord.Client();
 
@@ -42,27 +41,6 @@ client.on('message', async message => {
   if (message.content.indexOf(prefix) !== 0) return;
 
   switch (command) {
-    case 'test': {
-      if (!message.member.hasPermission('ADMINISTRATOR')) return;
-      if (!args[0]) return;
-
-      //client.saves[message.author.username] = {
-      //  message: args[0]
-      //};
-      const newObject = {
-        message: 'Yes',
-        type: 'No'
-      };
-      fs.writeFile('./saves.json', JSON.stringify(newObject), err => {
-        if (err) {
-          console.log(err);
-        }
-        message.channel.send(`Message Written! \n${args[0]}`);
-      });
-
-      break;
-    }
-
     case 'help': {
       if (args[0] === "2") return message.channel.send(embedHelp2);
       message.channel.send(embedHelp1);
