@@ -51,7 +51,7 @@ client.on('message', async message => {
             let member = message.mentions.members.first();
             if (!message.member.hasPermission("KICK_MEMBERS")) return message.reply("You do not have permission to use this command!");
             if (member === undefined) return message.reply(`Incorrect command format! \n(${prefix}kick <@user>)`);
-            
+
             if (!member.hasPermission('ADMINISTRATOR') || message.member.roles.cache.some(role => role.name === 'Head Asian') && !(member.roles.cache.some(role => role.name === 'Guild Master'))) member.kick().then((member) => {
                 message.channel.send(member.displayName + " has been kicked.");
             }); else message.channel.send('Cannot kick this member!');
@@ -63,7 +63,7 @@ client.on('message', async message => {
             let member = message.mentions.members.first();
             if (!message.member.hasPermission("BAN_MEMBERS")) return message.reply("You do not have permission to use this command!");
             if (member === undefined) return message.reply(`Incorrect command format! \n(${prefix}ban <@user>)`);
-            
+
             if (!member.hasPermission('ADMINISTRATOR') || message.member.roles.cache.some(role => role.name === 'Head Asian') && !(member.roles.cache.some(role => role.name === 'Guild Master'))) member.ban().then((member) => {
                 message.channel.send(member.displayName + " has been banned.");
             }); else message.channel.send('Cannnot ban this member!');
@@ -76,8 +76,8 @@ client.on('message', async message => {
             const role = message.guild.roles.cache.find(role => role.name === 'MUTED');
 
             if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-            if (member === undefined) return message.reply(`Incorrect command format! \n(${prefix}mute <@user>)`)
-            
+            if (member === undefined) return message.reply(`Incorrect command format! \n(${prefix}mute <@user>)`);
+
             if (!member.hasPermission('ADMINISTRATOR') || message.member.roles.cache.some(role => role.name === 'Head Asian') && !(member.roles.cache.some(role => role.name === 'Guild Master'))) {
                 member.roles.add(role).catch(err => {
                     return message.channel.send('An error occured');
@@ -93,8 +93,8 @@ client.on('message', async message => {
             const role = message.guild.roles.cache.find(role => role.name === 'MUTED');
 
             if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-            if (member === undefined) return message.reply(`Incorrect command format! \n(${prefix}mute <@user>)`)
-            
+            if (member === undefined) return message.reply(`Incorrect command format! \n(${prefix}mute <@user>)`);
+
             if (!member.hasPermission('ADMINISTRATOR') || message.member.roles.cache.some(role => role.name === 'Head Asian') && !(member.roles.cache.some(role => role.name === 'Guild Master'))) {
                 member.roles.remove(role).catch(err => {
                     return message.channel.send('An error occured');
@@ -156,7 +156,7 @@ client.on('message', async message => {
                     else message.channel.send(`Successfully deleted \`\`${parseInt(deleteNumber)}\`\` messages!`);
                 }
             }).catch(err => {
-                message.reply('An error occured (You can only delete messages that are under 14 days old)')
+                message.reply('An error occured (You can only delete messages that are under 14 days old)');
             });
 
             break;
@@ -214,7 +214,7 @@ client.on('message', async message => {
                 case 'triangle': {
                     let trianglemsg = await message.channel.send('<:TrianglePOG:761668890572226611>');
                     await trianglemsg.react(':TrianglePOG:761668890572226611');
-                            
+
                     message.delete().catch(err => {
                         return;
                     });
@@ -225,7 +225,7 @@ client.on('message', async message => {
                 case 'shaggy': {
                     let shaggymsg = await message.channel.send('<:ShaggyPOG:761672749667975208>');
                     await shaggymsg.react(':ShaggyPOG:761672749667975208');
-                    
+
                     message.delete().catch(err => {
                         return;
                     });
@@ -239,8 +239,8 @@ client.on('message', async message => {
 
                     message.delete().catch(err => {
                         return;
-                    })
-                    
+                    });
+
                     break;
                 }
 
@@ -251,7 +251,7 @@ client.on('message', async message => {
                         .setColor('#F0630F');
 
                     message.channel.send(embedPog);
-                    
+
                     break;
                 }
 
@@ -272,7 +272,7 @@ client.on('message', async message => {
                 .setDescription(reqs)
                 .setFooter('Make sure to DM a staff member to check if you meet the requirements!')
                 .setColor('#0CE1F3');
-            
+
             message.channel.send(embedReqs);
 
             break;
@@ -371,16 +371,16 @@ client.on('message', async message => {
                 .setTitle('Burgis Buck List:')
                 .setDescription(BuckMessage)
                 .setColor('PURPLE');
-            
+
             message.channel.send(embedBucks);
-            
+
             break;
         }
 
         case 'resetbucks': {
             if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
             if (!args[0]) message.reply(`Incorrect command format! \n(${prefix}resetbucks <@user>)`);
-            
+
             message.mentions.users.map(user => {
                 if (!(user.username in BurgisBucks)) return;
                 BurgisBucks[user.username] = 0;
@@ -401,7 +401,7 @@ client.on('message', async message => {
                 .setDescription(`Shop Title: ${args[0]} \n\nShop Description: ${shopDesc} \n\nCost: ${args[2]} burgis bucks`)
                 .setFooter(`Command: ${prefix}buy ${args[0]}`)
                 .setColor('BLUE');
-            
+
             ShopList.push(args[0]);
             CostList.push(args[2]);
             chan.send(embedShop);
@@ -435,7 +435,7 @@ client.on('message', async message => {
                 .setTitle('All Shops:')
                 .setDescription(shops)
                 .setColor('GREEN');
-            
+
             if (ShopList.length == 0) return message.reply(`It seems like there are no currect active shops!`);
             message.channel.send(embedShop);
 
@@ -443,11 +443,11 @@ client.on('message', async message => {
         }
 
         case 'buy': {
-            if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}buy <shop title>)`)
+            if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}buy <shop title>)`);
 
             for (let i = 0; i <= ShopList.length; i ++) {
                 if (ShopList[i] == args[0]) return message.channel.send(`You just bought ${ShopList[i]}!`);
-                else return message.reply(`It seems like shop ${args[0]} doesn't exist. Double check if you typed it correctly(it is case sensitive)!`)
+                else return message.reply(`It seems like shop ${args[0]} doesn't exist. Double check if you typed it correctly(it is case sensitive)!`);
             }
 
             break;
@@ -455,7 +455,7 @@ client.on('message', async message => {
 
         case 'deleteshop': {
             if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-            if (!args[0]) return message.reply(`Incorrrect command format! \n(${prefix}deleteshop <shop title>)`)
+            if (!args[0]) return message.reply(`Incorrrect command format! \n(${prefix}deleteshop <shop title>)`);
 
             for (let i = 0; i <= ShopList.length; i ++) {
                 if (ShopList[i] == args[0]) {
@@ -464,7 +464,7 @@ client.on('message', async message => {
                     message.channel.send(`You just deleted shop ${ShopList[i]}!`);
                     return;
                 }
-                else return message.reply(`It seems like shop ${args[0]} doesn't exist. Double check if you typed it correctly(it is case sensitive)!`)
+                else return message.reply(`It seems like shop ${args[0]} doesn't exist. Double check if you typed it correctly(it is case sensitive)!`);
             }
 
             break;
@@ -477,7 +477,7 @@ client.on('message', async message => {
 
             if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
             if (!args[1]) return message.reply('Incorrect command format! \n(b.addpoll <#channel> <poll>');
-            if (channelName == undefined) return message.reply('Incorrect command format! \n(b.addpoll <#channel> <poll>')
+            if (channelName == undefined) return message.reply('Incorrect command format! \n(b.addpoll <#channel> <poll>');
 
             let embedPoll = new Discord.MessageEmbed()
                 .setTitle('Poll:')
@@ -492,7 +492,7 @@ client.on('message', async message => {
             });
             await msg.react(':upvote:758527296071794718');
             await msg.react(':downvote:758527282532319263');
-                
+
             break;
         }
 
@@ -523,4 +523,4 @@ client.on('message', async message => {
     }
 });
 
-client.login(process.env.token); 
+client.login(process.env.token);
