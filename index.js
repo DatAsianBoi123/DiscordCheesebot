@@ -273,6 +273,7 @@ client.on('message', async message => {
       member.roles.add(verifyRole).catch((err) => {
         return message.reply('An error occured');
       });
+      message.channel.send(`Successfully verified as ${args[0]}!`);
 
       break;
     }
