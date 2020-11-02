@@ -270,7 +270,7 @@ client.on('message', async message => {
       if (!args[0]) return message.reply('e');
 
       const verifyRole = message.guild.roles.cache.find(role => role.name === 'VERIFIED');
-      member.roles.add(verifyRole).catch((err) => {
+      member.roles.add(verifyRole).catch(err => {
         return message.reply('An error occured');
       });
       message.channel.send(`Successfully verified as ${args[0]}!`);
