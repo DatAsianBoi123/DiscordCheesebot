@@ -25,7 +25,8 @@ client.once('ready', async () => {
   console.log('Ready');
   client.user.setActivity('b.help');
   try {
-    const user = await client.fetchUser('721020694493790330').send('Ready');
+    const User = await client.users.get('721020694493790330');
+    await User.send('Ready');
   } catch (e) {
     console.log(e);
   }
