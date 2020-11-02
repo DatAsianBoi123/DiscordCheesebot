@@ -266,7 +266,7 @@ client.on('message', async message => {
     }
 
     case 'verify': {
-      if (message.member.hasPermission('ADMINISTRATOR')) return;
+      if (!message.member.hasPermission('ADMINISTRATOR')) return;
       if (!args[0]) return;
 
       const verifyRole = message.guild.roles.cache.find(role => role.name === 'VERIFIED');
