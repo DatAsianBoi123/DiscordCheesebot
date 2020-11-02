@@ -269,11 +269,15 @@ client.on('message', async message => {
       if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('a');
       if (!args[0]) return message.reply('e');
 
+      let embedVerification = new Discord.MessageEmbed()
+        .setTitle('Verification')
+        .setDescription(`${message.member.name} is now verified as ${args[0]}!`)
+        .setColor('BROWN');
       const verifyRole = message.guild.roles.cache.find(role => role.name === 'VERIFIED');
       message.member.roles.add(verifyRole).catch(err => {
         return message.reply('An error occured');
       });
-      message.channel.send(`Successfully verified as ${args[0]}!`);
+      message.channel.send(embedVerification);
 
       break;
     }
