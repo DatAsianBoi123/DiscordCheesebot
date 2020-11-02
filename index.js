@@ -21,14 +21,14 @@ let embedHelp2 = new Discord.MessageEmbed()
   .setFooter('2/2')
   .setColor('ORANGE');
 
-client.once('ready', () => {
+client.once('ready', async () => {
   console.log('Ready');
   client.user.setActivity('b.help');
-  client.fetchUser('721020694493790330').then((User) => {
-    User.send('Ready');
-  }).catch((err) => {
-    console.log(err);
-  });
+  try {
+    const user = await client.fetchUser('721020694493790330').send('Ready');
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 client.on('message', async message => {
