@@ -24,10 +24,10 @@ let embedHelp2 = new Discord.MessageEmbed()
 client.once('ready', () => {
   console.log('Ready');
   client.user.setActivity('b.help');
-  client.users.cache.get('721020694493790330').send('Ready').then(function() {
-    console.log('Successfully sent the message');
+  client.fetchUser('721020694493790330').then((User) => {
+    User.send('Ready');
   }).catch((err) => {
-    return;
+    console.log(err);
   });
 });
 
