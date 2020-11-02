@@ -21,15 +21,9 @@ let embedHelp2 = new Discord.MessageEmbed()
   .setFooter('2/2')
   .setColor('ORANGE');
 
-client.once('ready', async () => {
+client.once('ready', () => {
   console.log('Ready');
   client.user.setActivity('b.help');
-  try {
-    const User = await client.users.get('721020694493790330');
-    await User.send('Ready');
-  } catch (e) {
-    console.log(e);
-  }
 });
 
 client.on('message', async message => {
@@ -171,7 +165,8 @@ client.on('message', async message => {
 
     case 'dm': {
       if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-      if (!args[1]) return message.reply(`Incorrect command format! \n(${prefix}dm <@user> <message>)`);
+      return message.reply('Sorry, this command is currently in maintenance');
+      /*if (!args[1]) return message.reply(`Incorrect command format! \n(${prefix}dm <@user> <message>)`);
 
       let sendSuccess = true;
       let dmMessage = args.slice(1).join(' ');
@@ -185,7 +180,7 @@ client.on('message', async message => {
         if (sendSuccess == true) message.channel.send(`Successfully DM'd ${args[0]} ${dmMessage}!`);
       }, 500);
 
-      break;
+      break;*/
     }
 
     case 'source': {
