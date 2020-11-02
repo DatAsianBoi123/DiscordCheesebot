@@ -271,7 +271,7 @@ client.on('message', async message => {
 
       let embedVerification = new Discord.MessageEmbed()
         .setTitle('Verification')
-        .setDescription(`${message.users.name} is now verified as ${args[0]}!`)
+        .setDescription(`${message.author.username} is now verified as ${args[0]}!`)
         .setColor('PURPLE');
       const verifyRole = message.guild.roles.cache.find(role => role.name === 'VERIFIED');
       message.member.roles.add(verifyRole).catch(err => {
