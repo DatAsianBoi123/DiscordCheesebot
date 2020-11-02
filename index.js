@@ -24,7 +24,9 @@ let embedHelp2 = new Discord.MessageEmbed()
 client.once('ready', () => {
   console.log('Ready');
   client.user.setActivity('b.help');
-  //client.users.cache.get('721020694493790330').send('Ready');
+  client.users.cache.get('721020694493790330').send('Ready').catch((err) => {
+    return;
+  });
 });
 
 client.on('message', async message => {
@@ -265,7 +267,7 @@ client.on('message', async message => {
       break;
     }
 
-    /*case 'verify': {
+    case 'verify': {
       if (message.member.hasPermission('ADMINISTRATOR')) return;
       if (!args[0]) return;
 
@@ -275,7 +277,7 @@ client.on('message', async message => {
       });
 
       break;
-    }*/
+    }
 
     //Requirements
 
