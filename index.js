@@ -265,7 +265,7 @@ client.on('message', async message => {
       break;
     }
 
-    case 'verify': {
+    /*case 'verify': {
       if (message.member.hasPermission('ADMINISTRATOR')) return;
       if (!args[0]) return;
 
@@ -275,7 +275,7 @@ client.on('message', async message => {
       });
 
       break;
-    }
+    }*/
 
     //Requirements
 
