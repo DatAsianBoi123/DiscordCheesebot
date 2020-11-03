@@ -340,6 +340,7 @@ client.on('message', async message => {
 
       let stringifyData = JSON.stringify(args[0]);
       fs.writeFile('data.json', stringifyData, finished);
+      console.log(stringifyData);
 
       break;
     }
