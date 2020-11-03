@@ -291,9 +291,10 @@ client.on('message', async message => {
         let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
         let json = result.json();
         return json;
-      };
+      }.catch(err => {
+        return message.reply('It looks like the minecraft username doesn\' exist!');
+      });
       let name = await nameAPI();
-      if (!name.name) return message.reply('Looks like that minecraft username doesn\' exist!');
 
       message.channel.send(`<@${message.author.id}> \nName: ${name.name} \nId: ${name.id}`);
 
