@@ -293,8 +293,9 @@ client.on('message', async message => {
         return json;
       };
       let name = await nameAPI();
+      if (!name.name) return message.reply('Looks like that minecraft username doesn\' exist!');
 
-      message.reply(`Name: ${name.name} \nId: ${name.id}`);
+      message.channel.send(`<@${message.author.id}> \nName: ${name.name} \nId: ${name.id}`);
 
       break;
     }
