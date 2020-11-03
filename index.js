@@ -346,7 +346,7 @@ client.on('message', async message => {
       fs.writeFile('data.json', stringifyData, finished);
       console.log(stringifyData);
 
-      message.channel.send(`Changed text to ${args[0]} (${stringifyData})!`)
+      message.channel.send(`Changed text to ${args[0]} (${stringifyData})!`);
 
       break;
     }
