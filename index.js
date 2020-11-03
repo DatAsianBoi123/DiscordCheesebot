@@ -312,6 +312,7 @@ client.on('message', async message => {
         .setTitle('Verification successful!')
         .setDescription('Your discord is now linked to this minecraft account!')
         .setColor('#146feb')
+        .setThumbnail('./images/checkmark.png')
         .setFooter(`Name: ${name.name}, ID: ${name.id}`);
 
       message.member.roles.add(verifyRole).catch(err => {
