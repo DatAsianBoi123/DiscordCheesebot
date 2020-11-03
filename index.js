@@ -324,6 +324,7 @@ client.on('message', async message => {
     }
 
     case 'saytext': {
+      console.log('start');
       let data = fs.readFileSync('data.json');
       let words = JSON.parse(data);
       console.log(words);
