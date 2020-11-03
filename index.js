@@ -324,7 +324,6 @@ client.on('message', async message => {
     }
 
     case 'saytext': {
-      if (!message.member.hasPermission('ADMINISTRATOR')) return;
       let data = fs.readFileSync('data.json');
       let words = JSON.parse(data);
       console.log(words);
