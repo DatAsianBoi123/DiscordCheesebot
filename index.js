@@ -11,6 +11,8 @@ var PollID;
 var BurgisBucks = {};
 var ShopList = [];
 var CostList = [];
+var data = fs.readFileSync('data.json');
+var parseData = JSON.parse(data);
 
 let embedHelp1 = new Discord.MessageEmbed()
   .setTitle('General Commands')
@@ -324,10 +326,19 @@ client.on('message', async message => {
     }
 
     case 'saytext': {
-      console.log('start');
-      let data = fs.readFileSync('data.json');
-      let words = JSON.parse(data);
-      console.log(words);
+      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('E');
+
+      message.channel.send(parseData);
+
+      break;
+    }
+
+    case 'changetext': {
+      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('E');
+      if (!args[0]) return message.reply('a');
+
+      let stringifyData = parseData.stringify(args[0]);
+      fs.writeFile('data.json', stringifyData, finished);
 
       break;
     }
@@ -591,5 +602,8 @@ client.on('message', async message => {
     }
   }
 });
+function finished(err) {
+  console.log('all set.');
+}
 
 client.login(process.env.token);
