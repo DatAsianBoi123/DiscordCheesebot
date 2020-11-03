@@ -343,9 +343,9 @@ client.on('message', async message => {
       if (!args[0]) return message.reply('a');
 
       textList.text = args[0];
-      fs.writeFile('data.json', stringifyTextList, finish);
       console.log(`${stringifyTextList}, ${parseData.text}`);
       stringifyTextList = JSON.stringify(textList);
+      fs.writeFileSync('data.json', stringifyTextList, finish);
 
       message.channel.send(`Changed text to ${args[0]} (${stringifyTextList})!`);
 
