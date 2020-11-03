@@ -290,7 +290,7 @@ client.on('message', async message => {
       let nameAPI = async () => {
         let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
         let json = result.json().catch(err => {
-          message.reply('no >:(');
+          return message.reply('no >:(');
         });
         return json;
       };
