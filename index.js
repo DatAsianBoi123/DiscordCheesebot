@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const fetch = require('node-fetch');
+const fs = require('fs');
 const prefix = process.env.prefix;
 const client = new Discord.Client();
 
@@ -318,6 +319,15 @@ client.on('message', async message => {
         message.reply('An error occured');
       });
       message.channel.send(embedVerification);
+
+      break;
+    }
+
+    case 'saytext': {
+      if (!message.member.hasPermission('ADMINISTRATOR')) return;
+      let data = fs.readFileSync('data.json');
+      let words = JSON.parse(data);
+      console.log(words);
 
       break;
     }
