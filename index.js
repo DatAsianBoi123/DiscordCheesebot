@@ -288,10 +288,10 @@ client.on('message', async message => {
       if (!args[0]) return message.reply('yes but no');
 
       let nameAPI = async () => {
-        let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`).catch(err => {
-          return message.reply('Looks like this username doesn\'t exist!');
+        let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
+        let json = result.json().catch(err => {
+          message.reply('no >:(');
         });
-        let json = result.json();
         return json;
       };
       let name = await nameAPI();
