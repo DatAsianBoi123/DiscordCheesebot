@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const fetch = require('node-fetch');
 const prefix = process.env.prefix;
 const client = new Discord.Client();
 
@@ -278,6 +279,22 @@ client.on('message', async message => {
         return message.reply('An error occured');
       });
       message.channel.send(embedVerification);
+
+      break;
+    }
+
+    case 'checkname': {
+      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('no');
+      if (!args[0]) return message.reply('yes but no');
+
+      let nameAPI = async () => {
+        let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
+        let json = result.json();
+        return json;
+      };
+      let name = await nameAPI();
+
+      message.reply(`Name: ${name.name} \nId: ${name.id}`);
 
       break;
     }
