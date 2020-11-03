@@ -343,7 +343,7 @@ client.on('message', async message => {
       if (!args[0]) return message.reply('a');
 
       textList.text = args[0];
-      console.log(`${stringifyTextList}, ${parseData.text}`);
+      console.log(`${stringifyTextList}, ${textList.text}`);
       stringifyTextList = JSON.stringify(textList);
       fs.writeFileSync('./data.json', stringifyTextList, finish);
 
