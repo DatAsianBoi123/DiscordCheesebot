@@ -290,13 +290,16 @@ client.on('message', async message => {
       let nameAPI = async () => {
         let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
         let json = result.json().catch(err => {
+          console.log('returned error');
           return message.reply('no >:(');
         });
+        console.log('returned json');
         return json;
       };
       let name = await nameAPI();
 
-      message.channel.send(`<@${message.author.id}> \nName: ${name.name} \nId: ${name.id}`);
+      message.channel.send(`<@${message.author.id}> \nName: ${name.name} \nID: ${name.id}`);
+      console.log('sent message');
 
       break;
     }
