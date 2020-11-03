@@ -338,7 +338,7 @@ client.on('message', async message => {
       if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('E');
       if (!args[0]) return message.reply('a');
 
-      let stringifyData = parseData.stringify(args[0]);
+      let stringifyData = JSON.stringify(args[0]);
       fs.writeFile('data.json', stringifyData, finished);
 
       break;
