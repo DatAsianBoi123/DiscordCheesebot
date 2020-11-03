@@ -341,10 +341,12 @@ client.on('message', async message => {
       if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('E');
       if (!args[0]) return message.reply('a');
 
-      TextList[text] = args[0];
-      let stringifyData = JSON.stringify(TextList);
+      TextList.text = args[0];
+      let stringifyData = await JSON.stringify(TextList);
       fs.writeFile('data.json', stringifyData, finished);
       console.log(stringifyData);
+
+      message.channel.send(`Changed text to ${args[0]} (${stringifyData})!`)
 
       break;
     }
