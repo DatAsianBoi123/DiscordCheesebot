@@ -343,9 +343,9 @@ client.on('message', async message => {
       if (!args[0]) return message.reply('a');
 
       textList.text = args[0];
-      console.log(`${stringifyTextList}, ${textList.text}`);
       stringifyTextList = JSON.stringify(textList);
       fs.writeFileSync('./data.json', stringifyTextList, finish);
+      console.log(`${stringifyTextList} / ${parseData}, ${textList.text}`);
 
       message.channel.send(`Changed text to ${args[0]} (${stringifyTextList})!`);
 
@@ -611,7 +611,7 @@ client.on('message', async message => {
     }
   }
 });
-function finish() {
+function finish(err) {
   console.log('all good.');
 }
 
