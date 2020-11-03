@@ -12,7 +12,7 @@ var BurgisBucks = {};
 var ShopList = [];
 var CostList = [];
 var textList = {
-  "text": "hi"
+  text: "hi"
 };
 var stringifyTextList = JSON.stringify(textList);
 var data = fs.readFileSync('data.json');
