@@ -192,7 +192,7 @@ client.on('message', async message => {
 
     case 'sc':
     case 'skycrypt': {
-      if (!args[0]) return message.reply(`Incorrect command format! \n(b.skylea <player name> [profile name])`);
+      if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}skylea <player name> [profile name])`);
       if (!args[1]) message.channel.send(`https://sky.shiiyu.moe/stats/${args[0]}`);
       else message.channel.send(`https://sky.shiiyu.moe/stats/${args[0]}/${args[1]}`);
 
@@ -266,7 +266,7 @@ client.on('message', async message => {
       break;
     }
 
-    case 'verify': {
+    /*case 'verify': {
       if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('a');
       if (!args[0]) return message.reply('e');
 
@@ -281,18 +281,25 @@ client.on('message', async message => {
       message.channel.send(embedVerification);
 
       break;
-    }
+    }*/
 
-    case 'checkname': {
+    case 'verify': {
       let json;
-      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('no');
-      if (!args[0]) return message.reply('yes but no');
+      if (!message.member.hasPermission('ADMINISTRATOR')) return;
+      if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}verify <your minecraft name>)`);
+
+      const verifyRole = message.guild.roles.cache.find(role => role.name === 'VERIFIED');
+      let embedVerification;
 
       let nameAPI = async () => {
         let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
         json = result.json().catch(err => {
           json = undefined;
-          return message.reply('no >:(');
+          embedVerification = new Discord.MessageEmbed()
+            .setTitle('Verifcation failed')
+            .setDescription('It seems like this minecraft account does not exist!')
+            .setColor('RED');
+          return message.channel.send(embedVerification);
         });
         return json;
       };
@@ -301,7 +308,16 @@ client.on('message', async message => {
         return;
       }
 
-      message.channel.send(`<@${message.author.id}> \nName: ${name.name} \nID: ${name.id}`);
+      embedVerification = new Discord.MessageEmbed()
+        .setTitle('Verification successful!')
+        .setDescription('Your discord is now linked to this minecraft account!')
+        .setColor('#146feb')
+        .setFooter(`Name: ${name.name}, ID: ${name.id}`);
+
+      message.member.roles.add(verifyRole).catch(err => {
+        message.reply('An error occured');
+      });
+      message.channel.send(embedVerification);
 
       break;
     }
