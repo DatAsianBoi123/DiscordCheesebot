@@ -313,7 +313,7 @@ client.on('message', async message => {
         .setDescription('Your discord is now linked to this minecraft account!')
         .setColor('#146feb')
         .attachFiles(['../images/checkmark.png'])
-        .setThumbnail('attachment://checkmark.png')
+        .setImage('attachment://checkmark.png')
         .setFooter(`Name: ${name.name}, ID: ${name.id}`);
 
       message.member.roles.add(verifyRole).catch(err => {
