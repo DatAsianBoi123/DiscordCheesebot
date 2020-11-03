@@ -284,12 +284,14 @@ client.on('message', async message => {
     }
 
     case 'checkname': {
+      let json;
       if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('no');
       if (!args[0]) return message.reply('yes but no');
 
       let nameAPI = async () => {
         let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
-        let json = result.json().catch(err => {
+        json = result.json().catch(err => {
+          json = undefined;
           console.log('returned error');
           return message.reply('no >:(');
         });
@@ -297,6 +299,9 @@ client.on('message', async message => {
         return json;
       };
       let name = await nameAPI();
+      if (json == undefined) {
+        return;
+      }
 
       message.channel.send(`<@${message.author.id}> \nName: ${name.name} \nID: ${name.id}`);
       console.log('sent message');
