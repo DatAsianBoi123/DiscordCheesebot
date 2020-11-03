@@ -11,9 +11,10 @@ var PollID;
 var BurgisBucks = {};
 var ShopList = [];
 var CostList = [];
-var TextList = {
+var textList = {
   "text": "hi"
 };
+var stringifyTextList = JSON.stringify(textList);
 var data = fs.readFileSync('data.json');
 var parseData = JSON.parse(data);
 
@@ -341,12 +342,11 @@ client.on('message', async message => {
       if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('E');
       if (!args[0]) return message.reply('a');
 
-      TextList.text = args[0];
-      let stringifyData = await JSON.stringify(TextList);
-      fs.writeFile('data.json', stringifyData, finished);
-      console.log(stringifyData);
+      textList.text = args[0];
+      fs.writeFile('data.json', stringifyTextList);
+      console.log(`${stringifyTextList}, ${parseData}`);
 
-      message.channel.send(`Changed text to ${args[0]} (${stringifyData})!`);
+      message.channel.send(`Changed text to ${args[0]} (${stringifyTextList})!`);
 
       break;
     }
@@ -610,8 +610,5 @@ client.on('message', async message => {
     }
   }
 });
-function finished(err) {
-  console.log('all set.');
-}
 
 client.login(process.env.token);
