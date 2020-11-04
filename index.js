@@ -331,7 +331,7 @@ client.on('message', async message => {
     case 'saytext': {
       if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('E');
 
-      console.log(parseData.text);
+      console.log(JSON.parse(fs.readFile('data.json')).text);
       message.channel.send(parseData.text);
 
       break;
