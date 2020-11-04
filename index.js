@@ -11,9 +11,9 @@ var PollID;
 var BurgisBucks = {};
 var ShopList = [];
 var CostList = [];
-var textList = {
-  "text": "hi"
-};
+
+var data = fs.readFileSync('data.json');
+var textList = JSON.parse(data);
 
 let embedHelp1 = new Discord.MessageEmbed()
   .setTitle('General Commands')
@@ -28,6 +28,7 @@ let embedHelp2 = new Discord.MessageEmbed()
 
 client.once('ready', () => {
   console.log('Ready');
+  console.log(textList);
   client.user.setActivity('b.help');
 });
 
