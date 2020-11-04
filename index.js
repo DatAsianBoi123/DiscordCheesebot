@@ -14,7 +14,6 @@ var CostList = [];
 var textList = {
   text: "hi"
 };
-var stringifyTextList = JSON.stringify(textList);
 var data = fs.readFileSync('data.json');
 var parseData = JSON.parse(data);
 
@@ -345,9 +344,9 @@ client.on('message', async message => {
       textList.text = args[0];
       stringifyTextList = JSON.stringify(textList);
       fs.writeFileSync('./data.json', stringifyTextList, finish);
-      console.log(`${stringifyTextList} / ${parseData}, ${textList.text}`);
+      console.log(`${JSON.stringify(textList)} / ${parseData}, ${textList.text}`);
 
-      message.channel.send(`Changed text to ${args[0]} (${stringifyTextList})!`);
+      message.channel.send(`Changed text to ${args[0]} (${JSON.stringify(textList)}, ${JSON.parse(data)})!`);
 
       break;
     }
