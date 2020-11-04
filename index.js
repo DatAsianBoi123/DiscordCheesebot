@@ -12,10 +12,8 @@ var BurgisBucks = {};
 var ShopList = [];
 var CostList = [];
 var textList = {
-  text: "hi"
+  "text": "hi"
 };
-var data = fs.readFileSync('data.json');
-var parseData = JSON.parse(data);
 
 let embedHelp1 = new Discord.MessageEmbed()
   .setTitle('General Commands')
@@ -331,8 +329,7 @@ client.on('message', async message => {
     case 'saytext': {
       if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('E');
 
-      console.log(parseData.text);
-      message.channel.send(parseData.text);
+      message.channel.send(textList);
 
       break;
     }
@@ -342,14 +339,6 @@ client.on('message', async message => {
       if (!args[0]) return message.reply('a');
 
       textList.text = args[0];
-      stringifyTextList = JSON.stringify(textList);
-      fs.writeFile('./data.json', JSON.stringify(textList), err => {
-        if (err) return console.log('an error occured');
-        console.log('all good.');
-      });
-      console.log(`${JSON.stringify(textList)} / ${parseData}, ${parseData.text}`);
-
-      message.channel.send(`Changed text to ${args[0]} (${JSON.stringify(textList)}, ${parseData})!`);
 
       break;
     }
