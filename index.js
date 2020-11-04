@@ -331,7 +331,7 @@ client.on('message', async message => {
     case 'saytext': {
       if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('E');
 
-      console.log(JSON.parse(fs.readFile('data.json')).text);
+      console.log(parseData.text);
       message.channel.send(parseData.text);
 
       break;
@@ -343,7 +343,10 @@ client.on('message', async message => {
 
       textList.text = args[0];
       stringifyTextList = JSON.stringify(textList);
-      fs.writeFile('./data.json', JSON.stringify(textList), finish);
+      fs.writeFile('./data.json', JSON.stringify(textList), err => {
+        if (err) return console.log('an error occured');
+        console.log('all good.');
+      });
       console.log(`${JSON.stringify(textList)} / ${parseData}, ${parseData.text}`);
 
       message.channel.send(`Changed text to ${args[0]} (${JSON.stringify(textList)}, ${parseData})!`);
@@ -610,8 +613,5 @@ client.on('message', async message => {
     }
   }
 });
-function finish(err) {
-  console.log('all good.');
-}
 
 client.login(process.env.token);
