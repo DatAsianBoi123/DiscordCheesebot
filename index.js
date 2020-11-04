@@ -36,9 +36,7 @@ client.on('message', async message => {
   const command = args.shift().toLowerCase();
 
   if (message.mentions.users.size) {
-    if (message.mentions.users.first().username === "Aspect Of The Cheesebot") {
-      message.channel.send(embedHelp1);
-    }
+    if (message.mentions.users.first().username === "Aspect Of The Cheesebot") message.channel.send(embedHelp1);
   }
 
   if (message.author.bot) return;
@@ -339,6 +337,11 @@ client.on('message', async message => {
       if (!args[0]) return message.reply('a');
 
       textList.text = args[0];
+      let stringiyTextList = JSON.stringify(textList);
+      fs.writeFile('data.json', stringiyTextList, err => {
+        if (err) return message.reply('An error occured');
+        else console.log('all good.');
+      });
 
       break;
     }
