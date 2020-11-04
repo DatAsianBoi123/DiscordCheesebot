@@ -329,7 +329,7 @@ client.on('message', async message => {
     case 'saytext': {
       if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('E');
 
-      message.channel.send(textList);
+      message.channel.send(textList.text);
 
       break;
     }
