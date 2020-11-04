@@ -28,7 +28,6 @@ let embedHelp2 = new Discord.MessageEmbed()
 
 client.once('ready', () => {
   console.log('Ready');
-  console.log(textList);
   client.user.setActivity('b.help');
 });
 
