@@ -4,7 +4,7 @@ const fs = require('fs');
 const prefix = process.env.prefix;
 const client = new Discord.Client();
 
-const help1 = `PREFIX - ${prefix} \n\nhelp - shows this help page (${prefix}help [help page number]) \n\ninfo - shows server info (${prefix}info) \n\nmyinfo - shows a users info (${prefix}myinfo [@user]) \n\nping - Pong! (${prefix}ping) \n\npig - Oink! (${prefix}pig) \n\nskycrypt / sc - shows a player's https://sky.shiiyu.moe (${prefix}skycrypt / sc <player name> [profile name]) \n\npog - displays a pog emote (${prefix}pog <pog name>) \n\nsource - shows the source code for Aspect Of The Cheesebot (${prefix}source)`;
+const help1 = `PREFIX - ${prefix} \n\nhelp - shows this help page (${prefix}help [help page number]) \n\ninfo - shows server info (${prefix}info) \n\nmyinfo - shows a users info (${prefix}myinfo [@user]) \n\nping - Pong! (${prefix}ping) \n\npig - Oink! (${prefix}pig) \n\nskycrypt / sc - shows a player's https://sky.shiiyu.moe (${prefix}skycrypt / sc <player name> [profile name]) \n\npog - displays a pog emote (${prefix}pog <pog name>) \n\nsource - shows the source code for Aspect Of The Cheesebot (${prefix}source) \n\ncheckname - checks if a minecraft user exists (${prefix}checkname <name>)`;
 const help2 = `mybucks - Shows the amount of bucks this user has (${prefix}mybucks [@user]) \n\nbucklist - Shows everyone's burgis bucks on this server (${prefix}bucklist)`;
 var reqs = '50k slayer xp\n20mil net worth\nSkill avg of at least 18.5\nActive at least once a week unless u have a good excuse';
 var PollID;
@@ -285,12 +285,10 @@ client.on('message', async message => {
       break;
     }*/
 
-    case 'verify': {
+    case 'checkname': {
       let json;
-      if (!message.member.hasPermission('ADMINISTRATOR')) return;
-      if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}verify <your minecraft name>)`);
+      if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}checkname <name>)`);
 
-      const verifyRole = message.guild.roles.cache.find(role => role.name === 'VERIFIED');
       let embedVerification;
 
       let nameAPI = async () => {
@@ -298,7 +296,7 @@ client.on('message', async message => {
         json = result.json().catch(err => {
           json = undefined;
           embedVerification = new Discord.MessageEmbed()
-            .setTitle('Verifcation failed')
+            .setTitle('Name not found')
             .setDescription('It seems like this minecraft account does not exist!')
             .setColor('RED');
           return message.channel.send(embedVerification);
@@ -311,14 +309,11 @@ client.on('message', async message => {
       }
 
       embedVerification = new Discord.MessageEmbed()
-        .setTitle('Verification successful!')
+        .setTitle('Name found!')
         .setDescription('Your discord is now linked to this minecraft account!')
         .setColor('GREEN')
         .setFooter(`Name: ${name.name}, ID: ${name.id}`);
 
-      message.member.roles.add(verifyRole).catch(err => {
-        message.reply('An error occured');
-      });
       message.channel.send(embedVerification);
 
       break;
