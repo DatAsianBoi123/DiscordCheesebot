@@ -310,7 +310,7 @@ client.on('message', async message => {
 
       embedVerification = new Discord.MessageEmbed()
         .setTitle('Name found!')
-        .setDescription('Your discord is now linked to this minecraft account!')
+        .setDescription('This minecraft accound was found!')
         .setColor('GREEN')
         .setFooter(`Name: ${name.name}, ID: ${name.id}`);
 
