@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const fetch = require('node-fetch');
 const fs = require('fs');
-const prefix = process.env.prefix;
+const prefix = 'b.';
 const client = new Discord.Client();
 
 const help1 = `PREFIX - ${prefix} \n\nhelp - shows this help page (${prefix}help [help page number]) \n\ninfo - shows server info (${prefix}info) \n\nmyinfo - shows a users info (${prefix}myinfo [@user]) \n\nping - Pong! (${prefix}ping) \n\npig - Oink! (${prefix}pig) \n\nskycrypt / sc - shows a player's https://sky.shiiyu.moe (${prefix}skycrypt / sc <player name> [profile name]) \n\npog - displays a pog emote (${prefix}pog <pog name>) \n\nsource - shows the source code for Aspect Of The Cheesebot (${prefix}source) \n\ncheckname - checks if a minecraft user exists (${prefix}checkname <name>)`;
@@ -318,6 +318,29 @@ client.on('message', async message => {
 
       break;
     }
+
+    case 'skyblock':
+      let json;
+      if (!message.member.hasPermission('ADMINISTRATOR')) return;
+
+      let skyblockAPI = async () => {
+        let apikey = process.env.apikey;
+        let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=8dafbe017706434eb217c72c9794245a`);
+        json = result.json().catch((err) => {
+          json = undefined;
+        });
+        return json;
+      };
+
+      let data = await skyblockAPI();
+      if (json == undefined || data.success == false) {
+        message.channel.send(`An error occured`);
+        return;
+      }
+
+      message.channel.send(`Success! ${data.player.displayname}`);
+
+      break;
 
     case 'saytext': {
       if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('E');
