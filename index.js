@@ -348,14 +348,14 @@ client.on('message', async message => {
       if (skyblockJSON == undefined || accountJSON == undefined || skyblockData.success == false) {
         skyblock = skyblockJSON == undefined ? 'Skyblock api data not found' : 'Skyblock api data found';
         data = skyblockData.success == false ? 'Player hasn\'t joined skyblock' : 'Player has joined skyblock';
-        message.channel.send(`An error occured: ${skyblock}, ${data}`);
+        message.reply(`An error occured: ${skyblock}, ${data}`);
         return;
       }
       if (skyblockData.player == null) {
         message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
       }
 
-      message.channel.send(`Success! ${skyblockData.player.displayname}`);
+      message.channel.send(`Success! ${skyblockData.player.level}`);
 
       break;
 
