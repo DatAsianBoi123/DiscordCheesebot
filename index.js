@@ -381,7 +381,7 @@ client.on('message', async message => {
       for (let i = 0; i < skyblockData.profiles.length; i ++) {
         if (skyblockData.profiles[i].cute_name.toLowerCase() == args[1].toLowerCase()) {
           console.log(skyblockData.profiles[i].members[accountData.id]);
-          message.channel.send(`${skyblockData.profiles[i].members[accountData.id].experience_skill_combat} combat xp`);
+          message.channel.send(`${getLevelByXp(skyblockData.profiles[i].members[accountData.id].experience_skill_combat)} combat level`);
           return;
         }
       }
@@ -689,5 +689,40 @@ client.on('message', async message => {
     }
   }
 });
+
+function getLevelByXp(xp) {
+  let xpTotal = 0;
+  let level = 0;
+
+  let xpForNext = Infinity;
+
+  let maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
+
+  for(let x = 1; x <= maxLevel; x++){
+    xpTotal += xp_table[x];
+    if(xpTotal > xp){
+      xpTotal -= xp_table[x];
+      break;
+    }else{
+      level = x;
+    }
+  }
+
+  let xpCurrent = Math.floor(xp - xpTotal);
+
+  if(level < maxLevel)
+    xpForNext = Math.ceil(xp_table[level + 1]);
+
+  let progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+
+  return {
+    xp,
+    level,
+    maxLevel,
+    xpCurrent,
+    xpForNext,
+    progress
+  };
+}
 
 client.login(process.env.token);
