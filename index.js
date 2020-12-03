@@ -322,6 +322,7 @@ client.on('message', async message => {
     case 'skyblock':
       let skyblockJSON;
       let accountJSON;
+      let apikey = process.env.apikey;
       if (!message.member.hasPermission('ADMINISTRATOR')) return;
       if (!args[0]) return;
 
@@ -336,7 +337,6 @@ client.on('message', async message => {
       if (accountJSON == undefined) return message.reply('This minecraft account doesn\'t exist');
 
       let skyblockAPI = async () => {
-        let apikey = process.env.apikey;
         let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountJSON.id}`);
         skyblockJSON = result.json().catch((err) => {
           skyblockJSON = undefined;
