@@ -363,7 +363,7 @@ client.on('message', async message => {
 
       let levels =  exp < 0 ? 1 : Math.floor((1 + reversePqPrefix + Math.sqrt(reverseConst + (2 / growth) * exp)) * 100) / 100;
 
-      message.channel.send(`${accountData.name}'s network level is ${levels} (${exp} total exp)`);
+      message.channel.send(`${accountData.name}'s network level is ${levels} (${exp.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} total exp)`);
 
       break;
 
