@@ -319,12 +319,11 @@ client.on('message', async message => {
       break;
     }
 
-    case 'skyblock':
+    case 'hypixellevel':
       let skyblockJSON;
       let accountJSON;
       let apikey = process.env.apikey;
-      if (!message.member.hasPermission('ADMINISTRATOR')) return;
-      if (!args[0]) return;
+      if (!args[0]) return message.reply(`Incorrect command format! (${prefix}hypixellevel <name>)`);
 
       let nameAPI = async () => {
         let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
@@ -362,9 +361,9 @@ client.on('message', async message => {
 
       const exp = skyblockData.player.networkExp;
 
-      let levels =  exp < 0 ? 1 : Math.floor(1 + reversePqPrefix + Math.sqrt(reverseConst + (2 / growth) * exp));
+      let levels =  exp < 0 ? 1 : Math.floor(1 + reversePqPrefix + Math.sqrt(reverseConst + (2 / growth) * exp) * 100) / 100;
 
-      message.channel.send(`Success! ${levels}`);
+      message.channel.send(`${accountData.name}'s network level is ${levels} (${exp} total exp)`);
 
       break;
 
