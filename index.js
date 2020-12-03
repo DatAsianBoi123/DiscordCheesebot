@@ -380,7 +380,9 @@ client.on('message', async message => {
 
       for (let i = 0; i < skyblockData.profiles.length; i ++) {
         if (skyblockData.profiles[i].cute_name.toLowerCase() == args[1].toLowerCase()) {
-          return message.channel.send(`Profile name found: ${skyblockData.profiles[0].cute_name}`);
+          console.log(skyblockData.profiles[i]);
+          message.channel.send(`Profile name found: ${skyblockData.profiles[0].cute_name}`);
+          return;
         }
       }
       message.reply(`This profile doesn't exist! (${args[1]})`);
