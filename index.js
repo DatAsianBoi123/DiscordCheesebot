@@ -355,7 +355,16 @@ client.on('message', async message => {
         message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
       }
 
-      message.channel.send(`Success! ${skyblockData.player.networkExp}`);
+      const base = 10000;
+      const growth = 2500;
+      const reversePqPrefix = -(base - 0.5 * growth) / growth;
+      const reverseConst = reversePqPrefix ** 2;
+
+      const exp = skyblockData.player.networkExp;
+
+      let levels =  exp < 0 ? 1 : Math.floor(1 + reversePqPrefix + Math.sqrt(reverseConst + (2 / growth) * exp));
+
+      message.channel.send(`Success! ${levels}`);
 
       break;
 
