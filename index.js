@@ -333,10 +333,11 @@ client.on('message', async message => {
         return accountJSON;
       };
       let accountData = await nameAPI();
+      if (accountJSON == undefined) return message.reply('This minecraft account doesn\'t exist');
 
       let skyblockAPI = async () => {
         let apikey = process.env.apikey;
-        let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountData.id}`);
+        let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountJSON.id}`);
         skyblockJSON = result.json().catch((err) => {
           skyblockJSON = undefined;
         });
