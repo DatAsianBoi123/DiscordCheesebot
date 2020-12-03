@@ -350,9 +350,7 @@ client.on('message', async message => {
         message.reply(`An error occured: ${skyblock}, ${data}`);
         return;
       }
-      if (skyblockData.player == null) {
-        message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
-      }
+      if (skyblockData.player == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
 
       const base = 10000;
       const growth = 2500;
