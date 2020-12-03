@@ -337,7 +337,7 @@ client.on('message', async message => {
       if (accountJSON == undefined) return message.reply('This minecraft account doesn\'t exist');
 
       let skyblockAPI = async () => {
-        let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountJSON.id}`);
+        let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountData.id}`);
         skyblockJSON = result.json().catch((err) => {
           skyblockJSON = undefined;
         });
@@ -349,7 +349,7 @@ client.on('message', async message => {
         skyblock = skyblockJSON == undefined ? 'Skyblock data not found' : 'Skyblock data found';
         account = accountJSON == undefined ? 'Mojang account not found' : 'Mojong account found';
         data = skyblockData.success == false ? 'Player hasn\'t joined skyblock' : 'Player has joined skyblock';
-        message.channel.send(`An error occured: ${skyblock}, ${account}, ${data} (https://api.hypixel.net/player?key=${apikey}&uuid=${accountJSON.id})`);
+        message.channel.send(`An error occured: ${skyblock}, ${account}, ${data}`);
         return;
       }
 
