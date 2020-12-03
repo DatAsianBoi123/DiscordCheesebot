@@ -268,23 +268,6 @@ client.on('message', async message => {
       break;
     }
 
-    /*case 'verify': {
-      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('a');
-      if (!args[0]) return message.reply('e');
-
-      let embedVerification = new Discord.MessageEmbed()
-        .setTitle('Verification')
-        .setDescription(`${message.author.username} is now verified as ${args[0]}!`)
-        .setColor('#146feb');
-      const verifyRole = message.guild.roles.cache.find(role => role.name === 'VERIFIED');
-      message.member.roles.add(verifyRole).catch(err => {
-        return message.reply('An error occured');
-      });
-      message.channel.send(embedVerification);
-
-      break;
-    }*/
-
     case 'checkname': {
       let json;
       if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}checkname <name>)`);
@@ -319,7 +302,7 @@ client.on('message', async message => {
       break;
     }
 
-    case 'hypixellevel':
+    case 'hypixellevel': {
       let skyblockJSON;
       let accountJSON;
       let apikey = process.env.apikey;
@@ -345,12 +328,10 @@ client.on('message', async message => {
 
       let skyblockData = await skyblockAPI();
       if (skyblockJSON == undefined || accountJSON == undefined || skyblockData.success == false) {
-        skyblock = skyblockJSON == undefined ? 'Skyblock api data not found' : 'Skyblock api data found';
-        data = skyblockData.success == false ? 'Player hasn\'t joined skyblock' : 'Player has joined skyblock';
-        message.reply(`An error occured: ${skyblock}, ${data}`);
+        message.reply(`An error occured`);
         return;
       }
-      if (skyblockData.player == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
+      if (skyblockData.player == null) return message.reply(`Looks like this player has never joined hypixel before! (${accountData.name})`);
 
       const base = 10000;
       const growth = 2500;
@@ -364,25 +345,40 @@ client.on('message', async message => {
       message.channel.send(`${accountData.name}'s network level is ${levels} (${exp.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} total exp)`);
 
       break;
+}
 
-    case 'saytext': {
-      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('E');
+    case 'profilename': {
+      let skyblockJSON;
+      let accountJSON;
+      let apikey = process.env.apikey;
+      if (!args[0]) return message.reply(`Incorrect command format! (${prefix}hypixellevel <name>)`);
 
-      message.channel.send(textList.text);
+      let nameAPI = async () => {
+        let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
+        accountJSON = result.json().catch(err => {
+          accountJSON = undefined;
+        });
+        return accountJSON;
+      };
+      let accountData = await nameAPI();
+      if (accountJSON == undefined) return message.reply('This minecraft account doesn\'t exist');
 
-      break;
-    }
+      let skyblockAPI = async () => {
+        let result = await fetch(`https://api.hypixel.net/skyblock/profiles?key=${apikey}&uuid=${accountData.id}`);
+        skyblockJSON = result.json().catch((err) => {
+          skyblockJSON = undefined;
+        });
+        return skyblockJSON;
+      };
 
-    case 'changetext': {
-      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('E');
-      if (!args[0]) return message.reply('a');
+      let skyblockData = await skyblockAPI();
+      if (skyblockJSON == undefined || accountJSON == undefined || skyblockData.success == false) {
+        message.reply(`An error occured`);
+        return;
+      }
+      if (skyblockData.profiles == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
 
-      textList.text = args[0];
-      let stringiyTextList = JSON.stringify(textList, null, 2);
-      fs.writeFile('data.json', stringiyTextList, err => {
-        if (err) return message.reply('An error occured');
-        else console.log('all good.');
-      });
+      message.channel.send(`First profile name: ${skyblockData.profiles[0].cute_name}`);
 
       break;
     }
