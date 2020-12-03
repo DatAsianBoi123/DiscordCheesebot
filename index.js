@@ -320,20 +320,31 @@ client.on('message', async message => {
     }
 
     case 'skyblock':
-      let json;
+      let skyblockJSON;
+      let accountJSON;
       if (!message.member.hasPermission('ADMINISTRATOR')) return;
+      if (!args[0]) return;
+
+      let nameAPI = async () => {
+        let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
+        accountJSON = result.json().catch(err => {
+          accountJSON = undefined;
+        });
+        return accountJSON;
+      };
+      let accountData = await nameAPI();
 
       let skyblockAPI = async () => {
         let apikey = process.env.apikey;
-        let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=8dafbe017706434eb217c72c9794245a`);
-        json = result.json().catch((err) => {
-          json = undefined;
+        let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountData.id}`);
+        skyblockJSON = result.json().catch((err) => {
+          skyblockJSON = undefined;
         });
-        return json;
+        return skyblockJSON;
       };
 
-      let data = await skyblockAPI();
-      if (json == undefined || data.success == false) {
+      let skyblockData = await skyblockAPI();
+      if (skyblockJSON == undefined || accountJSON == undefined || skyblockData.success == false) {
         message.channel.send(`An error occured`);
         return;
       }
