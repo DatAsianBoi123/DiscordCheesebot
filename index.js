@@ -361,7 +361,7 @@ client.on('message', async message => {
 
       const exp = skyblockData.player.networkExp;
 
-      let levels =  exp < 0 ? 1 : Math.floor(1 + reversePqPrefix + Math.sqrt(reverseConst + (2 / growth) * exp) * 100) / 100;
+      let levels =  exp < 0 ? 1 : Math.floor((1 + reversePqPrefix + Math.sqrt(reverseConst + (2 / growth) * exp)) * 100) / 100;
 
       message.channel.send(`${accountData.name}'s network level is ${levels} (${exp} total exp)`);
 
