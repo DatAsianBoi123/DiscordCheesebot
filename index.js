@@ -355,7 +355,7 @@ client.on('message', async message => {
         message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
       }
 
-      message.channel.send(`Success! ${skyblockData.player.level}`);
+      message.channel.send(`Success! ${skyblockData.player.networkExp}`);
 
       break;
 
