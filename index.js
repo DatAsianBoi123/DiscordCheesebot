@@ -351,7 +351,7 @@ client.on('message', async message => {
       let skyblockJSON;
       let accountJSON;
       let apikey = process.env.apikey;
-      if (!args[0]) return message.reply(`Incorrect command format! (${prefix}hypixellevel <name>)`);
+      if (!args[1]) return message.reply(`Incorrect command format! (${prefix}profilename <name> <profile name>)`);
 
       let nameAPI = async () => {
         let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
@@ -378,7 +378,12 @@ client.on('message', async message => {
       }
       if (skyblockData.profiles == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
 
-      message.channel.send(`First profile name: ${skyblockData.profiles[0].cute_name}`);
+      for (let i = 0; i < skyblockData.profiles.length; i ++) {
+        if (skyblockData.profiles[i] == args[1]) {
+          return message.channel.send(`First profile name: ${skyblockData.profiles[0].cute_name}`);
+        }
+      }
+      message.reply(`This profile doesn't exist! (${args[1]})`);
 
       break;
     }
