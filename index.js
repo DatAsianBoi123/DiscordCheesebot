@@ -345,11 +345,10 @@ client.on('message', async message => {
       };
 
       let skyblockData = await skyblockAPI();
-      if (skyblockJSON == undefined || accountJSON == undefined || skyblockData.success == false) {
-        skyblock = skyblockJSON == undefined ? 'Skyblock data not found' : 'Skyblock data found';
-        account = accountJSON == undefined ? 'Mojang account not found' : 'Mojong account found';
+      if (skyblockJSON == undefined || accountJSON == undefined || skyblockData.success == false || skyblockData.player == null) {
+        skyblock = skyblockJSON == undefined ? 'Skyblock api data not found' : 'Skyblock api data found';
         data = skyblockData.success == false ? 'Player hasn\'t joined skyblock' : 'Player has joined skyblock';
-        message.channel.send(`An error occured: ${skyblock}, ${account}, ${data}`);
+        message.channel.send(`An error occured: ${skyblock}, ${data}`);
         return;
       }
 
