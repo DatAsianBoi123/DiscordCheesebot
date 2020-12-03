@@ -379,7 +379,7 @@ client.on('message', async message => {
       if (skyblockData.profiles == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
 
       for (let i = 0; i < skyblockData.profiles.length; i ++) {
-        if (skyblockData.profiles[i] == args[1]) {
+        if (skyblockData.profiles[i].cute_name.toLowerCase() == args[1].toLowerCase()) {
           return message.channel.send(`First profile name: ${skyblockData.profiles[0].cute_name}`);
         }
       }
