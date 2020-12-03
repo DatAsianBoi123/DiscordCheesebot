@@ -380,10 +380,50 @@ client.on('message', async message => {
 
       for (let i = 0; i < skyblockData.profiles.length; i ++) {
         if (skyblockData.profiles[i].cute_name.toLowerCase() == args[1].toLowerCase()) {
-          return message.channel.send(`First profile name: ${skyblockData.profiles[0].cute_name}`);
+          return message.channel.send(`Profile name found: ${skyblockData.profiles[0].cute_name}`);
         }
       }
       message.reply(`This profile doesn't exist! (${args[1]})`);
+
+      break;
+    }
+
+    case 'profilelist': {
+      let skyblockJSON;
+      let accountJSON;
+      let apikey = process.env.apikey;
+      if (!args[1]) return message.reply(`Incorrect command format! (${prefix}profilelist <name>)`);
+
+      let nameAPI = async () => {
+        let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
+        accountJSON = result.json().catch(err => {
+          accountJSON = undefined;
+        });
+        return accountJSON;
+      };
+      let accountData = await nameAPI();
+      if (accountJSON == undefined) return message.reply('This minecraft account doesn\'t exist');
+
+      let skyblockAPI = async () => {
+        let result = await fetch(`https://api.hypixel.net/skyblock/profiles?key=${apikey}&uuid=${accountData.id}`);
+        skyblockJSON = result.json().catch((err) => {
+          skyblockJSON = undefined;
+        });
+        return skyblockJSON;
+      };
+
+      let skyblockData = await skyblockAPI();
+      if (skyblockJSON == undefined || accountJSON == undefined || skyblockData.success == false) {
+        message.reply(`An error occured`);
+        return;
+      }
+      if (skyblockData.profiles == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
+
+      let profiles = 'Profiles:';
+      for (let i = 0; i < skyblockData.profiles.length; i ++) {
+        profiles += `\n ${skyblockData.profiles[i].cute_name}`;
+      }
+      message.channel.send(profiles);
 
       break;
     }
