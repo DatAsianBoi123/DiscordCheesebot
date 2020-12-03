@@ -349,7 +349,7 @@ client.on('message', async message => {
         skyblock = skyblockJSON == undefined ? 'Skyblock data not found' : 'Skyblock data found';
         account = accountJSON == undefined ? 'Mojang account not found' : 'Mojong account found';
         data = skyblockData.success == false ? 'Player hasn\'t joined skyblock' : 'Player has joined skyblock';
-        message.channel.send(`An error occured ${skyblock}, ${account}, ${data}`);
+        message.channel.send(`An error occured: ${skyblock}, ${account}, ${data} (https://api.hypixel.net/player?key=${apikey}&uuid=${accountJSON.id})`);
         return;
       }
 
