@@ -392,7 +392,7 @@ client.on('message', async message => {
       let skyblockJSON;
       let accountJSON;
       let apikey = process.env.apikey;
-      if (!args[1]) return message.reply(`Incorrect command format! (${prefix}profilelist <name>)`);
+      if (!args[0]) return message.reply(`Incorrect command format! (${prefix}profilelist <name>)`);
 
       let nameAPI = async () => {
         let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
@@ -421,7 +421,7 @@ client.on('message', async message => {
 
       let profiles = 'Profiles:';
       for (let i = 0; i < skyblockData.profiles.length; i ++) {
-        profiles += `\n ${skyblockData.profiles[i].cute_name}`;
+        profiles += `\n${skyblockData.profiles[i].cute_name}`;
       }
       message.channel.send(profiles);
 
