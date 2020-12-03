@@ -347,11 +347,11 @@ client.on('message', async message => {
       break;
 }
 
-    case 'profilename': {
+    case 'getstats': {
       let skyblockJSON;
       let accountJSON;
       let apikey = process.env.apikey;
-      if (!args[1]) return message.reply(`Incorrect command format! (${prefix}profilename <name> <profile name>)`);
+      if (!args[1]) return message.reply(`Incorrect command format! (${prefix}getstats <name> <profile name>)`);
 
       let nameAPI = async () => {
         let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
@@ -380,7 +380,7 @@ client.on('message', async message => {
 
       for (let i = 0; i < skyblockData.profiles.length; i ++) {
         if (skyblockData.profiles[i].cute_name.toLowerCase() == args[1].toLowerCase()) {
-          console.log(skyblockData.profiles[i]);
+          console.log(skyblockData.profiles[i].members[accountData.id]);
           message.channel.send(`Profile name found: ${skyblockData.profiles[0].cute_name}`);
           return;
         }
