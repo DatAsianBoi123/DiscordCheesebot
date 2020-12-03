@@ -346,11 +346,14 @@ client.on('message', async message => {
 
       let skyblockData = await skyblockAPI();
       if (skyblockJSON == undefined || accountJSON == undefined || skyblockData.success == false) {
-        message.channel.send(`An error occured`);
+        skyblock = skyblockJSON == undefined ? 'Skyblock data not found' : 'Skyblock data found';
+        account = accountJSON == undefined ? 'Mojang account not found' : 'Mojong account found';
+        data = skyblockData.success == false ? 'Player hasn\'t joined skyblock' : 'Player has joined skyblock';
+        message.channel.send(`An error occured ${skyblock}, ${account}, ${data}`);
         return;
       }
 
-      message.channel.send(`Success! ${data.player.displayname}`);
+      message.channel.send(`Success! ${skyblockData.player.displayname}`);
 
       break;
 
