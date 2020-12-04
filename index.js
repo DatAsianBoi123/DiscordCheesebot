@@ -432,7 +432,8 @@ client.on('message', async message => {
           let skillText = '';
           for (let n = 0; n < Object.keys(skills).length; n ++) {
             key = Object.keys(skills)[n];
-            skillText += `${key} level ${skills[key].level}\t${skills[key].progress * 100}% to ${key.toLocaleLowerCase()} ${skills[key].level + 1}\n`;
+            skill = skills[key];
+            skillText += `${key} level ${skill.level}, ${Math.round(skill.progress * 100)}% to ${key.toLocaleLowerCase()} ${skill.level + 1}  (${nFormatter(skill.xpCurrent)} / ${nFormatter(skill.xpForNext)}xp)\n`;
           }
           skillText.replace(/\n+$/, "");
 
@@ -819,6 +820,26 @@ function getLevelByXp(xp, hypixelProfile, type = 'regular') {
         xpForNext,
         progress
     };
+}
+
+function nFormatter(num, digits) {
+  var si = [
+    { value: 1, symbol: "" },
+    { value: 1E3, symbol: "k" },
+    { value: 1E6, symbol: "M" },
+    { value: 1E9, symbol: "G" },
+    { value: 1E12, symbol: "T" },
+    { value: 1E15, symbol: "P" },
+    { value: 1E18, symbol: "E" }
+  ];
+  var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+  var i;
+  for (i = si.length - 1; i > 0; i--) {
+    if (num >= si[i].value) {
+      break;
+    }
+  }
+  return (num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
 }
 
 client.login(process.env.token);
