@@ -394,8 +394,19 @@ client.on('message', async message => {
         if (profile.cute_name.toLowerCase() == args[1].toLowerCase()) {
           const member = profile.members[accountData.id];
           const achievements = hypixelData.player.achievements;
-          const skills = ['Combat', 'Foraging', 'Mining', 'Fishing', 'Farming', 'Alchemy', 'Enchanting', 'Taming', 'Carpentry', 'Runecrafting'];
-
+          const skills = {
+            'Combat': getLevelByXp(member.experience_skill_combat, achievements),
+            'Foraging': getLevelByXp(member.experience_skill_foraging, achievements),
+            'Mining': getLevelByXp(member.experience_skill_mining, achievements),
+            'Fishing': getLevelByXp(member.experience_skill_fishing, achievements),
+            'Farming': getLevelByXp(member.experience_skill_farming, achievements),
+            'Alchemy': getLevelByXp(member.experience_skill_alchemy, achievements),
+            'Enchanting': getLevelByXp(member.experience_skill_enchanting, achievements),
+            'Taming': getLevelByXp(member.experience_skill_taming, achievements),
+            'Carpentry': getLevelByXp(member.experience_skill_carpentry, achievements),
+            'Runecrafting': getLevelByXp(member.experience_skill_runecrafting, achievements, 'runecrafting')
+          };
+          /*
           let combat = getLevelByXp(member.experience_skill_combat, achievements);
           let foraging = getLevelByXp(member.experience_skill_foraging, achievements);
           let mining = getLevelByXp(member.experience_skill_mining, achievements);
@@ -406,12 +417,10 @@ client.on('message', async message => {
           let taming = getLevelByXp(member.experience_skill_taming, achievements);
           let carpentry = getLevelByXp(member.experience_skill_carpentry, achievements);
           let runecrafting = getLevelByXp(member.experience_skill_runecrafting, achievements, 'runecrafting');
-
+          */
           let skillText = '';
-          let loweredSkills;
           for (let n = 0; n < skills.length; n ++) {
-            loweredSkills = skills[n].toLocaleLowerCase();
-            skillText += `${skills[n]} level ${loweredSkills.level}\n`;
+            skillText += `${Object.keys(skills)[n]} level ${skills[n].level}\n`;
           }
           skillText.replace(/\n+$/, "");
 
