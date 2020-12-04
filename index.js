@@ -548,7 +548,7 @@ client.on('message', async message => {
 
           let dungeonXp = member.dungeons.dungeon_types.catacombs.experience;
           message.channel.send(getLevelByXp(dungeonXp, achievements, 'dungeon').level);
-          console.log(member.dungeons.dungeon_types);
+          console.log(member.dungeons);
         }
       }
 
