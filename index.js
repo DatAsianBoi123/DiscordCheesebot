@@ -500,12 +500,12 @@ client.on('message', async message => {
       break;
     }
 
-    case 'catacombslevel': {
+    case 'catalevel': {
       let skyblockJSON;
       let accountJSON;
       let hypixelJSON;
       let apikey = process.env.apikey;
-      if (!args[1]) return message.reply(`Incorrect command format! (${prefix}skyblockskills <name> <profile name>)`);
+      if (!args[1]) return message.reply(`Incorrect command format! (${prefix}catalevel <name> <profile name>)`);
 
       let nameAPI = async () => {
         let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
