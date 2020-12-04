@@ -540,15 +540,20 @@ client.on('message', async message => {
         return message.reply(`An error occured`);
       if (skyblockData.profiles == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
 
-      for (let i = 0; i < skyblockData.profiles.length; i ++) {
+      for (let i = 0; i < skyblockData.profiles.length; i++) {
         const profile = skyblockData.profiles[i];
         if (profile.cute_name.toLowerCase() == args[1].toLowerCase()) {
           const member = profile.members[accountData.id];
           const achievements = hypixelData.player.achievements;
+          const dungeon = member.dungeons;
+          const catacombs = dungeon.dungeon_types.catacombs;
 
-          let dungeonXp = member.dungeons.dungeon_types.catacombs.experience;
-          message.channel.send(getLevelByXp(dungeonXp, achievements, 'dungeon').level);
-          console.log(member.dungeons);
+          let classLevels = '';
+          for (let i = 0; i < Object.keys(dungeon.player_classes).length; i++) {
+            keys = Object.keys(dungeon.player_classes);
+            classLevels += `\n${keys[i]} level ${dungeon.player_classes[keys[i]]}`;
+          }
+          message.channel.send(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level} ${classLevels}`);
         }
       }
 
