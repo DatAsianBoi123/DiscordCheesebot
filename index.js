@@ -380,7 +380,7 @@ client.on('message', async message => {
 
       for (let i = 0; i < skyblockData.profiles.length; i ++) {
         if (skyblockData.profiles[i].cute_name.toLowerCase() == args[1].toLowerCase()) {
-          message.channel.send(`${getLevelByXp(skyblockData.profiles[i].members[accountData.id].experience_skill_combat).level} combat level`);
+          message.channel.send(`${getLevelByXp(skyblockData.profiles[i].members[accountData.id].experience_skill_combat, false).level} combat level`);
           return;
         }
       }
@@ -689,7 +689,9 @@ client.on('message', async message => {
   }
 });
 
-function getLevelByXp(xp) {
+function getLevelByXp(xp, runecrafting) {
+  let xp_table = runecrafting ? runecrafting_xp : leveling_xp;
+
   let xpTotal = 0;
   let level = 0;
 
