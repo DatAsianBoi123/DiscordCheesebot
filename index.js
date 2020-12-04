@@ -348,12 +348,12 @@ client.on('message', async message => {
       break;
 }
 
-    case 'getstats': {
+    case 'skyblockskills': {
       let skyblockJSON;
       let accountJSON;
       let hypixelJSON;
       let apikey = process.env.apikey;
-      if (!args[1]) return message.reply(`Incorrect command format! (${prefix}getstats <name> <profile name>)`);
+      if (!args[1]) return message.reply(`Incorrect command format! (${prefix}skyblockskills <name> <profile name>)`);
 
       let nameAPI = async () => {
         let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
@@ -390,13 +390,32 @@ client.on('message', async message => {
       if (skyblockData.profiles == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
 
       for (let i = 0; i < skyblockData.profiles.length; i ++) {
-        if (skyblockData.profiles[i].cute_name.toLowerCase() == args[1].toLowerCase()) {
-          let combat = getLevelByXp(skyblockData.profiles[i].members[accountData.id].experience_skill_combat, hypixelData.player.achievements);
+        const profile = skyblockData.profiles[i];
+        if (profile.cute_name.toLowerCase() == args[1].toLowerCase()) {
+          const member = profile.members[accountData.id];
+          const achievements = hypixelData.player.achievements;
+          const skills = ['Combat', 'Foraging', 'Mining', 'Fishing', 'Farming', 'Alchemy', 'Enchanting', 'Taming', 'Carpentry', 'Runecrafting'];
+
+          let combat = getLevelByXp(member.experience_skill_combat, achievements);
+          let foraging = getLevelByXp(member.experience_skill_foraging, achievements);
+          let mining = getLevelByXp(member.experience_skill_mining, achievements);
+          let fishing = getLevelByXp(member.experience_skill_fishing, achievements);
+          let farming = getLevelByXp(member.experience_skill_farming, achievements);
+          let alchemy = getLevelByXp(member.experience_skill_alchemy, achievements);
+          let enchanting = getLevelByXp(member.experience_skill_enchanting, achievements);
+          let taming = getLevelByXp(member.experience_skill_taming, achievements);
+          let carpentry = getLevelByXp(member.experience_skill_carpentry, achievements);
+          let runecrafting = getLevelByXp(member.experience_skill_runecrafting, achievements, 'runecrafting');
+
+          let skillText;
+          for (let n = 0; n < skills.length; n ++) {
+            skillText += `${skills[n]} level ${skills[n].toLowerCase().level} \n`;
+          }
+          skillText.replace(/\n+$/, "");
 
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
-            .setDescription(`Combat level: ${combat.level}`)
-            .setFooter(`${Math.round(combat.progress * 100)}% to combat ${combat.level + 1} (${combat.xpCurrent} / ${combat.xpForNext} xp needed)`)
+            .setDescription(skillText)
             .setColor('GREEN');
           message.channel.send(embedMessage);
           return;
