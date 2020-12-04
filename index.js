@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const fetch = require('node-fetch');
 const fs = require('fs');
+const skillxp = require('./skillxp.js');
 const prefix = 'b.';
 const client = new Discord.Client();
 
@@ -28,7 +29,7 @@ let embedHelp2 = new Discord.MessageEmbed()
 
 client.once('ready', () => {
   console.log('Ready');
-  client.user.setActivity('b.help');
+  client.user.setActivity(`${prefix}help`);
 });
 
 client.on('message', async message => {
@@ -380,7 +381,7 @@ client.on('message', async message => {
 
       for (let i = 0; i < skyblockData.profiles.length; i ++) {
         if (skyblockData.profiles[i].cute_name.toLowerCase() == args[1].toLowerCase()) {
-          message.channel.send(`${getLevelByXp(skyblockData.profiles[i].members[accountData.id].experience_skill_combat, false).level} combat level`);
+          message.channel.send(`${getLevelByXp(skyblockData.profiles[i].members[accountData.id].experience_skill_combat, skyblockData.profiles[i].members[accountData.id])} combat level`);
           return;
         }
       }
@@ -689,41 +690,71 @@ client.on('message', async message => {
   }
 });
 
-function getLevelByXp(xp, runecrafting) {
-  let xp_table = runecrafting ? runecrafting_xp : leveling_xp;
+function getLevelByXp(xp, hypixelProfile, type = 'regular') {
+    let xp_table;
 
-  let xpTotal = 0;
-  let level = 0;
-
-  let xpForNext = Infinity;
-
-  let maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
-
-  for(let x = 1; x <= maxLevel; x++){
-    xpTotal += xp_table[x];
-    if(xpTotal > xp){
-      xpTotal -= xp_table[x];
-      break;
-    }else{
-      level = x;
+    switch (type) {
+        case 'runecrafting':
+            xp_table = skillxp.runecrafting_xp;
+            break;
+        case 'dungeon':
+            xp_table = skillxp.dungeon_xp;
+            break;
+        default:
+            xp_table = skillxp.leveling_xp;
     }
-  }
 
-  let xpCurrent = Math.floor(xp - xpTotal);
+    if (isNaN(xp)) {
+        return {
+            xp: 0,
+            level: 0,
+            xpCurrent: 0,
+            xpForNext: xp_table[1],
+            progress: 0
+        };
+    }
 
-  if(level < maxLevel)
-    xpForNext = Math.ceil(xp_table[level + 1]);
+    let xpTotal = 0;
+    let level = 0;
 
-  let progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+    let xpForNext = Infinity;
 
-  return {
-    xp,
-    level,
-    maxLevel,
-    xpCurrent,
-    xpForNext,
-    progress
-  };
+    let maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
+    let maxLevelCap = maxLevel;
+
+    if(skillxp.skills_cap[type] > maxLevel && type in skillxp.skills_achievements){
+        xp_table = Object.assign(skillxp.xp_past_50, xp_table);
+
+        maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
+        maxLevelCap = Math.max(maxLevelCap, hypixelProfile.achievements[skillxp.skills_achievements[type]]);
+    }
+
+    for(let x = 1; x <= maxLevelCap; x++){
+        xpTotal += xp_table[x];
+
+        if(xpTotal > xp){
+            xpTotal -= xp_table[x];
+            break;
+        }else{
+            level = x;
+        }
+    }
+
+    let xpCurrent = Math.floor(xp - xpTotal);
+
+    if(level < maxLevel)
+        xpForNext = Math.ceil(xp_table[level + 1]);
+
+    let progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+
+    return {
+        xp,
+        level,
+        maxLevel,
+        xpCurrent,
+        xpForNext,
+        progress
+    };
 }
 
 client.login(process.env.token);
