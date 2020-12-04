@@ -375,10 +375,10 @@ client.on('message', async message => {
 
       let hypixelAPI = async () => {
         let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountData.id}`);
-        skyblockJSON = result.json().catch((err) => {
+        hypixelJSON = result.json().catch((err) => {
           skyblockJSON = undefined;
         });
-        return skyblockJSON;
+        return hypixelJSON;
       };
 
       let hypixelData = await hypixelAPI();
