@@ -29,7 +29,7 @@ let embedHelp2 = new Discord.MessageEmbed()
 
 client.once('ready', () => {
   console.log('Ready');
-  console.log(skillxp.skills.leveling_xp[0]);
+  console.log(leveling_xp[0]);
   client.user.setActivity(`${prefix}help`);
 });
 
