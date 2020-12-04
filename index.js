@@ -391,7 +391,7 @@ client.on('message', async message => {
 
       for (let i = 0; i < skyblockData.profiles.length; i ++) {
         if (skyblockData.profiles[i].cute_name.toLowerCase() == args[1].toLowerCase()) {
-          message.channel.send(`${getLevelByXp(skyblockData.profiles[i].members[accountData.id].experience_skill_combat, hypixelData.player.achievements)} combat level`);
+          message.channel.send(`${getLevelByXp(skyblockData.profiles[i].members[accountData.id].experience_skill_combat, hypixelData.player.achievements).level} combat level`);
           return;
         }
       }
