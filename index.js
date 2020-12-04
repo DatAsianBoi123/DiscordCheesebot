@@ -547,7 +547,7 @@ client.on('message', async message => {
           const achievements = hypixelData.player.achievements;
 
           let dungeonXp = member.dungeons.dungeon_types.catacombs.experience;
-          message.channel.send(getLevelByXp(dungeonXp, achievements).level);
+          message.channel.send(getLevelByXp(dungeonXp, achievements, 'dungeon').level);
         }
       }
 
