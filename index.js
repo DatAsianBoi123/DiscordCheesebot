@@ -45,7 +45,7 @@ client.on('message', async message => {
 
   switch (command) {
     case 'help': {
-      if (args[0] === "2") return message.channel.send(embedHelp2);
+      if (args[0] === '2') return message.channel.send(embedHelp2);
       message.channel.send(embedHelp1);
       break;
     }
@@ -346,7 +346,7 @@ client.on('message', async message => {
       message.channel.send(`${accountData.name}'s network level is ${levels} (${exp.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} total exp)`);
 
       break;
-}
+    }
 
     case 'skyblockskills': {
       let skyblockJSON;
@@ -357,7 +357,7 @@ client.on('message', async message => {
 
       let nameAPI = async () => {
         let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
-        accountJSON = result.json().catch(err => {
+        accountJSON = result.json().catch(() => {
           accountJSON = undefined;
         });
         return accountJSON;
@@ -367,7 +367,7 @@ client.on('message', async message => {
 
       let skyblockAPI = async () => {
         let result = await fetch(`https://api.hypixel.net/skyblock/profiles?key=${apikey}&uuid=${accountData.id}`);
-        skyblockJSON = result.json().catch((err) => {
+        skyblockJSON = result.json().catch(() => {
           skyblockJSON = undefined;
         });
         return skyblockJSON;
@@ -375,7 +375,7 @@ client.on('message', async message => {
 
       let hypixelAPI = async () => {
         let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountData.id}`);
-        hypixelJSON = result.json().catch((err) => {
+        hypixelJSON = result.json().catch(() => {
           skyblockJSON = undefined;
         });
         return hypixelJSON;
@@ -468,7 +468,7 @@ client.on('message', async message => {
 
       let nameAPI = async () => {
         let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
-        accountJSON = result.json().catch(err => {
+        accountJSON = result.json().catch(() => {
           accountJSON = undefined;
         });
         return accountJSON;
@@ -478,7 +478,7 @@ client.on('message', async message => {
 
       let skyblockAPI = async () => {
         let result = await fetch(`https://api.hypixel.net/skyblock/profiles?key=${apikey}&uuid=${accountData.id}`);
-        skyblockJSON = result.json().catch((err) => {
+        skyblockJSON = result.json().catch(() => {
           skyblockJSON = undefined;
         });
         return skyblockJSON;
@@ -496,6 +496,49 @@ client.on('message', async message => {
         profiles += `\n${skyblockData.profiles[i].cute_name}`;
       }
       message.channel.send(profiles);
+
+      break;
+    }
+
+    case 'catacombslevel': {
+      let skyblockJSON;
+      let accountJSON;
+      let hypixelJSON;
+      let apikey = process.env.apikey;
+      if (!args[1]) return message.reply(`Incorrect command format! (${prefix}skyblockskills <name> <profile name>)`);
+
+      let nameAPI = async () => {
+        let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
+        accountJSON = result.json().catch(() => {
+          accountJSON = undefined;
+        });
+        return accountJSON;
+      };
+      let accountData = await nameAPI();
+      if (accountJSON == undefined) return message.reply('This minecraft account doesn\'t exist');
+
+      let skyblockAPI = async () => {
+        let result = await fetch(`https://api.hypixel.net/skyblock/profiles?key=${apikey}&uuid=${accountData.id}`);
+        skyblockJSON = result.json().catch(() => {
+          skyblockJSON = undefined;
+        });
+        return skyblockJSON;
+      };
+
+      let hypixelAPI = async () => {
+        let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountData.id}`);
+        hypixelJSON = result.json().catch(() => {
+          skyblockJSON = undefined;
+        });
+        return hypixelJSON;
+      };
+
+      let hypixelData = await hypixelAPI();
+      let skyblockData = await skyblockAPI();
+      if (skyblockJSON == undefined || accountJSON == undefined || hypixelJSON == undefined || skyblockData.success == false)
+        return message.reply(`An error occured`);
+      if (skyblockData.profiles == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
+      console.log(hypixelData.player.achievements);
 
       break;
     }
