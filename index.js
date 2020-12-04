@@ -351,6 +351,7 @@ client.on('message', async message => {
     case 'getstats': {
       let skyblockJSON;
       let accountJSON;
+      let hypixelJSON;
       let apikey = process.env.apikey;
       if (!args[1]) return message.reply(`Incorrect command format! (${prefix}getstats <name> <profile name>)`);
 
@@ -372,8 +373,17 @@ client.on('message', async message => {
         return skyblockJSON;
       };
 
+      let hypixelAPI = async () => {
+        let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountData.id}`);
+        skyblockJSON = result.json().catch((err) => {
+          skyblockJSON = undefined;
+        });
+        return skyblockJSON;
+      };
+
+      let hypixelData = await hypixelAPI();
       let skyblockData = await skyblockAPI();
-      if (skyblockJSON == undefined || accountJSON == undefined || skyblockData.success == false) {
+      if (skyblockJSON == undefined || accountJSON == undefined || hypixelJSON == undefined || skyblockData.success == false) {
         message.reply(`An error occured`);
         return;
       }
@@ -381,7 +391,7 @@ client.on('message', async message => {
 
       for (let i = 0; i < skyblockData.profiles.length; i ++) {
         if (skyblockData.profiles[i].cute_name.toLowerCase() == args[1].toLowerCase()) {
-          console.log(skyblockData);
+          console.log(hypixelData.achievements);
           message.channel.send(`${getLevelByXp(skyblockData.profiles[i].members[accountData.id].experience_skill_combat, skyblockData.profiles[i].members[accountData.id])} combat level`);
           return;
         }
