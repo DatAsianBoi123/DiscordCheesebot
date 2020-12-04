@@ -435,10 +435,9 @@ client.on('message', async message => {
             skillText += `${key} ${skill.level}, ${Math.round(skill.progress * 100)}% to ${key.toLocaleLowerCase()} ${skill.level + 1}  (${nFormatter(skill.xpCurrent)} / ${nFormatter(skill.xpForNext)} xp)\n\n`;
             if (key == 'Runecrafting' || key == 'Carpentry') continue;
             skillAvg += skill.level;
-            console.log(`${key}: ${skill.level}, ${skillAvg}`);
           }
           skillText.replace(/\n+$/, '');
-          skillText += `--------------------------\nSkill average without progress: ${Math.round(skillAvg / (Object.keys(skills).length - 2))}`;
+          skillText += `--------------------------\nSkill average without progress: ${Math.round((skillAvg / (Object.keys(skills).length - 2)) * 100) / 100}`;
 
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
