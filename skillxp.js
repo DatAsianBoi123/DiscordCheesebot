@@ -1,4 +1,4 @@
-module.exports = {
+module.exports.skills = {
   // XP required for each level of a skill
   leveling_xp: {
     1: 50,
