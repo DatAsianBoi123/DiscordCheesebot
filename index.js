@@ -419,7 +419,7 @@ client.on('message', async message => {
           let runecrafting = getLevelByXp(member.experience_skill_runecrafting, achievements, 'runecrafting');
           */
           let skillText = '';
-          for (let n = 0; n < skills.length; n ++) {
+          for (let n = 0; n < Object.keys(skills).length; n ++) {
             skillText += `${Object.keys(skills)[n]} level ${skills[n].level}\n`;
           }
           skillText.replace(/\n+$/, "");
