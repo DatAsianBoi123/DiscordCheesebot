@@ -427,13 +427,16 @@ client.on('message', async message => {
           skills.Carpentry = Carpentry;
           skills.Runecrafting = Runecrafting;
 
+          let skillAvg = 0;
           let skillText = '';
           for (let n = 0; n < Object.keys(skills).length; n ++) {
             key = Object.keys(skills)[n];
             skill = skills[key];
             skillText += `${key} ${skill.level}, ${Math.round(skill.progress * 100)}% to ${key.toLocaleLowerCase()} ${skill.level + 1}  (${nFormatter(skill.xpCurrent)} / ${nFormatter(skill.xpForNext)} xp)\n\n`;
+            skillAvg += skill.level;
           }
-          skillText.replace(/\n+$/, "");
+          skillText.replace(/\n+$/, '');
+          skillText += `\n--------------------------\nSkill average without progress: ${Math.round(skillAvg / skills.length)}`;
 
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
