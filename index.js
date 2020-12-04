@@ -391,11 +391,20 @@ client.on('message', async message => {
 
       for (let i = 0; i < skyblockData.profiles.length; i ++) {
         if (skyblockData.profiles[i].cute_name.toLowerCase() == args[1].toLowerCase()) {
-          message.channel.send(`${getLevelByXp(skyblockData.profiles[i].members[accountData.id].experience_skill_combat, hypixelData.player.achievements).level} combat level`);
+          let combat = getLevelByXp(skyblockData.profiles[i].members[accountData.id].experience_skill_combat, hypixelData.player.achievements);
+
+          let embedMessage = new Discord.MessageEmbed()
+            .setTitle('Profile Found!')
+            .setDescription(`Combat level: ${combat.level} \n${combat.progress}% to combat ${combat.level + 1} (${combat.xpCurrent} / ${combat.xpForNext} xp needed)`)
+            .setColor('GREEN');
+          message.channel.send(embedMessage);
           return;
         }
       }
-      message.reply(`This profile doesn't exist! (${args[1]})`);
+      let embedMessage = new Discord.MessageEmbed()
+        .setTitle('Unknown Profile')
+        .setDescription(`This profile (${args[0]}) doesn't exist on this user (${accountData.name})!`)
+        .setColor('RED');
 
       break;
     }
