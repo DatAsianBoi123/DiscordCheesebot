@@ -438,7 +438,7 @@ client.on('message', async message => {
             console.log(`${key}: ${skill.level}, ${skillAvg}`);
           }
           skillText.replace(/\n+$/, '');
-          skillText += `--------------------------\nSkill average without progress: ${Math.round(skillAvg / (key.length - 2))}`;
+          skillText += `--------------------------\nSkill average without progress: ${Math.round(skillAvg / (Object.keys(skills).length - 2))}`;
 
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
