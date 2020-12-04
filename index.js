@@ -29,6 +29,7 @@ let embedHelp2 = new Discord.MessageEmbed()
 
 client.once('ready', () => {
   console.log('Ready');
+  console.log(skillxp.skills_cap);
   client.user.setActivity(`${prefix}help`);
 });
 
