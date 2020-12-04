@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const fetch = require('node-fetch');
 const fs = require('fs');
-const skillxp = require('./skillxp.js');
+const skillxp = require('./skillxp');
 const prefix = 'b.';
 const client = new Discord.Client();
 
@@ -29,7 +29,7 @@ let embedHelp2 = new Discord.MessageEmbed()
 
 client.once('ready', () => {
   console.log('Ready');
-  console.log(skillxp);
+  console.log(skillxp.leveling_xp[0]);
   client.user.setActivity(`${prefix}help`);
 });
 
