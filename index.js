@@ -395,7 +395,8 @@ client.on('message', async message => {
 
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
-            .setDescription(`Combat level: ${combat.level} \n${combat.progress}% to combat ${combat.level + 1} (${combat.xpCurrent} / ${combat.xpForNext} xp needed)`)
+            .setDescription(`Combat level: ${combat.level}`)
+            .setFooter(`${Math.round(combat.progress * 100)}% to combat ${combat.level + 1} (${combat.xpCurrent} / ${combat.xpForNext} xp needed)`)
             .setColor('GREEN');
           message.channel.send(embedMessage);
           return;
@@ -403,8 +404,10 @@ client.on('message', async message => {
       }
       let embedMessage = new Discord.MessageEmbed()
         .setTitle('Unknown Profile')
-        .setDescription(`This profile (${args[0]}) doesn't exist on this user (${accountData.name})!`)
+        .setDescription(`This profile doesn't exist on this user!`)
+        .setFooter(`Profile name: ${args[0]}, user: ${accountData.name}`)
         .setColor('RED');
+      message.reply(embedMessage);
 
       break;
     }
