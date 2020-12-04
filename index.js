@@ -407,16 +407,16 @@ client.on('message', async message => {
             'Runecrafting': undefined
           };
 
-          skills[0] = getLevelByXp(member.experience_skill_combat, achievements);
-          skills[1] = getLevelByXp(member.experience_skill_foraging, achievements);
-          skills[2] = getLevelByXp(member.experience_skill_mining, achievements);
-          skills[3] = getLevelByXp(member.experience_skill_fishing, achievements);
-          skills[4] = getLevelByXp(member.experience_skill_farming, achievements);
-          skills[5] = getLevelByXp(member.experience_skill_alchemy, achievements);
-          skills[6] = getLevelByXp(member.experience_skill_enchanting, achievements);
-          skills[7] = getLevelByXp(member.experience_skill_taming, achievements);
-          skills[8] = getLevelByXp(member.experience_skill_carpentry, achievements);
-          skills[9] = getLevelByXp(member.experience_skill_runecrafting, achievements, 'runecrafting');
+          skills.Combat = getLevelByXp(member.experience_skill_combat, achievements);
+          skills.Foraging = getLevelByXp(member.experience_skill_foraging, achievements);
+          skills.Mining = getLevelByXp(member.experience_skill_mining, achievements);
+          skills.Fishing = getLevelByXp(member.experience_skill_fishing, achievements);
+          skills.Farming = getLevelByXp(member.experience_skill_farming, achievements);
+          skills.Alchemy = getLevelByXp(member.experience_skill_alchemy, achievements);
+          skills.Enchanting = getLevelByXp(member.experience_skill_enchanting, achievements);
+          skills.Taming = getLevelByXp(member.experience_skill_taming, achievements);
+          skills.Carpentry = getLevelByXp(member.experience_skill_carpentry, achievements);
+          skills.Runecrafting = getLevelByXp(member.experience_skill_runecrafting, achievements, 'runecrafting');
 
           let skillText = '';
           for (let n = 0; n < Object.keys(skills).length; n ++) {
