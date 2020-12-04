@@ -407,9 +407,11 @@ client.on('message', async message => {
           let carpentry = getLevelByXp(member.experience_skill_carpentry, achievements);
           let runecrafting = getLevelByXp(member.experience_skill_runecrafting, achievements, 'runecrafting');
 
-          let skillText;
+          let skillText = '';
+          let loweredSkills;
           for (let n = 0; n < skills.length; n ++) {
-            skillText += `${skills[n]} level ${skills[n].toLowerCase().level} \n`;
+            loweredSkills = skills[n].toLocaleLowerCase();
+            skillText += `${skills[n]} level ${loweredSkills.level}\n`;
           }
           skillText.replace(/\n+$/, "");
 
