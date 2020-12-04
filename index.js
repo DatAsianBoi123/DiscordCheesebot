@@ -545,7 +545,9 @@ client.on('message', async message => {
         if (profile.cute_name.toLowerCase() == args[1].toLowerCase()) {
           const member = profile.members[accountData.id];
           const achievements = hypixelData.player.achievements;
-          message.channel.send(member.dungeons.dungeon_types.catacombs.experience);
+
+          let dungeonXp = member.dungeons.dungeon_types.catacombs.experience;
+          message.channel.send(getLevelByXp(dungeonXp, achievements));
         }
       }
 
