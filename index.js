@@ -420,7 +420,7 @@ client.on('message', async message => {
 
           let skillText = '';
           for (let n = 0; n < Object.keys(skills).length; n ++) {
-            skillText += `${Object.keys(skills)[n]} level ${skills[n].level}\n`;
+            skillText += `${Object.keys(skills)[n]} level ${skills[Object.keys(skills)[n]].level}\n`;
           }
           skillText.replace(/\n+$/, "");
 
