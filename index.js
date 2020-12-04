@@ -435,7 +435,7 @@ client.on('message', async message => {
             skillText += `${key} ${skill.level}, ${Math.round(skill.progress * 100)}% to ${key.toLocaleLowerCase()} ${skill.level + 1}  (${nFormatter(skill.xpCurrent)} / ${nFormatter(skill.xpForNext)} xp)\n\n`;
             if (key == 'Runecrafting' || key == 'Carpentry') continue;
             skillAvg += skill.level;
-            console.log(key);
+            console.log(`${key}: ${skill.level}, ${skillAvg}`);
           }
           skillText.replace(/\n+$/, '');
           skillText += `--------------------------\nSkill average without progress: ${Math.round((skillAvg / key.length - 2) * 100) / 100}`;
