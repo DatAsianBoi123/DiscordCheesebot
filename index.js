@@ -395,32 +395,44 @@ client.on('message', async message => {
           const member = profile.members[accountData.id];
           const achievements = hypixelData.player.achievements;
           const skills = {
-            'Combat': undefined,
-            'Foraging': undefined,
-            'Mining': undefined,
-            'Fishing': undefined,
-            'Farming': undefined,
-            'Alchemy': undefined,
-            'Enchanting': undefined,
-            'Taming': undefined,
-            'Carpentry': undefined,
-            'Runecrafting': undefined
+            'Combat': 0,
+            'Foraging': 0,
+            'Mining': 0,
+            'Fishing': 0,
+            'Farming': 0,
+            'Alchemy': 0,
+            'Enchanting': 0,
+            'Taming': 0,
+            'Carpentry': 0,
+            'Runecrafting': 0
           };
 
-          skills.Combat = getLevelByXp(member.experience_skill_combat, achievements);
-          skills.Foraging = getLevelByXp(member.experience_skill_foraging, achievements);
-          skills.Mining = getLevelByXp(member.experience_skill_mining, achievements);
-          skills.Fishing = getLevelByXp(member.experience_skill_fishing, achievements);
-          skills.Farming = getLevelByXp(member.experience_skill_farming, achievements);
-          skills.Alchemy = getLevelByXp(member.experience_skill_alchemy, achievements);
-          skills.Enchanting = getLevelByXp(member.experience_skill_enchanting, achievements);
-          skills.Taming = getLevelByXp(member.experience_skill_taming, achievements);
-          skills.Carpentry = getLevelByXp(member.experience_skill_carpentry, achievements);
-          skills.Runecrafting = getLevelByXp(member.experience_skill_runecrafting, achievements, 'runecrafting');
+          let Combat = getLevelByXp(member.experience_skill_combat, achievements);
+          let Foraging = getLevelByXp(member.experience_skill_foraging, achievements);
+          let Mining = getLevelByXp(member.experience_skill_mining, achievements);
+          let Fishing = getLevelByXp(member.experience_skill_fishing, achievements);
+          let Farming = getLevelByXp(member.experience_skill_farming, achievements);
+          let Alchemy = getLevelByXp(member.experience_skill_alchemy, achievements);
+          let Enchanting = getLevelByXp(member.experience_skill_enchanting, achievements);
+          let Taming = getLevelByXp(member.experience_skill_taming, achievements);
+          let Carpentry = getLevelByXp(member.experience_skill_carpentry, achievements);
+          let Runecrafting = getLevelByXp(member.experience_skill_runecrafting, achievements, 'runecrafting');
+
+          skills.Combat = Combat;
+          skills.Foraging = Foraging;
+          skills.Mining = Mining;
+          skills.Fishing = Fishing;
+          skills.Farming = Farming;
+          skills.Alchemy = Alchemy;
+          skills.Enchanting = Enchanting;
+          skills.Taming = Taming;
+          skills.Carpentry = Carpentry;
+          skills.Runecrafting = Runecrafting;
 
           let skillText = '';
           for (let n = 0; n < Object.keys(skills).length; n ++) {
-            skillText += `${Object.keys(skills)[n]} level ${skills[Object.keys(skills)[n]].level}\n`;
+            key = Object.keys(skills)[n];
+            skillText += `${key} level ${skills[key].level}\t${skills[key].progress * 100}% to ${key.toLocaleLowerCase()} ${skills[key].level + 1}\n`;
           }
           skillText.replace(/\n+$/, "");
 
