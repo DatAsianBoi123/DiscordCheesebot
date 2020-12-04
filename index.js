@@ -383,10 +383,8 @@ client.on('message', async message => {
 
       let hypixelData = await hypixelAPI();
       let skyblockData = await skyblockAPI();
-      if (skyblockJSON == undefined || accountJSON == undefined || hypixelJSON == undefined || skyblockData.success == false) {
-        message.reply(`An error occured`);
-        return;
-      }
+      if (skyblockJSON == undefined || accountJSON == undefined || hypixelJSON == undefined || skyblockData.success == false)
+        return message.reply(`An error occured`);
       if (skyblockData.profiles == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
 
       for (let i = 0; i < skyblockData.profiles.length; i ++) {
@@ -433,13 +431,14 @@ client.on('message', async message => {
           for (let n = 0; n < Object.keys(skills).length; n ++) {
             key = Object.keys(skills)[n];
             skill = skills[key];
-            skillText += `${key} level ${skill.level}, ${Math.round(skill.progress * 100)}% to ${key.toLocaleLowerCase()} ${skill.level + 1}  (${nFormatter(skill.xpCurrent)} / ${nFormatter(skill.xpForNext)}xp)\n`;
+            skillText += `${key} ${skill.level}, ${Math.round(skill.progress * 100)}% to ${key.toLocaleLowerCase()} ${skill.level + 1}  (${nFormatter(skill.xpCurrent)} / ${nFormatter(skill.xpForNext)} xp)\n\n`;
           }
           skillText.replace(/\n+$/, "");
 
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
             .setDescription(skillText)
+            .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
             .setColor('GREEN');
           message.channel.send(embedMessage);
           return;
@@ -826,7 +825,7 @@ function nFormatter(num, digits) {
   var si = [
     { value: 1, symbol: "" },
     { value: 1E3, symbol: "k" },
-    { value: 1E6, symbol: "M" },
+    { value: 1E6, symbol: "m" },
     { value: 1E9, symbol: "G" },
     { value: 1E12, symbol: "T" },
     { value: 1E15, symbol: "P" },
