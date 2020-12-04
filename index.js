@@ -533,12 +533,21 @@ client.on('message', async message => {
         return hypixelJSON;
       };
 
+
       let hypixelData = await hypixelAPI();
       let skyblockData = await skyblockAPI();
       if (skyblockJSON == undefined || accountJSON == undefined || hypixelJSON == undefined || skyblockData.success == false)
         return message.reply(`An error occured`);
       if (skyblockData.profiles == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
-      console.log(hypixelData.player.achievements);
+
+      for (let i = 0; i < skyblockData.profiles.length; i ++) {
+        const profile = skyblockData.profiles[i];
+        if (profile.cute_name.toLowerCase() == args[1].toLowerCase()) {
+          const member = profile.members[accountData.id];
+          const achievements = hypixelData.player.achievements;
+          message.channel.send(member.dungeons.dungeon_types.catacombs.experience);
+        }
+      }
 
       break;
     }
