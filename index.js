@@ -450,6 +450,7 @@ client.on('message', async message => {
             skillAvgWithoutProgress += skill.level;
             skillAvgWithProgress += skill.level + skill.progress;
           }
+          skillText.trim();
           skillText.replace(/\n+$/, "");
           skillText += `--------------------------\nSkill average without progress: ${Math.round((skillAvgWithoutProgress / (Object.keys(skills).length - 2)) * 100) / 100}\nSkill average with progress: ${Math.round((skillAvgWithProgress / (Object.keys(skills).length - 2)) * 100) / 100}`;
 
