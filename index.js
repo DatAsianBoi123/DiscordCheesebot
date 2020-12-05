@@ -563,14 +563,16 @@ client.on('message', async message => {
           let classLevels = '';
           for (let i = 0; i < Object.keys(dungeon.player_classes).length; i++) {
             keys = Object.keys(dungeon.player_classes);
-            classLevels += `\n${keys[i]} level ${getLevelByXp(dungeon.player_classes[keys[i]].experience, achievements, 'dungeon').level}`;
+            classLevels += `\n\n${keys[i]} level ${getLevelByXp(dungeon.player_classes[keys[i]].experience, achievements, 'dungeon').level}`;
           }
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
-            .setDescription(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}\n---------------- ${classLevels}`)
+            .setDescription(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}\n\n---------------- ${classLevels}`)
             .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
             .setColor('GREEN');
           message.channel.send(embedMessage);
+
+          return;
         }
         let embedMessage = new Discord.MessageEmbed()
           .setTitle('Unknown Profile')
