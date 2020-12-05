@@ -568,20 +568,19 @@ client.on('message', async message => {
           classLevels.replace(/\n+$/, "");
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
-            .setDescription(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}\n---------------- ${classLevels}`)
+            .setDescription(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}\n----------------\n${classLevels}`)
             .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
             .setColor('GREEN');
           message.channel.send(embedMessage);
-
           return;
         }
-        let embedMessage = new Discord.MessageEmbed()
-          .setTitle('Unknown Profile')
-          .setDescription('This profile doesn\'t exist on this user!')
-          .setFooter(`User: ${accountData.name}, Profile: ${args[1]}`)
-          .setColor('RED');
-        message.reply(embedMessage);
       }
+      let embedMessage = new Discord.MessageEmbed()
+        .setTitle('Unknown Profile')
+        .setDescription('This profile doesn\'t exist on this user!')
+        .setFooter(`User: ${accountData.name}, Profile: ${args[1]}`)
+        .setColor('RED');
+      message.reply(embedMessage);
 
       break;
     }
