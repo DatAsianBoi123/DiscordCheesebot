@@ -551,7 +551,7 @@ client.on('message', async message => {
           let classLevels = '';
           for (let i = 0; i < Object.keys(dungeon.player_classes).length; i++) {
             keys = Object.keys(dungeon.player_classes);
-            classLevels += `\n${keys[i]} level ${getLevelByXp(dungeon.player_classes[keys[i]].experience, 'dungeon').level}`;
+            classLevels += `\n${keys[i]} level ${getLevelByXp(dungeon.player_classes[keys[i]].experience, achievements, 'dungeon').level}`;
           }
           message.channel.send(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level} ${classLevels}`);
         }
