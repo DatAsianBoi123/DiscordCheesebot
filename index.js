@@ -500,12 +500,12 @@ client.on('message', async message => {
       break;
     }
 
-    case 'catalevel': {
+    case 'catainfo': {
       let skyblockJSON;
       let accountJSON;
       let hypixelJSON;
       let apikey = process.env.apikey;
-      if (!args[1]) return message.reply(`Incorrect command format! (${prefix}catalevel <name> <profile name>)`);
+      if (!args[1]) return message.reply(`Incorrect command format! (${prefix}catainfo <name> <profile name>)`);
 
       let nameAPI = async () => {
         let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
@@ -551,7 +551,7 @@ client.on('message', async message => {
           let classLevels = '';
           for (let i = 0; i < Object.keys(dungeon.player_classes).length; i++) {
             keys = Object.keys(dungeon.player_classes);
-            classLevels += `\n${keys[i]} level ${dungeon.player_classes[keys[i]].experience}`;
+            classLevels += `\n${keys[i]} level ${getLevelByXp(dungeon.player_classes[keys[i]].experience, 'dungeon').level}`;
           }
           message.channel.send(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level} ${classLevels}`);
         }
