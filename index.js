@@ -450,7 +450,7 @@ client.on('message', async message => {
             skillAvgWithoutProgress += skill.level;
             skillAvgWithProgress += skill.level + skill.progress;
           }
-          skillText.replace(/\n+$/, '');
+          skillText.replace(/\n+$/, "");
           skillText += `--------------------------\nSkill average without progress: ${Math.round((skillAvgWithoutProgress / (Object.keys(skills).length - 2)) * 100) / 100}\nSkill average with progress: ${Math.round((skillAvgWithProgress / (Object.keys(skills).length - 2)) * 100) / 100}`;
 
           let embedMessage = new Discord.MessageEmbed()
@@ -563,11 +563,12 @@ client.on('message', async message => {
           let classLevels = '';
           for (let i = 0; i < Object.keys(dungeon.player_classes).length; i++) {
             keys = Object.keys(dungeon.player_classes);
-            classLevels += `\n\n${keys[i]} level ${getLevelByXp(dungeon.player_classes[keys[i]].experience, achievements, 'dungeon').level}`;
+            classLevels += `${keys[i]} level ${getLevelByXp(dungeon.player_classes[keys[i]].experience, achievements, 'dungeon').level}\n\n`;
           }
+          classLevels.replace(/\n+$/, "");
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
-            .setDescription(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}\n\n---------------- ${classLevels}`)
+            .setDescription(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}\n---------------- ${classLevels}`)
             .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
             .setColor('GREEN');
           message.channel.send(embedMessage);
