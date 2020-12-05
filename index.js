@@ -311,7 +311,7 @@ client.on('message', async message => {
 
       let nameAPI = async () => {
         let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
-        accountJSON = result.json().catch(err => {
+        accountJSON = result.json().catch(() => {
           accountJSON = undefined;
         });
         return accountJSON;
@@ -321,7 +321,7 @@ client.on('message', async message => {
 
       let skyblockAPI = async () => {
         let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountData.id}`);
-        skyblockJSON = result.json().catch((err) => {
+        skyblockJSON = result.json().catch(() => {
           skyblockJSON = undefined;
         });
         return skyblockJSON;
@@ -332,7 +332,15 @@ client.on('message', async message => {
         message.reply(`An error occured`);
         return;
       }
-      if (skyblockData.player == null) return message.reply(`Looks like this player has never joined hypixel before! (${accountData.name})`);
+      if (skyblockData.player == null) {
+        let embedMessage = new Discord.MessageEmbed()
+          .setTitle('Unkown Player')
+          .setDescription(`Looks like this player has never joined hypixel before!`)
+          .setFooter(`User: ${accountData.name}`)
+          .setColor('RED');
+        message.channel.send(embedMessage);
+        return;
+      }
 
       const base = 10000;
       const growth = 2500;
@@ -343,7 +351,11 @@ client.on('message', async message => {
 
       let levels =  exp < 0 ? 1 : Math.floor((1 + reversePqPrefix + Math.sqrt(reverseConst + (2 / growth) * exp)) * 100) / 100;
 
-      message.channel.send(`${accountData.name}'s network level is ${levels} (${exp.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} total exp)`);
+      let embedMessage = new Discord.MessageEmbed()
+        .setTitle('Account Found!')
+        .setDescription(`${accountData.name}'s network level is ${levels} (${exp.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} total exp)`)
+        .setColor('GREEN');
+      message.channel.send(embedMessage);
 
       break;
     }
@@ -453,7 +465,7 @@ client.on('message', async message => {
       let embedMessage = new Discord.MessageEmbed()
         .setTitle('Unknown Profile')
         .setDescription(`This profile doesn't exist on this user!`)
-        .setFooter(`Profile name: ${args[0]}, user: ${accountData.name}`)
+        .setFooter(`User: ${accountData.name}, Profile: ${args[1]}`)
         .setColor('RED');
       message.reply(embedMessage);
 
@@ -553,8 +565,19 @@ client.on('message', async message => {
             keys = Object.keys(dungeon.player_classes);
             classLevels += `\n${keys[i]} level ${getLevelByXp(dungeon.player_classes[keys[i]].experience, achievements, 'dungeon').level}`;
           }
-          message.channel.send(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level} ${classLevels}`);
+          let embedMessage = new Discord.MessageEmbed()
+            .setTitle('Profile Found!')
+            .setDescription(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}\n---------------- ${classLevels}`)
+            .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
+            .setColor('GREEN');
+          message.channel.send(embedMessage);
         }
+        let embedMessage = new Discord.MessageEmbed()
+          .setTitle('Unknown Profile')
+          .setDescription('This profile doesn\'t exist on this user!')
+          .setFooter(`User: ${accountData.name}, Profile: ${args[1]}`)
+          .setColor('RED');
+        message.reply(embedMessage);
       }
 
       break;
