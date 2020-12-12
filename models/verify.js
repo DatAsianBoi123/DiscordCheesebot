@@ -1,17 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
-    user: {
-        type: Object,
-        required: true
-    }
-});
 const dataSchema = new Schema({
     users: {
         type: Object,
-        child: userSchema,
-        required: true,
+        required: true
     },
     type: {
         type: String,
