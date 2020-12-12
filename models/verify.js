@@ -4,7 +4,11 @@ const Schema = mongoose.Schema;
 const dataSchema = new Schema({
     users: {
         type: Object,
-        required: true
+        required: true,
+        user: {
+            type: Object,
+            required: true
+        }
     },
     type: {
         type: String,
