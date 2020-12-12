@@ -39,7 +39,7 @@ client.once('ready', () => {
 
   addData('Verify', 'verify', {
     users: {
-      Bogus: 0
+      User: 0
     }
   });
 
