@@ -1,9 +1,19 @@
 const Discord = require('discord.js');
+const client = new Discord.Client();
+
 const fetch = require('node-fetch');
 const fs = require('fs');
+const mongoose = require('mongoose');
+
 const skillxp = require('./skillxp');
+
 const prefix = 'b.';
-const client = new Discord.Client();
+
+const uri = `mongodb+srv://DatAsianBoi123:${process.env.mongopass}@mydiscordbot.xudyc.mongodb.net/discord-bot?retryWrites=true&w=majority`;
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connected'))
+    .catch(err => console.log(err));
+
 
 const help1 = `PREFIX - ${prefix} \n\nhelp - shows this help page (${prefix}help [help page number]) \n\ninfo - shows server info (${prefix}info) \n\nmyinfo - shows a users info (${prefix}myinfo [@user]) \n\nping - Pong! (${prefix}ping) \n\npig - Oink! (${prefix}pig) \n\nskycrypt / sc - shows a player's https://sky.shiiyu.moe (${prefix}skycrypt / sc <player name> [profile name]) \n\npog - displays a pog emote (${prefix}pog <pog name>) \n\nsource - shows the source code for Aspect Of The Cheesebot (${prefix}source) \n\ncheckname - checks if a minecraft user exists (${prefix}checkname <name>)`;
 const help2 = `mybucks - Shows the amount of bucks this user has (${prefix}mybucks [@user]) \n\nbucklist - Shows everyone's burgis bucks on this server (${prefix}bucklist)`;
@@ -12,9 +22,6 @@ var PollID;
 var BurgisBucks = {};
 var ShopList = [];
 var CostList = [];
-
-var data = fs.readFileSync('data.json');
-var textList = JSON.parse(data);
 
 let embedHelp1 = new Discord.MessageEmbed()
   .setTitle('General Commands')
@@ -29,19 +36,21 @@ let embedHelp2 = new Discord.MessageEmbed()
 
 client.once('ready', () => {
   console.log('Ready');
+
+  addData('Verify', 'verify', {
+    users: {
+      user: { name: undefined, uuid: undefined }
+    }
+  });
+
   client.user.setActivity(`${prefix}help`);
 });
 
 client.on('message', async message => {
+  if (message.author.bot || message.content.startsWith(prefix)) return;
+
   const args = message.content.slice(prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
-
-  if (message.mentions.users.size) {
-    if (message.mentions.users.first().username === "Aspect Of The Cheesebot") message.channel.send(embedHelp1);
-  }
-
-  if (message.author.bot) return;
-  if (message.content.indexOf(prefix) !== 0) return;
 
   switch (command) {
     case 'help': {
@@ -931,6 +940,57 @@ function nFormatter(num, digits) {
     }
   }
   return (num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
+}
+
+const addData = async function(dataType, dataTypePath, object) {
+    const Data = require(`./models/${dataTypePath}`);
+    let objectData = '';
+    await Data.find()
+    .then(result => {
+        objectData = result;
+    });
+    for (let i = 0; i < objectData.length; i++) if (objectData[i].type == dataType) return;
+    
+    object.type = dataType;
+    const data = new Data(object);
+
+    data.save();
+}
+const getDataByType = async function(dataType, dataTypePath) {
+    const Data = require(`./models/${dataTypePath}`);
+    let dataObject = '';
+    await Data.find()
+    .then(result => {
+        dataObject = result;
+    }).catch(err => {
+        console.log(err);
+    });
+
+    for (let i = 0; i < dataObject.length; i++) if (dataObject[i].type == dataType) return dataObject[i];
+}
+const updateById = async function (id, dataTypePath, updatedValues) {
+    const Data = require(`./models/${dataTypePath}`);
+
+    Data.findById(id)
+        .then(result => {
+            if (!result) return console.log('No object found');
+
+            for (let i = 0; i < Object.keys(updatedValues).length; i++) {
+                result[Object.keys(updatedValues)[i]] = updatedValues[Object.keys(updatedValues)[i]];
+            }
+            result.save(err => {
+                if (err) console.log(err);
+            });
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
+
+module.exports = {
+  addData,
+  getDataByType,
+  updateById
 }
 
 client.login(process.env.token);
