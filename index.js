@@ -38,9 +38,7 @@ client.once('ready', () => {
   console.log('Ready');
 
   addData('Verify', 'verify', {
-    users: {
-      User: 0
-    }
+    users: {}
   });
 
   client.user.setActivity(`${prefix}help`);
