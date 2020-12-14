@@ -243,21 +243,23 @@ client.on('message', async message => {
                 return json;
             };
             let name = await nameAPI();
-            if (json == undefined) {
-                return;
+            if (json == undefined) return;
+
+            const data = await getDataByType('Verify', 'verify');
+
+            for (users in data.users) {
+                if (users == name.id) return message.reply('e');
             }
+
+            let Object = {};
+            Object.users = data.users;
+            Object.users[message.author.username] = name.id;
 
             embedVerification = new Discord.MessageEmbed()
                 .setTitle('Verification Successful!')
                 .setDescription('This minecraft accound was found!')
                 .setColor('GREEN')
                 .setFooter(`Name: ${name.name}, ID: ${name.id}`);
-
-            const data = await getDataByType('Verify', 'verify');
-
-            let Object = {};
-            Object.users = data.users;
-            Object.users[message.author.username] = name.id;
 
             updateById(data._id, 'verify', Object);
             message.channel.send(embedVerification);
