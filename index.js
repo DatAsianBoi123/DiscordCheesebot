@@ -247,13 +247,15 @@ client.on('message', async message => {
 
             const data = await getDataByType('Verify', 'verify');
 
-            for (users in data.users) {
-                if (users == name.id) return message.reply('e');
+            for (let i = 0; i < Object.keys(data.users).length; i++) {
+                const keys = Object.keys(data.users);
+
+                if (data.users[keys[i]] == name.id) return message.reply('e');
             }
 
-            let Object = {};
-            Object.users = data.users;
-            Object.users[message.author.username] = name.id;
+            let object = {};
+            object.users = data.users;
+            object.users[message.author.username] = name.id;
 
             embedVerification = new Discord.MessageEmbed()
                 .setTitle('Verification Successful!')
@@ -261,7 +263,7 @@ client.on('message', async message => {
                 .setColor('GREEN')
                 .setFooter(`Name: ${name.name}, ID: ${name.id}`);
 
-            updateById(data._id, 'verify', Object);
+            updateById(data._id, 'verify', object);
             message.channel.send(embedVerification);
 
             break;
