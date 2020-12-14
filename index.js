@@ -42,7 +42,7 @@ client.once('ready', () => {
 
     addData('Verify', 'verify', {
         users: {
-            DatAsianBoi1234: null
+            user: null
         }
     });
 

@@ -12,5 +12,5 @@ const dataSchema = new Schema({
     }
 }, { timestamps: true });
 
-const Data = mongoose.model('Object', dataSchema);
+const Data = mongoose.model('Buck', dataSchema);
 module.exports = Data;
