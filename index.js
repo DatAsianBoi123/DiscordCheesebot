@@ -250,8 +250,8 @@ client.on('message', async message => {
             for (let i = 0; i < Object.keys(data.users).length; i++) {
                 const keys = Object.keys(data.users);
 
-                if (data.users[keys[i]] == name.id) return message.reply('Account taken')
-                else if (keys[i] == message.author.username) return message.reply('Already verified');
+                if (keys[i] == message.author.username) return message.reply('Already verified')
+                else if (data.users[keys[i]] == name.id) return message.reply('Account taken');
             }
 
             let object = {};
