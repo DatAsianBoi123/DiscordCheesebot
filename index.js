@@ -223,7 +223,7 @@ client.on('message', async message => {
 
         case 'verify': {
             let json;
-            if (!message.author.hasPermission('ADMINISTRATOR')) return;
+            if (!message.member.hasPermission('ADMINISTRATOR')) return;
             if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}checkname <name>)`);
 
             let embedVerification;
