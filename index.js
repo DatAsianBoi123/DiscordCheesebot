@@ -41,7 +41,9 @@ client.once('ready', () => {
     console.log('Ready');
 
     addData('Verify', 'verify', {
-        users: {}
+        users: {
+            DatAsianBoi1234: null
+        }
     });
 
     client.user.setActivity(`${prefix}help`);
