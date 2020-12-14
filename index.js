@@ -10,7 +10,10 @@ const skillxp = require('./skillxp');
 const prefix = 'b.';
 
 const uri = `mongodb+srv://DatAsianBoi123:${process.env.mongopass}@mydiscordbot.xudyc.mongodb.net/discord-bot?retryWrites=true&w=majority`;
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(uri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
     .then(() => console.log('Connected'))
     .catch(err => console.log(err));
 
@@ -24,836 +27,770 @@ var ShopList = [];
 var CostList = [];
 
 let embedHelp1 = new Discord.MessageEmbed()
-  .setTitle('General Commands')
-  .setDescription(help1)
-  .setFooter('1/2')
-  .setColor('RED');
+    .setTitle('General Commands')
+    .setDescription(help1)
+    .setFooter('1/2')
+    .setColor('RED');
 let embedHelp2 = new Discord.MessageEmbed()
-  .setTitle('Burgis Buck Commands')
-  .setDescription(help2)
-  .setFooter('2/2')
-  .setColor('ORANGE');
+    .setTitle('Burgis Buck Commands')
+    .setDescription(help2)
+    .setFooter('2/2')
+    .setColor('ORANGE');
 
 client.once('ready', () => {
-  console.log('Ready');
+    console.log('Ready');
 
-  addData('Verify', 'verify', {
-    users: {}
-  });
+    addData('Verify', 'verify', {
+        users: {}
+    });
 
-  client.user.setActivity(`${prefix}help`);
+    client.user.setActivity(`${prefix}help`);
 });
 
 client.on('message', async message => {
-  if (message.author.bot || !message.content.startsWith(prefix)) return;
+    if (message.author.bot || !message.content.startsWith(prefix)) return;
 
-  const args = message.content.slice(prefix.length).trim().split(/ +/g);
-  const command = args.shift().toLowerCase();
+    const args = message.content.slice(prefix.length).trim().split(/ +/g);
+    const command = args.shift().toLowerCase();
 
-  switch (command) {
-    case 'help': {
-      if (args[0] === '2') return message.channel.send(embedHelp2);
-      message.channel.send(embedHelp1);
-      break;
-    }
-
-    case 'kick': {
-      let member = message.mentions.members.first();
-      if (!message.member.hasPermission("KICK_MEMBERS")) return message.reply("You do not have permission to use this command!");
-      if (member === undefined) return message.reply(`Incorrect command format! \n(${prefix}kick <@user>)`);
-
-      if (!member.hasPermission('ADMINISTRATOR') || message.member.roles.cache.some(role => role.name === 'Head Asian') && !(member.roles.cache.some(role => role.name === 'Guild Master'))) member.kick().then((member) => {
-        message.channel.send(member.displayName + " has been kicked.");
-      });
-      else message.channel.send('Cannot kick this member!');
-
-      break;
-    }
-
-    case 'ban': {
-      let member = message.mentions.members.first();
-      if (!message.member.hasPermission("BAN_MEMBERS")) return message.reply("You do not have permission to use this command!");
-      if (member === undefined) return message.reply(`Incorrect command format! \n(${prefix}ban <@user>)`);
-
-      if (!member.hasPermission('ADMINISTRATOR') || message.member.roles.cache.some(role => role.name === 'Head Asian') && !(member.roles.cache.some(role => role.name === 'Guild Master'))) member.ban().then((member) => {
-        message.channel.send(member.displayName + " has been banned.");
-      });
-      else message.channel.send('Cannnot ban this member!');
-
-      break;
-    }
-
-    case 'mute': {
-      const member = message.mentions.members.first();
-      const role = message.guild.roles.cache.find(role => role.name === 'MUTED');
-
-      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-      if (member === undefined) return message.reply(`Incorrect command format! \n(${prefix}mute <@user>)`);
-
-      if (!member.hasPermission('ADMINISTRATOR') || message.member.roles.cache.some(role => role.name === 'Head Asian') && !(member.roles.cache.some(role => role.name === 'Guild Master'))) {
-        member.roles.add(role).catch(err => {
-          return message.channel.send('An error occured');
-        });
-        message.channel.send(`${member.displayName} has been muted.`);
-      } else message.channel.send('Cannot mute this member!');
-
-      break;
-    }
-
-    case 'unmute': {
-      const member = message.mentions.members.first();
-      const role = message.guild.roles.cache.find(role => role.name === 'MUTED');
-
-      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-      if (member === undefined) return message.reply(`Incorrect command format! \n(${prefix}mute <@user>)`);
-
-      if (!member.hasPermission('ADMINISTRATOR') || message.member.roles.cache.some(role => role.name === 'Head Asian') && !(member.roles.cache.some(role => role.name === 'Guild Master'))) {
-        member.roles.remove(role).catch(err => {
-          return message.channel.send('An error occured');
-        });
-        message.channel.send(`${member.displayName} has been unmuted.`);
-      } else message.channel.send('Cannot mute this member!');
-
-      break;
-    }
-
-    case 'info': {
-      let embedInfo = new Discord.MessageEmbed()
-        .setTitle('Server Info:')
-        .setDescription(`Server name: ${message.guild.name} \nTotal members: ${message.guild.memberCount}`)
-        .setColor('ORANGE');
-      message.channel.send(embedInfo);
-
-      break;
-    }
-
-    case 'ping': {
-      message.channel.send("Pong!");
-
-      break;
-    }
-
-    case 'pig': {
-      message.channel.send('Oink!');
-
-      break;
-    }
-
-    case 'myinfo': {
-      if (!message.mentions.users.size) {
-        let personName = message.member.displayName;
-        let personID = message.member.id;
-        return message.channel.send(`You're name is ${personName}. \nYou're ID is ${personID}.`);
-      }
-
-      const personInfoList = message.mentions.users.map(user => {
-        return `${user.username}'s ID is ${user.id}`;
-      });
-      message.channel.send(personInfoList);
-
-      break;
-    }
-
-    case 'd':
-    case 'delete': {
-      let deleteNumber = Math.floor(parseFloat(args[0]));
-
-      if (isNaN(parseInt(args[0]))) return message.reply(`Incorrect command format! \n(${prefix}delete <amount>)`);
-      if (parseInt(deleteNumber) > 99) return message.reply("You cannot delete more than 99 messages at a time!");
-      if (!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply("You do not have permission to use this command!");
-
-      message.channel.bulkDelete(parseInt(deleteNumber) + 1).then(() => {
-        if (args[1] == "true" || args[1] == null) {
-          if (parseInt(deleteNumber) == 1) message.channel.send(`Successfully deleted \`\`${parseInt(deleteNumber)}\`\` message!`);
-          else message.channel.send(`Successfully deleted \`\`${parseInt(deleteNumber)}\`\` messages!`);
-        }
-      }).catch(err => {
-        message.reply('An error occured (You can only delete messages that are under 14 days old)');
-      });
-
-      break;
-    }
-
-    case 'dm': {
-      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-      return message.reply('Sorry, this command is currently in maintenance');
-      /*if (!args[1]) return message.reply(`Incorrect command format! \n(${prefix}dm <@user> <message>)`);
-
-      let sendSuccess = true;
-      let dmMessage = args.slice(1).join(' ');
-      client.users.cache.get(args[0]).send(dmMessage).catch(err => {
-        message.reply('Cannot send messages to this person!');
-        sendSuccess = false;
-        return;
-      });
-
-      setTimeout(() => {
-        if (sendSuccess == true) message.channel.send(`Successfully DM'd ${args[0]} ${dmMessage}!`);
-      }, 500);
-
-      break;*/
-    }
-
-    case 'source': {
-      message.channel.send('Here is my source code! \nhttps://github.com/DatAsianBoi123/DiscordCheesebot');
-
-      break;
-    }
-
-    case 'sc':
-    case 'skycrypt': {
-      if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}skylea <player name> [profile name])`);
-      if (!args[1]) message.channel.send(`https://sky.shiiyu.moe/stats/${args[0]}`);
-      else message.channel.send(`https://sky.shiiyu.moe/stats/${args[0]}/${args[1]}`);
-
-      break;
-    }
-
-    case 'pog': {
-      if (!args[0]) return message.reply(`Incorrect command format! \n(b.pog <pog name>)`);
-
-      switch (args[0]) {
-        case 'gator': {
-          let gatormsg = await message.channel.send('<:GatorPOG:761662766393589770>');
-          await gatormsg.react(':GatorPOG:761662766393589770');
-
-          message.delete().catch(err => {
-            return;
-          });
-
-          break;
+    switch (command) {
+        case 'help': {
+            if (args[0] === '2') return message.channel.send(embedHelp2);
+            message.channel.send(embedHelp1);
+            break;
         }
 
-        case 'triangle': {
-          let trianglemsg = await message.channel.send('<:TrianglePOG:761668890572226611>');
-          await trianglemsg.react(':TrianglePOG:761668890572226611');
+        case 'info': {
+            let embedInfo = new Discord.MessageEmbed()
+                .setTitle('Server Info:')
+                .setDescription(`Server name: ${message.guild.name} \nTotal members: ${message.guild.memberCount}`)
+                .setColor('ORANGE');
+            message.channel.send(embedInfo);
 
-          message.delete().catch(err => {
-            return;
-          });
-
-          break;
+            break;
         }
 
-        case 'shaggy': {
-          let shaggymsg = await message.channel.send('<:ShaggyPOG:761672749667975208>');
-          await shaggymsg.react(':ShaggyPOG:761672749667975208');
+        case 'myinfo': {
+            if (!message.mentions.users.size) {
+                let personName = message.member.displayName;
+                let personID = message.member.id;
+                return message.channel.send(`You're name is ${personName}. \nYou're ID is ${personID}.`);
+            }
 
-          message.delete().catch(err => {
-            return;
-          });
+            const personInfoList = message.mentions.users.map(user => {
+                return `${user.username}'s ID is ${user.id}`;
+            });
+            message.channel.send(personInfoList);
 
-          break;
+            break;
         }
 
-        case 'imposter': {
-          let impostermsg = await message.channel.send('<:ImpostorPOG:762163842473000981>');
-          await impostermsg.react(':ImpostorPOG:762163842473000981');
+        case 'd':
+        case 'delete': {
+            let deleteNumber = Math.floor(parseFloat(args[0]));
 
-          message.delete().catch(err => {
-            return;
-          });
+            if (isNaN(parseInt(args[0]))) return message.reply(`Incorrect command format! \n(${prefix}delete <amount>)`);
+            if (parseInt(deleteNumber) > 99) return message.reply("You cannot delete more than 99 messages at a time!");
+            if (!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply("You do not have permission to use this command!");
 
-          break;
+            message.channel.bulkDelete(parseInt(deleteNumber) + 1).then(() => {
+                if (args[1] == "true" || args[1] == null) {
+                    if (parseInt(deleteNumber) == 1) message.channel.send(`Successfully deleted \`\`${parseInt(deleteNumber)}\`\` message!`);
+                    else message.channel.send(`Successfully deleted \`\`${parseInt(deleteNumber)}\`\` messages!`);
+                }
+            }).catch(err => {
+                message.reply('An error occured (You can only delete messages that are under 14 days old)');
+            });
+
+            break;
         }
 
-        case 'list': {
-          let embedPog = new Discord.MessageEmbed()
-            .setTitle('List of pogs:')
-            .setDescription('gator \ntriangle \nshaggy \nimposter')
-            .setColor('#F0630F');
+        case 'source': {
+            message.channel.send('Here is my source code! \nhttps://github.com/DatAsianBoi123/DiscordCheesebot');
 
-          message.channel.send(embedPog);
+            break;
+        }
 
-          break;
+        case 'sc':
+        case 'skycrypt': {
+            if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}skylea <player name> [profile name])`);
+            if (!args[1]) message.channel.send(`https://sky.shiiyu.moe/stats/${args[0]}`);
+            else message.channel.send(`https://sky.shiiyu.moe/stats/${args[0]}/${args[1]}`);
+
+            break;
+        }
+
+        case 'pog': {
+            if (!args[0]) return message.reply(`Incorrect command format! \n(b.pog <pog name>)`);
+
+            switch (args[0]) {
+                case 'gator': {
+                    let gatormsg = await message.channel.send('<:GatorPOG:761662766393589770>');
+                    await gatormsg.react(':GatorPOG:761662766393589770');
+
+                    message.delete().catch(err => {
+                        return;
+                    });
+
+                    break;
+                }
+
+                case 'triangle': {
+                    let trianglemsg = await message.channel.send('<:TrianglePOG:761668890572226611>');
+                    await trianglemsg.react(':TrianglePOG:761668890572226611');
+
+                    message.delete().catch(err => {
+                        return;
+                    });
+
+                    break;
+                }
+
+                case 'shaggy': {
+                    let shaggymsg = await message.channel.send('<:ShaggyPOG:761672749667975208>');
+                    await shaggymsg.react(':ShaggyPOG:761672749667975208');
+
+                    message.delete().catch(err => {
+                        return;
+                    });
+
+                    break;
+                }
+
+                case 'imposter': {
+                    let impostermsg = await message.channel.send('<:ImpostorPOG:762163842473000981>');
+                    await impostermsg.react(':ImpostorPOG:762163842473000981');
+
+                    message.delete().catch(err => {
+                        return;
+                    });
+
+                    break;
+                }
+
+                case 'list': {
+                    let embedPog = new Discord.MessageEmbed()
+                        .setTitle('List of pogs:')
+                        .setDescription('gator \ntriangle \nshaggy \nimposter')
+                        .setColor('#F0630F');
+
+                    message.channel.send(embedPog);
+
+                    break;
+                }
+
+                default: {
+                    message.reply(`Pog ${args[0]} doesn't exist!`);
+                }
+            }
+
+            break;
+        }
+
+        case 'checkname': {
+            let json;
+            if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}checkname <name>)`);
+
+            let embedVerification;
+
+            let nameAPI = async () => {
+                let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
+                json = result.json().catch(err => {
+                    json = undefined;
+                    embedVerification = new Discord.MessageEmbed()
+                        .setTitle('Name not found')
+                        .setDescription('It seems like this minecraft account does not exist!')
+                        .setColor('RED');
+                    return message.channel.send(embedVerification);
+                });
+                return json;
+            };
+            let name = await nameAPI();
+            if (json == undefined) {
+                return;
+            }
+
+            embedVerification = new Discord.MessageEmbed()
+                .setTitle('Name found!')
+                .setDescription('This minecraft accound was found!')
+                .setColor('GREEN')
+                .setFooter(`Name: ${name.name}, ID: ${name.id}`);
+
+            message.channel.send(embedVerification);
+
+            break;
+        }
+
+        case 'verify': {
+            let json;
+            if (!message.author.hasPermission('ADMINISTRATOR')) return;
+            if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}checkname <name>)`);
+
+            let embedVerification;
+
+            let nameAPI = async () => {
+                let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
+                json = result.json().catch(err => {
+                    json = undefined;
+                    embedVerification = new Discord.MessageEmbed()
+                        .setTitle('Name not found')
+                        .setDescription('It seems like this minecraft account does not exist!')
+                        .setColor('RED');
+                    return message.channel.send(embedVerification);
+                });
+                return json;
+            };
+            let name = await nameAPI();
+            if (json == undefined) {
+                return;
+            }
+
+            embedVerification = new Discord.MessageEmbed()
+                .setTitle('Verification Successful!')
+                .setDescription('This minecraft accound was found!')
+                .setColor('GREEN')
+                .setFooter(`Name: ${name.name}, ID: ${name.id}`);
+
+            const data = await getDataByType('Verify', 'verify');
+
+            let Object = {};
+            Object.users = data.users;
+            Object.users[message.author.username] = name.id;
+
+            updateById(data._id, 'verify', Object);
+            message.channel.send(embedVerification);
+
+            break;
+        }
+
+        case 'hypixellevel': {
+            let skyblockJSON;
+            let accountJSON;
+            let apikey = process.env.apikey;
+            if (!args[0]) return message.reply(`Incorrect command format! (${prefix}hypixellevel <name>)`);
+
+            let nameAPI = async () => {
+                let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
+                accountJSON = result.json().catch(() => {
+                    accountJSON = undefined;
+                });
+                return accountJSON;
+            };
+            let accountData = await nameAPI();
+            if (accountJSON == undefined) return message.reply('This minecraft account doesn\'t exist');
+
+            let skyblockAPI = async () => {
+                let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountData.id}`);
+                skyblockJSON = result.json().catch(() => {
+                    skyblockJSON = undefined;
+                });
+                return skyblockJSON;
+            };
+
+            let skyblockData = await skyblockAPI();
+            if (skyblockJSON == undefined || accountJSON == undefined || skyblockData.success == false) {
+                message.reply(`An error occured`);
+                return;
+            }
+            if (skyblockData.player == null) {
+                let embedMessage = new Discord.MessageEmbed()
+                    .setTitle('Unkown Player')
+                    .setDescription(`Looks like this player has never joined hypixel before!`)
+                    .setFooter(`User: ${accountData.name}`)
+                    .setColor('RED');
+                message.channel.send(embedMessage);
+                return;
+            }
+
+            const base = 10000;
+            const growth = 2500;
+            const reversePqPrefix = -(base - 0.5 * growth) / growth;
+            const reverseConst = reversePqPrefix ** 2;
+
+            const exp = skyblockData.player.networkExp;
+
+            let levels = exp < 0 ? 1 : Math.floor((1 + reversePqPrefix + Math.sqrt(reverseConst + (2 / growth) * exp)) * 100) / 100;
+
+            let embedMessage = new Discord.MessageEmbed()
+                .setTitle('Account Found!')
+                .setDescription(`${accountData.name}'s network level is ${levels} (${exp.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} total exp)`)
+                .setColor('GREEN');
+            message.channel.send(embedMessage);
+
+            break;
+        }
+
+        case 'skyblockskills': {
+            let skyblockJSON;
+            let accountJSON;
+            let hypixelJSON;
+            let apikey = process.env.apikey;
+            if (!args[1]) return message.reply(`Incorrect command format! (${prefix}skyblockskills <name> <profile name>)`);
+
+            let nameAPI = async () => {
+                let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
+                accountJSON = result.json().catch(() => {
+                    accountJSON = undefined;
+                });
+                return accountJSON;
+            };
+            let accountData = await nameAPI();
+            if (accountJSON == undefined) return message.reply('This minecraft account doesn\'t exist');
+
+            let skyblockAPI = async () => {
+                let result = await fetch(`https://api.hypixel.net/skyblock/profiles?key=${apikey}&uuid=${accountData.id}`);
+                skyblockJSON = result.json().catch(() => {
+                    skyblockJSON = undefined;
+                });
+                return skyblockJSON;
+            };
+
+            let hypixelAPI = async () => {
+                let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountData.id}`);
+                hypixelJSON = result.json().catch(() => {
+                    skyblockJSON = undefined;
+                });
+                return hypixelJSON;
+            };
+
+            let hypixelData = await hypixelAPI();
+            let skyblockData = await skyblockAPI();
+            if (skyblockJSON == undefined || accountJSON == undefined || hypixelJSON == undefined || skyblockData.success == false)
+                return message.reply(`An error occured`);
+            if (skyblockData.profiles == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
+
+            for (let i = 0; i < skyblockData.profiles.length; i++) {
+                const profile = skyblockData.profiles[i];
+                if (profile.cute_name.toLowerCase() == args[1].toLowerCase()) {
+                    const member = profile.members[accountData.id];
+                    const achievements = hypixelData.player.achievements;
+                    const skills = {
+                        'Combat': 0,
+                        'Foraging': 0,
+                        'Mining': 0,
+                        'Fishing': 0,
+                        'Farming': 0,
+                        'Alchemy': 0,
+                        'Enchanting': 0,
+                        'Taming': 0,
+                        'Carpentry': 0,
+                        'Runecrafting': 0
+                    };
+
+                    let Combat = getLevelByXp(member.experience_skill_combat, achievements);
+                    let Foraging = getLevelByXp(member.experience_skill_foraging, achievements);
+                    let Mining = getLevelByXp(member.experience_skill_mining, achievements);
+                    let Fishing = getLevelByXp(member.experience_skill_fishing, achievements);
+                    let Farming = getLevelByXp(member.experience_skill_farming, achievements);
+                    let Alchemy = getLevelByXp(member.experience_skill_alchemy, achievements);
+                    let Enchanting = getLevelByXp(member.experience_skill_enchanting, achievements);
+                    let Taming = getLevelByXp(member.experience_skill_taming, achievements);
+                    let Carpentry = getLevelByXp(member.experience_skill_carpentry, achievements);
+                    let Runecrafting = getLevelByXp(member.experience_skill_runecrafting, achievements, 'runecrafting');
+
+                    skills.Combat = Combat;
+                    skills.Foraging = Foraging;
+                    skills.Mining = Mining;
+                    skills.Fishing = Fishing;
+                    skills.Farming = Farming;
+                    skills.Alchemy = Alchemy;
+                    skills.Enchanting = Enchanting;
+                    skills.Taming = Taming;
+                    skills.Carpentry = Carpentry;
+                    skills.Runecrafting = Runecrafting;
+
+                    let skillAvgWithoutProgress = 0;
+                    let skillAvgWithProgress = 0;
+                    let skillText = '';
+                    for (let n = 0; n < Object.keys(skills).length; n++) {
+                        key = Object.keys(skills)[n];
+                        skill = skills[key];
+                        skillText += `${key} ${skill.level}, ${Math.round(skill.progress * 100)}% to ${key.toLocaleLowerCase()} ${skill.level + 1}  (${nFormatter(skill.xpCurrent)} / ${nFormatter(skill.xpForNext)} xp)\n\n`;
+                        if (key == 'Runecrafting' || key == 'Carpentry') continue;
+                        skillAvgWithoutProgress += skill.level;
+                        skillAvgWithProgress += skill.level + skill.progress;
+                    }
+                    skillText.trim();
+                    skillText.replace(/\n+$/, "");
+                    skillText += `--------------------------\nSkill average without progress: ${Math.round((skillAvgWithoutProgress / (Object.keys(skills).length - 2)) * 100) / 100}\nSkill average with progress: ${Math.round((skillAvgWithProgress / (Object.keys(skills).length - 2)) * 100) / 100}`;
+
+                    let embedMessage = new Discord.MessageEmbed()
+                        .setTitle('Profile Found!')
+                        .setDescription(skillText)
+                        .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
+                        .setColor('GREEN');
+                    message.channel.send(embedMessage);
+                    return;
+                }
+            }
+            let embedMessage = new Discord.MessageEmbed()
+                .setTitle('Unknown Profile')
+                .setDescription(`This profile doesn't exist on this user!`)
+                .setFooter(`User: ${accountData.name}, Profile: ${args[1]}`)
+                .setColor('RED');
+            message.reply(embedMessage);
+
+            break;
+        }
+
+        case 'profilelist': {
+            let skyblockJSON;
+            let accountJSON;
+            let apikey = process.env.apikey;
+            if (!args[0]) return message.reply(`Incorrect command format! (${prefix}profilelist <name>)`);
+
+            let nameAPI = async () => {
+                let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
+                accountJSON = result.json().catch(() => {
+                    accountJSON = undefined;
+                });
+                return accountJSON;
+            };
+            let accountData = await nameAPI();
+            if (accountJSON == undefined) return message.reply('This minecraft account doesn\'t exist');
+
+            let skyblockAPI = async () => {
+                let result = await fetch(`https://api.hypixel.net/skyblock/profiles?key=${apikey}&uuid=${accountData.id}`);
+                skyblockJSON = result.json().catch(() => {
+                    skyblockJSON = undefined;
+                });
+                return skyblockJSON;
+            };
+
+            let skyblockData = await skyblockAPI();
+            if (skyblockJSON == undefined || accountJSON == undefined || skyblockData.success == false) {
+                message.reply(`An error occured`);
+                return;
+            }
+            if (skyblockData.profiles == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
+
+            let profiles = 'Profiles:';
+            for (let i = 0; i < skyblockData.profiles.length; i++) {
+                profiles += `\n${skyblockData.profiles[i].cute_name}`;
+            }
+            message.channel.send(profiles);
+
+            break;
+        }
+
+        case 'catainfo': {
+            let skyblockJSON;
+            let accountJSON;
+            let hypixelJSON;
+            let apikey = process.env.apikey;
+            if (!args[1]) return message.reply(`Incorrect command format! (${prefix}catainfo <name> <profile name>)`);
+
+            let nameAPI = async () => {
+                let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
+                accountJSON = result.json().catch(() => {
+                    accountJSON = undefined;
+                });
+                return accountJSON;
+            };
+            let accountData = await nameAPI();
+            if (accountJSON == undefined) return message.reply('This minecraft account doesn\'t exist');
+
+            let skyblockAPI = async () => {
+                let result = await fetch(`https://api.hypixel.net/skyblock/profiles?key=${apikey}&uuid=${accountData.id}`);
+                skyblockJSON = result.json().catch(() => {
+                    skyblockJSON = undefined;
+                });
+                return skyblockJSON;
+            };
+
+            let hypixelAPI = async () => {
+                let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountData.id}`);
+                hypixelJSON = result.json().catch(() => {
+                    skyblockJSON = undefined;
+                });
+                return hypixelJSON;
+            };
+
+
+            let hypixelData = await hypixelAPI();
+            let skyblockData = await skyblockAPI();
+            if (skyblockJSON == undefined || accountJSON == undefined || hypixelJSON == undefined || skyblockData.success == false)
+                return message.reply(`An error occured`);
+            if (skyblockData.profiles == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
+
+            for (let i = 0; i < skyblockData.profiles.length; i++) {
+                const profile = skyblockData.profiles[i];
+                if (profile.cute_name.toLowerCase() == args[1].toLowerCase()) {
+                    const member = profile.members[accountData.id];
+                    const achievements = hypixelData.player.achievements;
+                    const dungeon = member.dungeons;
+                    const catacombs = dungeon.dungeon_types.catacombs;
+
+                    let classLevels = '';
+                    for (let i = 0; i < Object.keys(dungeon.player_classes).length; i++) {
+                        keys = Object.keys(dungeon.player_classes);
+                        classLevels += `${keys[i]} level ${getLevelByXp(dungeon.player_classes[keys[i]].experience, achievements, 'dungeon').level}\n\n`;
+                    }
+                    classLevels.replace(/\n+$/, "");
+                    let embedMessage = new Discord.MessageEmbed()
+                        .setTitle('Profile Found!')
+                        .setDescription(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}\n----------------\n${classLevels}`)
+                        .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
+                        .setColor('GREEN');
+                    message.channel.send(embedMessage);
+                    return;
+                }
+            }
+            let embedMessage = new Discord.MessageEmbed()
+                .setTitle('Unknown Profile')
+                .setDescription('This profile doesn\'t exist on this user!')
+                .setFooter(`User: ${accountData.name}, Profile: ${args[1]}`)
+                .setColor('RED');
+            message.reply(embedMessage);
+
+            break;
+        }
+
+        //Requirements
+
+        case 'requirements':
+        case 'reqs': {
+            let embedReqs = new Discord.MessageEmbed()
+                .setTitle('Guild Requirements:')
+                .setDescription(reqs)
+                .setFooter('Make sure to DM a staff member to check if you meet the requirements!')
+                .setColor('#0CE1F3');
+
+            message.channel.send(embedReqs);
+
+            break;
+        }
+
+        case 'changerequirements':
+        case 'changereqs': {
+            if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
+            message.channel.send('What should the requirements be?');
+            message.channel.awaitMessages(m => m.author.id == message.author.id, {
+                max: 1,
+                time: 10000
+            }).then(collected => {
+                reqs = collected.first().content;
+                message.channel.send(`Successfully set the guild requirements to ${reqs}!`);
+            }).catch(err => {
+                message.reply('No reply in 10 seconds, resetting requirements');
+            });
+
+            break;
+        }
+
+        case 'resetrequirements':
+        case 'resetreqs': {
+            if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
+            reqs = 'No reqs for now!';
+
+            break;
+        }
+
+        //Burgis Bucks
+
+        case 'mybucks': {
+            if (!message.mentions.users.size) {
+                if (!(message.author.username in BurgisBucks)) BurgisBucks[`${message.author.username}`] = 0;
+                return message.reply("you have " + BurgisBucks[`${message.author.username}`] + " burgis bucks.");
+            }
+
+            const personBuckList = message.mentions.users.map(user => {
+                if (!(user.username in BurgisBucks)) BurgisBucks[`${user.username}`] = 0;
+                return `${user.username} has ` + BurgisBucks[`${user.username}`] + " burgis bucks.";
+            });
+            message.channel.send(personBuckList);
+
+            break;
+        }
+
+        case 'addbucks': {
+            let addNumber = parseFloat(args[0]);
+            if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply("You do not have permission to use this command!");
+
+            if (isNaN(parseInt(args[0]))) return message.reply(`Incorrect command format! \n${prefix}addbucks <amount> [@user]`);
+            if (Math.sign(args[0]) == 1) addNumber = Math.floor(addNumber);
+            else if (Math.sign(args[0]) == -1) addNumber = Math.ceil(addNumber);
+            else return message.reply('Please use a number greater or equal to 1.');
+
+            if (!message.mentions.users.size) {
+                if (!(message.author.username in BurgisBucks)) BurgisBucks[`${message.author.username}`] = 0;
+                if (!message.mentions.users.size) {
+                    if (Number.isInteger(parseInt(addNumber))) message.channel.send(`Successfully added ${parseInt(addNumber)} burgis bucks in your account!`);
+                    else return message.channel.reply('An error occured');
+                    return BurgisBucks[`${message.author.username}`] += parseInt(addNumber);
+                }
+            }
+
+            const personBuckAddList = message.mentions.users.map(user => {
+                if (!(user.username in BurgisBucks)) BurgisBucks[`${user.username}`] = 0;
+
+                let AddBuckMsg = ' ';
+                if (!args[1]) return message.reply(`Incorrect command format! \n(${prefix}addbucks <integer> [@user])`);
+
+                if (Number.isInteger(parseInt(addNumber))) AddBuckMsg = `Successfully added ${parseInt(addNumber)} burgis bucks in ${user.username}'s account!`;
+                else return message.reply("An error occured");
+
+                BurgisBucks[`${user.username}`] += parseInt(addNumber);
+                return AddBuckMsg;
+            });
+
+            message.channel.send(personBuckAddList).catch(err => {
+                return;
+            });
+
+            break;
+        }
+
+        case 'bucklist': {
+            let BuckOrder = 0;
+            let BuckMessage = '';
+            for (let keys in BurgisBucks) {
+                let name = `${Object.keys(BurgisBucks)[BuckOrder]}: `;
+                let amount = `${BurgisBucks[keys]}\n`;
+
+                BuckMessage += name + amount;
+                BuckOrder++;
+            }
+            let embedBucks = new Discord.MessageEmbed()
+                .setTitle('Burgis Buck List:')
+                .setDescription(BuckMessage)
+                .setColor('PURPLE');
+
+            message.channel.send(embedBucks);
+
+            break;
+        }
+
+        case 'resetbucks': {
+            if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
+            if (!args[0]) message.reply(`Incorrect command format! \n(${prefix}resetbucks <@user>)`);
+
+            message.mentions.users.map(user => {
+                if (!(user.username in BurgisBucks)) return;
+                BurgisBucks[user.username] = 0;
+                message.channel.send(`Successfully set ${user.username}'s bucks to 0!`);
+            });
+
+            break;
+        }
+
+        case 'addshop': {
+            if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
+            if (!args[2] || isNaN(parseInt(args[2])) || !message.mentions.channels.first()) return message.reply(`Incorrect command format! \n(${prefix}addshop <title> <#channel> <cost> <description>`);
+
+            let shopDesc = args.slice(3).join(' ');
+            let chan = message.mentions.channels.first();
+            let embedShop = new Discord.MessageEmbed()
+                .setTitle('Burgis Shop:')
+                .setDescription(`Shop Title: ${args[0]} \n\nShop Description: ${shopDesc} \n\nCost: ${args[2]} burgis bucks`)
+                .setFooter(`Command: ${prefix}buy ${args[0]}`)
+                .setColor('BLUE');
+
+            ShopList.push(args[0]);
+            CostList.push(args[2]);
+            chan.send(embedShop);
+
+            break;
+        }
+
+        case 'deleteshop': {
+            if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
+            if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}deleteshop <shop title>)`);
+
+            for (let i = 0; i <= ShopList.length; i++) {
+                if (args[0] == ShopList[i]) {
+                    ShopList.splice(i, 1);
+                    return message.channel.send(`Successfully deleted shop ${args[0]}!`);
+                }
+            }
+            message.reply(`It seems like shop ${args[0]} doesn't exist. Double check if you typed it correctly(it is case sensitive)!`);
+
+            break;
+        }
+
+        case 'shops': {
+            let shops = '';
+
+            for (let i = 0; i < ShopList.length; i++) {
+                shops += `Name: ${ShopList[i]}, Cost: ${CostList[i]} \n`;
+            }
+
+            let embedShop = new Discord.MessageEmbed()
+                .setTitle('All Shops:')
+                .setDescription(shops)
+                .setColor('GREEN');
+
+            if (ShopList.length == 0) return message.reply(`It seems like there are no currect active shops!`);
+            message.channel.send(embedShop);
+
+            break;
+        }
+
+        case 'buy': {
+            if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}buy <shop title>)`);
+
+            for (let i = 0; i <= ShopList.length; i++) {
+                if (ShopList[i] == args[0]) return message.channel.send(`You just bought ${ShopList[i]}!`);
+                else return message.reply(`It seems like shop ${args[0]} doesn't exist. Double check if you typed it correctly(it is case sensitive)!`);
+            }
+
+            break;
+        }
+
+        //Poll Commands
+
+        case 'addpoll': {
+            let channelName = message.mentions.channels.first();
+
+            if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
+            if (!args[1]) return message.reply('Incorrect command format! \n(b.addpoll <#channel> <poll>');
+            if (channelName == undefined) return message.reply('Incorrect command format! \n(b.addpoll <#channel> <poll>');
+
+            let embedPoll = new Discord.MessageEmbed()
+                .setTitle('Poll:')
+                .setDescription(args.slice(1).join(' '))
+                .setColor('YELLOW');
+
+            if (PollID != undefined) {
+                channelName.send(`<@&${PollID}>`);
+            }
+            let msg = await channelName.send(embedPoll).catch((error) => {
+                return message.reply('An error occured');
+            });
+            await msg.react(':upvote:758527296071794718');
+            await msg.react(':downvote:758527282532319263');
+
+            break;
+        }
+
+        case 'changepollid': {
+            if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
+            if (isNaN(parseInt(args[0]))) return message.reply('Incorrect command format! \n(b.changepollid <role ID>)');
+            PollID = args[0];
+            message.channel.send('Successfully set the poll role ID!');
+
+            break;
+        }
+
+        case 'resetpollid': {
+            if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
+
+            PollID = undefined;
+            message.channel.send('Successfully reset the poll role ID!');
+
+            break;
         }
 
         default: {
-          message.reply(`Pog ${args[0]} doesn't exist!`);
+            if (command == '') return;
+            message.reply(`This command (${command}) does not exist!`);
+
+            break;
         }
-      }
-
-      break;
     }
-
-    case 'checkname': {
-      let json;
-      if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}checkname <name>)`);
-
-      let embedVerification;
-
-      let nameAPI = async () => {
-        let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
-        json = result.json().catch(err => {
-          json = undefined;
-          embedVerification = new Discord.MessageEmbed()
-            .setTitle('Name not found')
-            .setDescription('It seems like this minecraft account does not exist!')
-            .setColor('RED');
-          return message.channel.send(embedVerification);
-        });
-        return json;
-      };
-      let name = await nameAPI();
-      if (json == undefined) {
-        return;
-      }
-
-      embedVerification = new Discord.MessageEmbed()
-        .setTitle('Name found!')
-        .setDescription('This minecraft accound was found!')
-        .setColor('GREEN')
-        .setFooter(`Name: ${name.name}, ID: ${name.id}`);
-
-      message.channel.send(embedVerification);
-
-      break;
-    }
-
-    case 'hypixellevel': {
-      let skyblockJSON;
-      let accountJSON;
-      let apikey = process.env.apikey;
-      if (!args[0]) return message.reply(`Incorrect command format! (${prefix}hypixellevel <name>)`);
-
-      let nameAPI = async () => {
-        let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
-        accountJSON = result.json().catch(() => {
-          accountJSON = undefined;
-        });
-        return accountJSON;
-      };
-      let accountData = await nameAPI();
-      if (accountJSON == undefined) return message.reply('This minecraft account doesn\'t exist');
-
-      let skyblockAPI = async () => {
-        let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountData.id}`);
-        skyblockJSON = result.json().catch(() => {
-          skyblockJSON = undefined;
-        });
-        return skyblockJSON;
-      };
-
-      let skyblockData = await skyblockAPI();
-      if (skyblockJSON == undefined || accountJSON == undefined || skyblockData.success == false) {
-        message.reply(`An error occured`);
-        return;
-      }
-      if (skyblockData.player == null) {
-        let embedMessage = new Discord.MessageEmbed()
-          .setTitle('Unkown Player')
-          .setDescription(`Looks like this player has never joined hypixel before!`)
-          .setFooter(`User: ${accountData.name}`)
-          .setColor('RED');
-        message.channel.send(embedMessage);
-        return;
-      }
-
-      const base = 10000;
-      const growth = 2500;
-      const reversePqPrefix = -(base - 0.5 * growth) / growth;
-      const reverseConst = reversePqPrefix ** 2;
-
-      const exp = skyblockData.player.networkExp;
-
-      let levels =  exp < 0 ? 1 : Math.floor((1 + reversePqPrefix + Math.sqrt(reverseConst + (2 / growth) * exp)) * 100) / 100;
-
-      let embedMessage = new Discord.MessageEmbed()
-        .setTitle('Account Found!')
-        .setDescription(`${accountData.name}'s network level is ${levels} (${exp.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} total exp)`)
-        .setColor('GREEN');
-      message.channel.send(embedMessage);
-
-      break;
-    }
-
-    case 'skyblockskills': {
-      let skyblockJSON;
-      let accountJSON;
-      let hypixelJSON;
-      let apikey = process.env.apikey;
-      if (!args[1]) return message.reply(`Incorrect command format! (${prefix}skyblockskills <name> <profile name>)`);
-
-      let nameAPI = async () => {
-        let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
-        accountJSON = result.json().catch(() => {
-          accountJSON = undefined;
-        });
-        return accountJSON;
-      };
-      let accountData = await nameAPI();
-      if (accountJSON == undefined) return message.reply('This minecraft account doesn\'t exist');
-
-      let skyblockAPI = async () => {
-        let result = await fetch(`https://api.hypixel.net/skyblock/profiles?key=${apikey}&uuid=${accountData.id}`);
-        skyblockJSON = result.json().catch(() => {
-          skyblockJSON = undefined;
-        });
-        return skyblockJSON;
-      };
-
-      let hypixelAPI = async () => {
-        let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountData.id}`);
-        hypixelJSON = result.json().catch(() => {
-          skyblockJSON = undefined;
-        });
-        return hypixelJSON;
-      };
-
-      let hypixelData = await hypixelAPI();
-      let skyblockData = await skyblockAPI();
-      if (skyblockJSON == undefined || accountJSON == undefined || hypixelJSON == undefined || skyblockData.success == false)
-        return message.reply(`An error occured`);
-      if (skyblockData.profiles == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
-
-      for (let i = 0; i < skyblockData.profiles.length; i ++) {
-        const profile = skyblockData.profiles[i];
-        if (profile.cute_name.toLowerCase() == args[1].toLowerCase()) {
-          const member = profile.members[accountData.id];
-          const achievements = hypixelData.player.achievements;
-          const skills = {
-            'Combat': 0,
-            'Foraging': 0,
-            'Mining': 0,
-            'Fishing': 0,
-            'Farming': 0,
-            'Alchemy': 0,
-            'Enchanting': 0,
-            'Taming': 0,
-            'Carpentry': 0,
-            'Runecrafting': 0
-          };
-
-          let Combat = getLevelByXp(member.experience_skill_combat, achievements);
-          let Foraging = getLevelByXp(member.experience_skill_foraging, achievements);
-          let Mining = getLevelByXp(member.experience_skill_mining, achievements);
-          let Fishing = getLevelByXp(member.experience_skill_fishing, achievements);
-          let Farming = getLevelByXp(member.experience_skill_farming, achievements);
-          let Alchemy = getLevelByXp(member.experience_skill_alchemy, achievements);
-          let Enchanting = getLevelByXp(member.experience_skill_enchanting, achievements);
-          let Taming = getLevelByXp(member.experience_skill_taming, achievements);
-          let Carpentry = getLevelByXp(member.experience_skill_carpentry, achievements);
-          let Runecrafting = getLevelByXp(member.experience_skill_runecrafting, achievements, 'runecrafting');
-
-          skills.Combat = Combat;
-          skills.Foraging = Foraging;
-          skills.Mining = Mining;
-          skills.Fishing = Fishing;
-          skills.Farming = Farming;
-          skills.Alchemy = Alchemy;
-          skills.Enchanting = Enchanting;
-          skills.Taming = Taming;
-          skills.Carpentry = Carpentry;
-          skills.Runecrafting = Runecrafting;
-
-          let skillAvgWithoutProgress = 0;
-          let skillAvgWithProgress = 0;
-          let skillText = '';
-          for (let n = 0; n < Object.keys(skills).length; n ++) {
-            key = Object.keys(skills)[n];
-            skill = skills[key];
-            skillText += `${key} ${skill.level}, ${Math.round(skill.progress * 100)}% to ${key.toLocaleLowerCase()} ${skill.level + 1}  (${nFormatter(skill.xpCurrent)} / ${nFormatter(skill.xpForNext)} xp)\n\n`;
-            if (key == 'Runecrafting' || key == 'Carpentry') continue;
-            skillAvgWithoutProgress += skill.level;
-            skillAvgWithProgress += skill.level + skill.progress;
-          }
-          skillText.trim();
-          skillText.replace(/\n+$/, "");
-          skillText += `--------------------------\nSkill average without progress: ${Math.round((skillAvgWithoutProgress / (Object.keys(skills).length - 2)) * 100) / 100}\nSkill average with progress: ${Math.round((skillAvgWithProgress / (Object.keys(skills).length - 2)) * 100) / 100}`;
-
-          let embedMessage = new Discord.MessageEmbed()
-            .setTitle('Profile Found!')
-            .setDescription(skillText)
-            .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
-            .setColor('GREEN');
-          message.channel.send(embedMessage);
-          return;
-        }
-      }
-      let embedMessage = new Discord.MessageEmbed()
-        .setTitle('Unknown Profile')
-        .setDescription(`This profile doesn't exist on this user!`)
-        .setFooter(`User: ${accountData.name}, Profile: ${args[1]}`)
-        .setColor('RED');
-      message.reply(embedMessage);
-
-      break;
-    }
-
-    case 'profilelist': {
-      let skyblockJSON;
-      let accountJSON;
-      let apikey = process.env.apikey;
-      if (!args[0]) return message.reply(`Incorrect command format! (${prefix}profilelist <name>)`);
-
-      let nameAPI = async () => {
-        let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
-        accountJSON = result.json().catch(() => {
-          accountJSON = undefined;
-        });
-        return accountJSON;
-      };
-      let accountData = await nameAPI();
-      if (accountJSON == undefined) return message.reply('This minecraft account doesn\'t exist');
-
-      let skyblockAPI = async () => {
-        let result = await fetch(`https://api.hypixel.net/skyblock/profiles?key=${apikey}&uuid=${accountData.id}`);
-        skyblockJSON = result.json().catch(() => {
-          skyblockJSON = undefined;
-        });
-        return skyblockJSON;
-      };
-
-      let skyblockData = await skyblockAPI();
-      if (skyblockJSON == undefined || accountJSON == undefined || skyblockData.success == false) {
-        message.reply(`An error occured`);
-        return;
-      }
-      if (skyblockData.profiles == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
-
-      let profiles = 'Profiles:';
-      for (let i = 0; i < skyblockData.profiles.length; i ++) {
-        profiles += `\n${skyblockData.profiles[i].cute_name}`;
-      }
-      message.channel.send(profiles);
-
-      break;
-    }
-
-    case 'catainfo': {
-      let skyblockJSON;
-      let accountJSON;
-      let hypixelJSON;
-      let apikey = process.env.apikey;
-      if (!args[1]) return message.reply(`Incorrect command format! (${prefix}catainfo <name> <profile name>)`);
-
-      let nameAPI = async () => {
-        let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
-        accountJSON = result.json().catch(() => {
-          accountJSON = undefined;
-        });
-        return accountJSON;
-      };
-      let accountData = await nameAPI();
-      if (accountJSON == undefined) return message.reply('This minecraft account doesn\'t exist');
-
-      let skyblockAPI = async () => {
-        let result = await fetch(`https://api.hypixel.net/skyblock/profiles?key=${apikey}&uuid=${accountData.id}`);
-        skyblockJSON = result.json().catch(() => {
-          skyblockJSON = undefined;
-        });
-        return skyblockJSON;
-      };
-
-      let hypixelAPI = async () => {
-        let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountData.id}`);
-        hypixelJSON = result.json().catch(() => {
-          skyblockJSON = undefined;
-        });
-        return hypixelJSON;
-      };
-
-
-      let hypixelData = await hypixelAPI();
-      let skyblockData = await skyblockAPI();
-      if (skyblockJSON == undefined || accountJSON == undefined || hypixelJSON == undefined || skyblockData.success == false)
-        return message.reply(`An error occured`);
-      if (skyblockData.profiles == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
-
-      for (let i = 0; i < skyblockData.profiles.length; i++) {
-        const profile = skyblockData.profiles[i];
-        if (profile.cute_name.toLowerCase() == args[1].toLowerCase()) {
-          const member = profile.members[accountData.id];
-          const achievements = hypixelData.player.achievements;
-          const dungeon = member.dungeons;
-          const catacombs = dungeon.dungeon_types.catacombs;
-
-          let classLevels = '';
-          for (let i = 0; i < Object.keys(dungeon.player_classes).length; i++) {
-            keys = Object.keys(dungeon.player_classes);
-            classLevels += `${keys[i]} level ${getLevelByXp(dungeon.player_classes[keys[i]].experience, achievements, 'dungeon').level}\n\n`;
-          }
-          classLevels.replace(/\n+$/, "");
-          let embedMessage = new Discord.MessageEmbed()
-            .setTitle('Profile Found!')
-            .setDescription(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}\n----------------\n${classLevels}`)
-            .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
-            .setColor('GREEN');
-          message.channel.send(embedMessage);
-          return;
-        }
-      }
-      let embedMessage = new Discord.MessageEmbed()
-        .setTitle('Unknown Profile')
-        .setDescription('This profile doesn\'t exist on this user!')
-        .setFooter(`User: ${accountData.name}, Profile: ${args[1]}`)
-        .setColor('RED');
-      message.reply(embedMessage);
-
-      break;
-    }
-
-    //Requirements
-
-    case 'requirements':
-    case 'reqs': {
-      let embedReqs = new Discord.MessageEmbed()
-        .setTitle('Guild Requirements:')
-        .setDescription(reqs)
-        .setFooter('Make sure to DM a staff member to check if you meet the requirements!')
-        .setColor('#0CE1F3');
-
-      message.channel.send(embedReqs);
-
-      break;
-    }
-
-    case 'changerequirements':
-    case 'changereqs': {
-      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-      message.channel.send('What should the requirements be?');
-      message.channel.awaitMessages(m => m.author.id == message.author.id, {
-        max: 1,
-        time: 10000
-      }).then(collected => {
-        reqs = collected.first().content;
-        message.channel.send(`Successfully set the guild requirements to ${reqs}!`);
-      }).catch(err => {
-        message.reply('No reply in 10 seconds, resetting requirements');
-      });
-
-      break;
-    }
-
-    case 'resetrequirements':
-    case 'resetreqs': {
-      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-      reqs = 'No reqs for now!';
-
-      break;
-    }
-
-    //Burgis Bucks
-
-    case 'mybucks': {
-      if (!message.mentions.users.size) {
-        if (!(message.author.username in BurgisBucks)) BurgisBucks[`${message.author.username}`] = 0;
-        return message.reply("you have " + BurgisBucks[`${message.author.username}`] + " burgis bucks.");
-      }
-
-      const personBuckList = message.mentions.users.map(user => {
-        if (!(user.username in BurgisBucks)) BurgisBucks[`${user.username}`] = 0;
-        return `${user.username} has ` + BurgisBucks[`${user.username}`] + " burgis bucks.";
-      });
-      message.channel.send(personBuckList);
-
-      break;
-    }
-
-    case 'addbucks': {
-      let addNumber = parseFloat(args[0]);
-      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply("You do not have permission to use this command!");
-
-      if (isNaN(parseInt(args[0]))) return message.reply(`Incorrect command format! \n${prefix}addbucks <amount> [@user]`);
-      if (Math.sign(args[0]) == 1) addNumber = Math.floor(addNumber);
-      else if (Math.sign(args[0]) == -1) addNumber = Math.ceil(addNumber);
-      else return message.reply('Please use a number greater or equal to 1.');
-
-      if (!message.mentions.users.size) {
-        if (!(message.author.username in BurgisBucks)) BurgisBucks[`${message.author.username}`] = 0;
-        if (!message.mentions.users.size) {
-          if (Number.isInteger(parseInt(addNumber))) message.channel.send(`Successfully added ${parseInt(addNumber)} burgis bucks in your account!`);
-          else return message.channel.reply('An error occured');
-          return BurgisBucks[`${message.author.username}`] += parseInt(addNumber);
-        }
-      }
-
-      const personBuckAddList = message.mentions.users.map(user => {
-        if (!(user.username in BurgisBucks)) BurgisBucks[`${user.username}`] = 0;
-
-        let AddBuckMsg = ' ';
-        if (!args[1]) return message.reply(`Incorrect command format! \n(${prefix}addbucks <integer> [@user])`);
-
-        if (Number.isInteger(parseInt(addNumber))) AddBuckMsg = `Successfully added ${parseInt(addNumber)} burgis bucks in ${user.username}'s account!`;
-        else return message.reply("An error occured");
-
-        BurgisBucks[`${user.username}`] += parseInt(addNumber);
-        return AddBuckMsg;
-      });
-
-      message.channel.send(personBuckAddList).catch(err => {
-        return;
-      });
-
-      break;
-    }
-
-    case 'bucklist': {
-      let BuckOrder = 0;
-      let BuckMessage = '';
-      for (let keys in BurgisBucks) {
-        let name = `${Object.keys(BurgisBucks)[BuckOrder]}: `;
-        let amount = `${BurgisBucks[keys]}\n`;
-
-        BuckMessage += name + amount;
-        BuckOrder++;
-      }
-      let embedBucks = new Discord.MessageEmbed()
-        .setTitle('Burgis Buck List:')
-        .setDescription(BuckMessage)
-        .setColor('PURPLE');
-
-      message.channel.send(embedBucks);
-
-      break;
-    }
-
-    case 'resetbucks': {
-      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-      if (!args[0]) message.reply(`Incorrect command format! \n(${prefix}resetbucks <@user>)`);
-
-      message.mentions.users.map(user => {
-        if (!(user.username in BurgisBucks)) return;
-        BurgisBucks[user.username] = 0;
-        message.channel.send(`Successfully set ${user.username}'s bucks to 0!`);
-      });
-
-      break;
-    }
-
-    case 'addshop': {
-      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-      if (!args[2] || isNaN(parseInt(args[2])) || !message.mentions.channels.first()) return message.reply(`Incorrect command format! \n(${prefix}addshop <title> <#channel> <cost> <description>`);
-
-      let shopDesc = args.slice(3).join(' ');
-      let chan = message.mentions.channels.first();
-      let embedShop = new Discord.MessageEmbed()
-        .setTitle('Burgis Shop:')
-        .setDescription(`Shop Title: ${args[0]} \n\nShop Description: ${shopDesc} \n\nCost: ${args[2]} burgis bucks`)
-        .setFooter(`Command: ${prefix}buy ${args[0]}`)
-        .setColor('BLUE');
-
-      ShopList.push(args[0]);
-      CostList.push(args[2]);
-      chan.send(embedShop);
-
-      break;
-    }
-
-    case 'deleteshop': {
-      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-      if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}deleteshop <shop title>)`);
-
-      for (let i = 0; i <= ShopList.length; i++) {
-        if (args[0] == ShopList[i]) {
-          ShopList.splice(i, 1);
-          return message.channel.send(`Successfully deleted shop ${args[0]}!`);
-        }
-      }
-      message.reply(`It seems like shop ${args[0]} doesn't exist. Double check if you typed it correctly(it is case sensitive)!`);
-
-      break;
-    }
-
-    case 'shops': {
-      let shops = '';
-
-      for (let i = 0; i < ShopList.length; i++) {
-        shops += `Name: ${ShopList[i]}, Cost: ${CostList[i]} \n`;
-      }
-
-      let embedShop = new Discord.MessageEmbed()
-        .setTitle('All Shops:')
-        .setDescription(shops)
-        .setColor('GREEN');
-
-      if (ShopList.length == 0) return message.reply(`It seems like there are no currect active shops!`);
-      message.channel.send(embedShop);
-
-      break;
-    }
-
-    case 'buy': {
-      if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}buy <shop title>)`);
-
-      for (let i = 0; i <= ShopList.length; i++) {
-        if (ShopList[i] == args[0]) return message.channel.send(`You just bought ${ShopList[i]}!`);
-        else return message.reply(`It seems like shop ${args[0]} doesn't exist. Double check if you typed it correctly(it is case sensitive)!`);
-      }
-
-      break;
-    }
-
-    case 'deleteshop': {
-      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-      if (!args[0]) return message.reply(`Incorrrect command format! \n(${prefix}deleteshop <shop title>)`);
-
-      for (let i = 0; i <= ShopList.length; i++) {
-        if (ShopList[i] == args[0]) {
-          ShopList.splice(i, 1);
-          CostList.splice(i, 1);
-          message.channel.send(`You just deleted shop ${ShopList[i]}!`);
-          return;
-        } else return message.reply(`It seems like shop ${args[0]} doesn't exist. Double check if you typed it correctly(it is case sensitive)!`);
-      }
-
-      break;
-    }
-
-    //Poll Commands
-
-    case 'addpoll': {
-      let channelName = message.mentions.channels.first();
-
-      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-      if (!args[1]) return message.reply('Incorrect command format! \n(b.addpoll <#channel> <poll>');
-      if (channelName == undefined) return message.reply('Incorrect command format! \n(b.addpoll <#channel> <poll>');
-
-      let embedPoll = new Discord.MessageEmbed()
-        .setTitle('Poll:')
-        .setDescription(args.slice(1).join(' '))
-        .setColor('YELLOW');
-
-      if (PollID != undefined) {
-        channelName.send(`<@&${PollID}>`);
-      }
-      let msg = await channelName.send(embedPoll).catch((error) => {
-        return message.reply('An error occured');
-      });
-      await msg.react(':upvote:758527296071794718');
-      await msg.react(':downvote:758527282532319263');
-
-      break;
-    }
-
-    case 'changepollid': {
-      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-      if (isNaN(parseInt(args[0]))) return message.reply('Incorrect command format! \n(b.changepollid <role ID>)');
-      PollID = args[0];
-      message.channel.send('Successfully set the poll role ID!');
-
-      break;
-    }
-
-    case 'resetpollid': {
-      if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-
-      PollID = undefined;
-      message.channel.send('Successfully reset the poll role ID!');
-
-      break;
-    }
-
-    default: {
-      if (command == '') return;
-      message.reply(`This command (${command}) does not exist!`);
-
-      break;
-    }
-  }
 });
 
-function getLevelByXp(xp, hypixelProfile, type = 'regular') {
+const getLevelByXp = function (xp, hypixelProfile, type = 'regular') {
     let xp_table;
 
     switch (type) {
@@ -885,27 +822,27 @@ function getLevelByXp(xp, hypixelProfile, type = 'regular') {
     let maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
     let maxLevelCap = maxLevel;
 
-    if(skillxp.skills_cap[type] > maxLevel && type in skillxp.skills_achievements){
+    if (skillxp.skills_cap[type] > maxLevel && type in skillxp.skills_achievements) {
         xp_table = Object.assign(skillxp.xp_past_50, xp_table);
 
         maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
         maxLevelCap = Math.max(maxLevelCap, hypixelProfile.achievements[skillxp.skills_achievements[type]]);
     }
 
-    for(let x = 1; x <= maxLevelCap; x++){
+    for (let x = 1; x <= maxLevelCap; x++) {
         xpTotal += xp_table[x];
 
-        if(xpTotal > xp){
+        if (xpTotal > xp) {
             xpTotal -= xp_table[x];
             break;
-        }else{
+        } else {
             level = x;
         }
     }
 
     let xpCurrent = Math.floor(xp - xpTotal);
 
-    if(level < maxLevel)
+    if (level < maxLevel)
         xpForNext = Math.ceil(xp_table[level + 1]);
 
     let progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
@@ -920,51 +857,73 @@ function getLevelByXp(xp, hypixelProfile, type = 'regular') {
     };
 }
 
-function nFormatter(num, digits) {
-  var si = [
-    { value: 1, symbol: "" },
-    { value: 1E3, symbol: "k" },
-    { value: 1E6, symbol: "m" },
-    { value: 1E9, symbol: "G" },
-    { value: 1E12, symbol: "T" },
-    { value: 1E15, symbol: "P" },
-    { value: 1E18, symbol: "E" }
-  ];
-  var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-  var i;
-  for (i = si.length - 1; i > 0; i--) {
-    if (num >= si[i].value) {
-      break;
+const nFormatter = function (num, digits) {
+    var si = [{
+            value: 1,
+            symbol: ""
+        },
+        {
+            value: 1E3,
+            symbol: "k"
+        },
+        {
+            value: 1E6,
+            symbol: "m"
+        },
+        {
+            value: 1E9,
+            symbol: "G"
+        },
+        {
+            value: 1E12,
+            symbol: "T"
+        },
+        {
+            value: 1E15,
+            symbol: "P"
+        },
+        {
+            value: 1E18,
+            symbol: "E"
+        }
+    ];
+    var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+    var i;
+    for (i = si.length - 1; i > 0; i--) {
+        if (num >= si[i].value) {
+            break;
+        }
     }
-  }
-  return (num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
+    return (num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
 }
 
-const addData = async function(dataType, dataTypePath, object) {
+const addData = async function (dataType, dataTypePath, object) {
     const Data = require(`./models/${dataTypePath}`);
     let objectData = '';
     await Data.find()
-    .then(result => {
-        objectData = result;
-    });
-    for (let i = 0; i < objectData.length; i++) if (objectData[i].type == dataType) return;
-    
+        .then(result => {
+            objectData = result;
+        });
+    for (let i = 0; i < objectData.length; i++)
+        if (objectData[i].type == dataType) return;
+
     object.type = dataType;
     const data = new Data(object);
 
     data.save();
 }
-const getDataByType = async function(dataType, dataTypePath) {
+const getDataByType = async function (dataType, dataTypePath) {
     const Data = require(`./models/${dataTypePath}`);
     let dataObject = '';
     await Data.find()
-    .then(result => {
-        dataObject = result;
-    }).catch(err => {
-        console.log(err);
-    });
+        .then(result => {
+            dataObject = result;
+        }).catch(err => {
+            console.log(err);
+        });
 
-    for (let i = 0; i < dataObject.length; i++) if (dataObject[i].type == dataType) return dataObject[i];
+    for (let i = 0; i < dataObject.length; i++)
+        if (dataObject[i].type == dataType) return dataObject[i];
 }
 const updateById = async function (id, dataTypePath, updatedValues) {
     const Data = require(`./models/${dataTypePath}`);
@@ -986,9 +945,12 @@ const updateById = async function (id, dataTypePath, updatedValues) {
 }
 
 module.exports = {
-  addData,
-  getDataByType,
-  updateById
+    addData,
+    getDataByType,
+    updateById,
+    getLevelByXp,
+    nFormatter,
+    prefix
 }
 
 client.login(process.env.token);
