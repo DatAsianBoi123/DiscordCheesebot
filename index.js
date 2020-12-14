@@ -250,8 +250,8 @@ client.on('message', async message => {
             for (let i = 0; i < Object.keys(data.users).length; i++) {
                 const keys = Object.keys(data.users);
 
-                if (keys[i] == message.author.username) return message.reply('Already verified')
-                else if (data.users[keys[i]] == name.id) return message.reply('Account taken');
+                if (keys[i] == message.author.username && keys[i] != null) return message.reply('You have already verified! If you want to verify again, please contact a staff member.')
+                else if (data.users[keys[i]] == name.id && keys[i] != null) return message.reply('This account has already been taken! If you think someone else has verified as you, please contact a staff member.');
             }
 
             let object = {};
@@ -265,6 +265,7 @@ client.on('message', async message => {
                 .setFooter(`Name: ${name.name}, ID: ${name.id}`);
 
             updateById(data._id, 'verify', object);
+            message.channel.send(`<@${message.author.id}>`);
             message.channel.send(embedVerification);
 
             break;
