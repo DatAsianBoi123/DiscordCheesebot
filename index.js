@@ -268,8 +268,8 @@ client.on('message', async message => {
       message.channel.send(`<@${message.author.id}>`);
       message.channel.send(embedVerification);
 
-      let verified = message.guild.roles.find('772656381403594762');
-      let unverified = message.guild.roles.find('788543788540362822');
+      let verified = message.guild.roles.get('772656381403594762');
+      let unverified = message.guild.roles.get('788543788540362822');
       message.member.roles.add(verified);
       message.member.roles.remove(unverified);
 
