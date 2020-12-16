@@ -276,12 +276,6 @@ client.on('message', async message => {
       break;
     }
 
-    case 'addroleall': {
-      console.log(message.guild.members.cache[0]);
-
-      break;
-    }
-
     case 'hypixellevel': {
       let skyblockJSON;
       let accountJSON;
