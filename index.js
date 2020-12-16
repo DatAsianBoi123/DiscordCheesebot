@@ -277,7 +277,7 @@ client.on('message', async message => {
     }
 
     case 'addroleall': {
-      console.log(message.guild.members[0]);
+      console.log(message.guild.members);
 
       break;
     }
