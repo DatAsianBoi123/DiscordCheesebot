@@ -232,7 +232,7 @@ client.on('message', async message => {
 
       let nameAPI = async () => {
         let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
-        json = result.json().catch(err => {
+        json = result.json().catch(() => {
           json = undefined;
           embedVerification = new Discord.MessageEmbed()
             .setTitle('Name not found')
@@ -272,6 +272,12 @@ client.on('message', async message => {
       let unverified = message.guild.roles.cache.get('788543788540362822');
       message.member.roles.add(verified);
       message.member.roles.remove(unverified);
+
+      break;
+    }
+
+    case 'addroleall': {
+      console.log(message.guild.memberCount);
 
       break;
     }
