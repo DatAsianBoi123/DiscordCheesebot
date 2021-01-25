@@ -39,6 +39,9 @@ let embedHelp2 = new Discord.MessageEmbed()
 
 client.once('ready', () => {
   console.log('Ready');
+  client.users.get('721020694493790330').send('Ready').catch(err => {
+    console.log(err);
+  });
 
   addData('Verify', 'verify', {
     users: {
