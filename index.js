@@ -891,31 +891,35 @@ const getLevelByXp = function (xp, hypixelProfile, type = 'regular') {
 const nFormatter = function (num, digits) {
   var si = [{
       value: 1,
-      symbol: ""
+      symbol: ''
     },
     {
       value: 1E3,
-      symbol: "k"
+      symbol: 'k'
     },
     {
       value: 1E6,
-      symbol: "m"
+      symbol: 'm'
     },
     {
       value: 1E9,
-      symbol: "G"
+      symbol: 'G'
     },
     {
       value: 1E12,
-      symbol: "T"
+      symbol: 'T'
     },
     {
       value: 1E15,
-      symbol: "P"
+      symbol: 'P'
     },
     {
       value: 1E18,
-      symbol: "E"
+      symbol: 'E'
+    },
+    {
+      value: Infinity,
+      symbol: ''
     }
   ];
   var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
