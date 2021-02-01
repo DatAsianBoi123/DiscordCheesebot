@@ -889,7 +889,7 @@ const getLevelByXp = function (xp, hypixelProfile, type = 'regular') {
 }
 
 const nFormatter = function (num, digits) {
-  if (num == Infinity) return Infinity;
+  if (num == Infinity) return '∞';
   var si = [{
       value: 1,
       symbol: ''
