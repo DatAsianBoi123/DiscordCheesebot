@@ -257,7 +257,7 @@ client.on('message', async message => {
 
       let object = {};
       object.users = data.users;
-      object.users[message.author.username] = name.id;
+      object.users[message.author.id] = name.id;
 
       embedVerification = new Discord.MessageEmbed()
         .setTitle('Verification Successful!')
@@ -791,15 +791,6 @@ client.on('message', async message => {
 
       PollID = undefined;
       message.channel.send('Successfully reset the poll role ID!');
-
-      break;
-    }
-
-    case 'dm': {
-      if (!message.member.hasPermission('ADMINISTRATOR')) return;
-      message.author.send('Hello').catch(() => {
-        message.reply('Could not send message.');
-      });
 
       break;
     }
