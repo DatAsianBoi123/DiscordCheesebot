@@ -417,9 +417,7 @@ client.on('message', async message => {
             skills[skill].format = `${Math.round(skills[skill].progress * 100)}% to ${skill.toLowerCase()} ${skills[skill].level + 1}\n(${nFormatter(skills[skill].xpCurrent)} / ${nFormatter(skills[skill].xpForNext)} xp)`
           }
 
-          /*skillText.trim();
-          skillText.replace(/\n+$/, "");
-          skillText += `--------------------------\nSkill average without progress: ${Math.round((skillAvgWithoutProgress / (Object.keys(skills).length - 2)) * 100) / 100}\nSkill average with progress: ${Math.round((skillAvgWithProgress / (Object.keys(skills).length - 2)) * 100) / 100}`;*/
+          skillText += `\nSkill average without progress: ${Math.round((skillAvgWithoutProgress / (Object.keys(skills).length - 2)) * 100) / 100}\nSkill average with progress: ${Math.round((skillAvgWithProgress / (Object.keys(skills).length - 2)) * 100) / 100}`;
 
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
@@ -435,6 +433,7 @@ client.on('message', async message => {
               { name: `Carpentry ${skills.Carpentry.level}`, value: skills.Carpentry.format, inline: true },
               { name: `Runecrafting ${skills.Runecrafting.level}`, value: skills.Runecrafting.format, inline: true }
             )
+            .setDescription(skillText)
             .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
             .setColor('GREEN');
           message.channel.send(embedMessage);
