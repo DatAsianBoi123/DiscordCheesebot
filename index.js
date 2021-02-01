@@ -414,7 +414,9 @@ client.on('message', async message => {
             skillAvgWithProgress += skill.level + skill.progress;
           }*/
           for (let skill in skills) {
-            skills[skill].format = `${Math.round(skills[skill].progress * 100)}% to ${skill.toLowerCase()} ${skills[skill].level + 1}\n(${nFormatter(skills[skill].xpCurrent)} / ${nFormatter(skills[skill].xpForNext)} xp)`
+            skills[skill].format = `${Math.round(skills[skill].progress * 100)}% to ${skill.toLowerCase()} ${skills[skill].level + 1}\n(${nFormatter(skills[skill].xpCurrent)} / ${nFormatter(skills[skill].xpForNext)} xp)`;
+            skillAvgWithoutProgress += skills[skill].level;
+            skillAvgWithProgress += skills[skill].level + skill.progress;
           }
 
           skillText += `\nSkill average without progress: ${Math.round((skillAvgWithoutProgress / (Object.keys(skills).length - 2)) * 100) / 100}\nSkill average with progress: ${Math.round((skillAvgWithProgress / (Object.keys(skills).length - 2)) * 100) / 100}`;
