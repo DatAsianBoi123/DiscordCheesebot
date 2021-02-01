@@ -533,15 +533,29 @@ client.on('message', async message => {
           const dungeon = member.dungeons;
           const catacombs = dungeon.dungeon_types.catacombs;
 
-          let classLevels = '';
-          for (let i = 0; i < Object.keys(dungeon.player_classes).length; i++) {
+          let classLevels = {
+            Berserk: 0,
+            Archer: 0,
+            Mage: 0,
+            Tank: 0,
+            Healer: 0
+          };
+          /*for (let i = 0; i < Object.keys(dungeon.player_classes).length; i++) {
             keys = Object.keys(dungeon.player_classes);
             classLevels += `${keys[i]} level ${getLevelByXp(dungeon.player_classes[keys[i]].experience, achievements, 'dungeon').level}\n\n`;
-          }
+          }*/
           classLevels.replace(/\n+$/, "");
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
-            .setDescription(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}\n----------------\n${classLevels}`)
+            .setDescription(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}`)
+            .addFields(
+              { name: `Cata ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}`},
+              { name: `Berserk ${getLevelByXp(dungeon.player_classes.berserk.experience, achievements, 'dungeon').level}`, value: '', inline: true },
+              { name: `Archer`, value: '', inline: true },
+              { name: `Mage`, value: '', inline: true },
+              { name: `Tank`, value: '', inline: true },
+              { name: `Healer`, value: '', inline: true }
+            )
             .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
             .setColor('GREEN');
           message.channel.send(embedMessage);
