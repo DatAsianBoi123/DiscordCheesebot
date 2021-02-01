@@ -415,6 +415,7 @@ client.on('message', async message => {
           }*/
           for (let skill in skills) {
             skills[skill].format = `${Math.round(skills[skill].progress * 100)}% to ${skill.toLowerCase()} ${skills[skill].level + 1}\n(${nFormatter(skills[skill].xpCurrent)} / ${nFormatter(skills[skill].xpForNext)} xp)`;
+            if (skills[skill] == 'Runecrafting' || skills[skill] == 'Carpentry') continue;
             skillAvgWithoutProgress += skills[skill].level;
             skillAvgWithProgress += skills[skill].level + skills[skill].progress;
           }
