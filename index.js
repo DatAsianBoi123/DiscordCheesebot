@@ -889,6 +889,7 @@ const getLevelByXp = function (xp, hypixelProfile, type = 'regular') {
 }
 
 const nFormatter = function (num, digits) {
+  if (num == Infinity) return Infinity;
   var si = [{
       value: 1,
       symbol: ''
@@ -916,10 +917,6 @@ const nFormatter = function (num, digits) {
     {
       value: 1E18,
       symbol: 'E'
-    },
-    {
-      value: Infinity,
-      symbol: ''
     }
   ];
   var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
