@@ -39,6 +39,9 @@ let embedHelp2 = new Discord.MessageEmbed()
 
 client.once('ready', () => {
   console.log('Ready');
+  client.users.cache.find(user => user.id == '721020694493790330').send('Ready').catch(() => {
+    console.log('Error sending message');
+  });
   addData('Verify', 'verify', {
     users: {
       user: null
@@ -797,6 +800,8 @@ client.on('message', async message => {
       message.author.send('Hello').catch(() => {
         message.reply('Could not send message.');
       });
+
+      break;
     }
 
     default: {
