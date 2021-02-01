@@ -40,7 +40,7 @@ let embedHelp2 = new Discord.MessageEmbed()
 client.once('ready', () => {
   console.log('Ready');
   client.users.fetch('721020694493790330').then((user) => {
-    user.send("My Message");
+    user.send('Ready');
   });
   addData('Verify', 'verify', {
     users: {
