@@ -421,21 +421,20 @@ client.on('message', async message => {
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
             .addFields(
-              { name: skills.Combat, value: 'Combat', inline: true },
-              { name: skills.Foraging, value: 'Foraging', inline: true },
-              { name: skills.Mining, value: 'Mining', inline: true },
-              { name: skills.Fishing, value: 'Fishing', inline: true },
-              { name: skills.Farming, value: 'Farming', inline: true },
-              { name: skills.Alchemy, value: 'Alchemy', inline: true },
-              { name: skills.Enchanting, value: 'Enchanting', inline: true },
-              { name: skills.Taming, value: 'Taming', inline: true },
-              { name: skills.Carpentry, value: 'Carpentry', inline: true },
-              { name: skills.Runecrafting, value: 'Runecrafting', inline: true }
+              { name: skills.Combat.level, value: 'Combat', inline: true },
+              { name: skills.Foraging.level, value: 'Foraging', inline: true },
+              { name: skills.Mining.level, value: 'Mining', inline: true },
+              { name: skills.Fishing.level, value: 'Fishing', inline: true },
+              { name: skills.Farming.level, value: 'Farming', inline: true },
+              { name: skills.Alchemy.level, value: 'Alchemy', inline: true },
+              { name: skills.Enchanting.level, value: 'Enchanting', inline: true },
+              { name: skills.Taming.level, value: 'Taming', inline: true },
+              { name: skills.Carpentry.level, value: 'Carpentry', inline: true },
+              { name: skills.Runecrafting.level, value: 'Runecrafting', inline: true }
             )
             .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
             .setColor('GREEN');
           message.channel.send(embedMessage);
-          console.log(skills);
           return;
         }
       }
