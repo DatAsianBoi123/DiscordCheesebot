@@ -413,24 +413,27 @@ client.on('message', async message => {
             skillAvgWithoutProgress += skill.level;
             skillAvgWithProgress += skill.level + skill.progress;
           }*/
+          for (let skill in skills) {
+            skills[skill].format = `${Math.round(skills[skill].progress * 100)}% to ${skill.toLowerCase()} ${skills[skill].level + 1}\n(${nFormatter(skills[skill].xpCurrent)} / ${nFormatter(skills[skill].xpForNext)} xp)`
+          }
 
-          skillText.trim();
+          /*skillText.trim();
           skillText.replace(/\n+$/, "");
-          skillText += `--------------------------\nSkill average without progress: ${Math.round((skillAvgWithoutProgress / (Object.keys(skills).length - 2)) * 100) / 100}\nSkill average with progress: ${Math.round((skillAvgWithProgress / (Object.keys(skills).length - 2)) * 100) / 100}`;
+          skillText += `--------------------------\nSkill average without progress: ${Math.round((skillAvgWithoutProgress / (Object.keys(skills).length - 2)) * 100) / 100}\nSkill average with progress: ${Math.round((skillAvgWithProgress / (Object.keys(skills).length - 2)) * 100) / 100}`;*/
 
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
             .addFields(
-              { name: `Combat ${skills.Combat.level}`, value: `${Math.round(skills.Combat.progress * 100)}% to combat ${skills.Combat.level + 1} (${nFormatter(skills.Combat.xpCurrent)} / ${nFormatter(skills.Combat.xpForNext)} xp)`, inline: true },
-              { name: `Foraging ${skills.Foraging.level}`, value: ` Foraging`, inline: true },
-              { name: `Mining ${skills.Mining.level}`, value: ` Mining`, inline: true },
-              { name: `Fishing ${skills.Fishing.level}`, value: ` Fishing`, inline: true },
-              { name: `Farming ${skills.Farming.level}`, value: ` Farming`, inline: true },
-              { name: `Alchemy ${skills.Alchemy.level}`, value: ` Alchemy`, inline: true },
-              { name: `Enchanting ${skills.Enchanting.level}`, value: ` Enchanting`, inline: true },
-              { name: `Taming ${skills.Taming.level}`, value: ` Taming`, inline: true },
-              { name: `Carpentry ${skills.Carpentry.level}`, value: ` Carpentry`, inline: true },
-              { name: `Runecrafting ${skills.Runecrafting.level}`, value: ` Runecrafting`, inline: true }
+              { name: `Combat ${skills.Combat.level}`, value: skills.Combat.format, inline: true },
+              { name: `Foraging ${skills.Foraging.level}`, value: skills.Foraging.format, inline: true },
+              { name: `Mining ${skills.Mining.level}`, value: skills.Mining.format, inline: true },
+              { name: `Fishing ${skills.Fishing.level}`, value: skills.Fishing.format, inline: true },
+              { name: `Farming ${skills.Farming.level}`, value: skills.Farming.format, inline: true },
+              { name: `Alchemy ${skills.Alchemy.level}`, value: skills.Alchemy.format, inline: true },
+              { name: `Enchanting ${skills.Enchanting.level}`, value: skills.Enchanting.format, inline: true },
+              { name: `Taming ${skills.Taming.level}`, value: skills.Taming.format, inline: true },
+              { name: `Carpentry ${skills.Carpentry.level}`, value: skills.Carpentry.format, inline: true },
+              { name: `Runecrafting ${skills.Runecrafting.level}`, value: skills.Runecrafting.format, inline: true }
             )
             .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
             .setColor('GREEN');
