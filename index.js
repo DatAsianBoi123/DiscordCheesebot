@@ -549,7 +549,7 @@ client.on('message', async message => {
             .setDescription(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}`)
             .addFields(
               { name: `Cata ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}`},
-              { name: `Berserk ${getLevelByXp(dungeon.player_classes.berserk.experience, achievements, 'dungeon').level}`, value: '', inline: true },
+              { name: `Berserk ${getLevelByXp(dungeon.player_classes.Berserk.experience, achievements, 'dungeon').level}`, value: '', inline: true },
               { name: `Archer`, value: '', inline: true },
               { name: `Mage`, value: '', inline: true },
               { name: `Tank`, value: '', inline: true },
