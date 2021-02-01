@@ -132,7 +132,7 @@ client.on('message', async message => {
           let gatormsg = await message.channel.send('<:GatorPOG:761662766393589770>');
           await gatormsg.react(':GatorPOG:761662766393589770');
 
-          message.delete().catch(err => {
+          message.delete().catch(() => {
             return;
           });
 
@@ -143,7 +143,7 @@ client.on('message', async message => {
           let trianglemsg = await message.channel.send('<:TrianglePOG:761668890572226611>');
           await trianglemsg.react(':TrianglePOG:761668890572226611');
 
-          message.delete().catch(err => {
+          message.delete().catch(() => {
             return;
           });
 
@@ -154,7 +154,7 @@ client.on('message', async message => {
           let shaggymsg = await message.channel.send('<:ShaggyPOG:761672749667975208>');
           await shaggymsg.react(':ShaggyPOG:761672749667975208');
 
-          message.delete().catch(err => {
+          message.delete().catch(() => {
             return;
           });
 
@@ -165,7 +165,7 @@ client.on('message', async message => {
           let impostermsg = await message.channel.send('<:ImpostorPOG:762163842473000981>');
           await impostermsg.react(':ImpostorPOG:762163842473000981');
 
-          message.delete().catch(err => {
+          message.delete().catch(() => {
             return;
           });
 
@@ -556,6 +556,20 @@ client.on('message', async message => {
         .setFooter(`User: ${accountData.name}, Profile: ${args[1]}`)
         .setColor('RED');
       message.reply(embedMessage);
+
+      break;
+    }
+
+    case 'embedtest': {
+      const message = new Discord.MessageEmbed()
+        .setTitle('Ooh, fancy')
+        .addFields({
+            name: 'Combat', value: 'Very cool combat stuff', inline: true
+          },
+          {
+            name: 'Foraging', value: 'Cool foraging stuff', inline: true
+          });
+      message.channel.send(message);
 
       break;
     }
