@@ -565,7 +565,8 @@ client.on('message', async message => {
         .setTitle('Ooh, fancy')
         .addFields(
           { name: 'Combat', value: 'Very cool combat stuff', inline: true },
-          { name: 'Foraging', value: 'Cool foraging stuff', inline: true }
+          { name: 'Foraging', value: 'Cool foraging stuff', inline: true },
+          { name: 'Fishing', value: 'Stinky fishing stuff' }
       );
       message.channel.send(embed);
 
