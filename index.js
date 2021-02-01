@@ -391,46 +391,46 @@ client.on('message', async message => {
             'Runecrafting': 0
           };
 
-          let Combat = getLevelByXp(member.experience_skill_combat, achievements);
-          let Foraging = getLevelByXp(member.experience_skill_foraging, achievements);
-          let Mining = getLevelByXp(member.experience_skill_mining, achievements);
-          let Fishing = getLevelByXp(member.experience_skill_fishing, achievements);
-          let Farming = getLevelByXp(member.experience_skill_farming, achievements);
-          let Alchemy = getLevelByXp(member.experience_skill_alchemy, achievements);
-          let Enchanting = getLevelByXp(member.experience_skill_enchanting, achievements);
-          let Taming = getLevelByXp(member.experience_skill_taming, achievements);
-          let Carpentry = getLevelByXp(member.experience_skill_carpentry, achievements);
-          let Runecrafting = getLevelByXp(member.experience_skill_runecrafting, achievements, 'runecrafting');
-
-          skills.Combat = Combat;
-          skills.Foraging = Foraging;
-          skills.Mining = Mining;
-          skills.Fishing = Fishing;
-          skills.Farming = Farming;
-          skills.Alchemy = Alchemy;
-          skills.Enchanting = Enchanting;
-          skills.Taming = Taming;
-          skills.Carpentry = Carpentry;
-          skills.Runecrafting = Runecrafting;
+          skills.Combat = getLevelByXp(member.experience_skill_combat, achievements);
+          skills.Foraging = getLevelByXp(member.experience_skill_foraging, achievements);
+          skills.Mining = getLevelByXp(member.experience_skill_mining, achievements);
+          skills.Fishing = getLevelByXp(member.experience_skill_fishing, achievements);
+          skills.Farming = getLevelByXp(member.experience_skill_farming, achievements);
+          skills.Alchemy = getLevelByXp(member.experience_skill_alchemy, achievements);
+          skills.Enchanting = getLevelByXp(member.experience_skill_enchanting, achievements);
+          skills.Taming = getLevelByXp(member.experience_skill_taming, achievements);
+          skills.Carpentry = getLevelByXp(member.experience_skill_carpentry, achievements);
+          skills.Runecrafting = getLevelByXp(member.experience_skill_runecrafting, achievements, 'runecrafting');
 
           let skillAvgWithoutProgress = 0;
           let skillAvgWithProgress = 0;
-          let skillText = '';
-          for (let n = 0; n < Object.keys(skills).length; n++) {
+          /*for (let n = 0; n < Object.keys(skills).length; n++) {
             key = Object.keys(skills)[n];
             skill = skills[key];
             skillText += `${key} ${skill.level}, ${Math.round(skill.progress * 100)}% to ${key.toLocaleLowerCase()} ${skill.level + 1}  (${nFormatter(skill.xpCurrent)} / ${nFormatter(skill.xpForNext)} xp)\n\n`;
             if (key == 'Runecrafting' || key == 'Carpentry') continue;
             skillAvgWithoutProgress += skill.level;
             skillAvgWithProgress += skill.level + skill.progress;
-          }
+          }*/
+
           skillText.trim();
           skillText.replace(/\n+$/, "");
           skillText += `--------------------------\nSkill average without progress: ${Math.round((skillAvgWithoutProgress / (Object.keys(skills).length - 2)) * 100) / 100}\nSkill average with progress: ${Math.round((skillAvgWithProgress / (Object.keys(skills).length - 2)) * 100) / 100}`;
 
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
-            .setDescription(skillText)
+            .addFields(
+              { name: skills.Combat, value: 'Combat', inline: true },
+              { name: skills.Foraging, value: 'Foraging', inline: true },
+              { name: skills.Mining, value: 'Mining', inline: true },
+              { name: skills.Fishing, value: 'Fishing', inline: true },
+              { name: skills.Farming, value: 'Farming', inline: true },
+              { name: skills.Alchemy, value: 'Alchemy', inline: true },
+              { name: skills.Enchanting, value: 'Enchanting', inline: true },
+              { name: skills.Taming, value: 'Taming', inline: true },
+              { name: skills.Carpentry, value: 'Carpentry', inline: true },
+              { name: skills.Runecrafting, value: 'Runecrafting', inline: true }
+            )
             .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
             .setColor('GREEN');
           message.channel.send(embedMessage);
