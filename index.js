@@ -561,15 +561,13 @@ client.on('message', async message => {
     }
 
     case 'embedtest': {
-      const message = new Discord.MessageEmbed()
+      const embed = new Discord.MessageEmbed()
         .setTitle('Ooh, fancy')
-        .addFields({
-            name: 'Combat', value: 'Very cool combat stuff', inline: true
-          },
-          {
-            name: 'Foraging', value: 'Cool foraging stuff', inline: true
-          });
-      message.channel.send(message);
+        .addFields(
+          { name: 'Combat', value: 'Very cool combat stuff', inline: true },
+          { name: 'Foraging', value: 'Cool foraging stuff', inline: true }
+      );
+      message.channel.send(embed);
 
       break;
     }
