@@ -546,9 +546,8 @@ client.on('message', async message => {
           }*/
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
-            .setDescription(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}`)
             .addFields(
-              { name: `Cata ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}`},
+              { name: `Cata ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}`, value: 'a'},
               { name: `Berserk ${getLevelByXp(dungeon.player_classes.berserk.experience, achievements, 'dungeon').level}`, value: 'a', inline: true },
               { name: `Archer`, value: 'a', inline: true },
               { name: `Mage`, value: 'a', inline: true },
