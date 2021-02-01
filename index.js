@@ -549,11 +549,11 @@ client.on('message', async message => {
             .setDescription(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}`)
             .addFields(
               { name: `Cata ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}`},
-              { name: `Berserk`, value: '', inline: true },
-              { name: `Archer`, value: '', inline: true },
-              { name: `Mage`, value: '', inline: true },
-              { name: `Tank`, value: '', inline: true },
-              { name: `Healer`, value: '', inline: true }
+              { name: `Berserk ${getLevelByXp(dungeon.player_classes.berserk.experience, achievements, 'dungeon').level}`, value: '', inline: true },
+              { name: `Archer`, value: 'a', inline: true },
+              { name: `Mage`, value: 'a', inline: true },
+              { name: `Tank`, value: 'a', inline: true },
+              { name: `Healer`, value: 'a', inline: true }
             )
             .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
             .setColor('GREEN');
