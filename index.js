@@ -421,16 +421,16 @@ client.on('message', async message => {
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
             .addFields(
-              { name: skills.Combat.level, value: 'Combat', inline: true },
-              { name: skills.Foraging.level, value: 'Foraging', inline: true },
-              { name: skills.Mining.level, value: 'Mining', inline: true },
-              { name: skills.Fishing.level, value: 'Fishing', inline: true },
-              { name: skills.Farming.level, value: 'Farming', inline: true },
-              { name: skills.Alchemy.level, value: 'Alchemy', inline: true },
-              { name: skills.Enchanting.level, value: 'Enchanting', inline: true },
-              { name: skills.Taming.level, value: 'Taming', inline: true },
-              { name: skills.Carpentry.level, value: 'Carpentry', inline: true },
-              { name: skills.Runecrafting.level, value: 'Runecrafting', inline: true }
+              { name: `Combat ${skills.Combat.level}`, value: 'Combat', inline: true },
+              { name: `Foraging ${skills.Foraging.level}`, value: 'Foraging', inline: true },
+              { name: `Mining ${skills.Mining.level}`, value: 'Mining', inline: true },
+              { name: `Fishing ${skills.Fishing.level}`, value: 'Fishing', inline: true },
+              { name: `Farming ${skills.Farming.level}`, value: 'Farming', inline: true },
+              { name: `Alchemy ${skills.Alchemy.level}`, value: 'Alchemy', inline: true },
+              { name: `Enchanting ${skills.Enchanting.level}`, value: 'Enchanting', inline: true },
+              { name: `Taming ${skills.Taming.level}`, value: 'Taming', inline: true },
+              { name: `Carpentry ${skills.Carpentry.level}`, value: 'Carpentry', inline: true },
+              { name: `Runecrafting ${skills.Runecrafting.level}`, value: 'Runecrafting', inline: true }
             )
             .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
             .setColor('GREEN');
