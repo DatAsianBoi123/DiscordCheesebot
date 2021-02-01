@@ -405,14 +405,6 @@ client.on('message', async message => {
           let skillAvgWithoutProgress = 0;
           let skillAvgWithProgress = 0;
           let skillText = '';
-          /*for (let n = 0; n < Object.keys(skills).length; n++) {
-            key = Object.keys(skills)[n];
-            skill = skills[key];
-            skillText += `${key} ${skill.level}, ${Math.round(skill.progress * 100)}% to ${key.toLocaleLowerCase()} ${skill.level + 1}  (${nFormatter(skill.xpCurrent)} / ${nFormatter(skill.xpForNext)} xp)\n\n`;
-            if (key == 'Runecrafting' || key == 'Carpentry') continue;
-            skillAvgWithoutProgress += skill.level;
-            skillAvgWithProgress += skill.level + skill.progress;
-          }*/
           for (let skill in skills) {
             skills[skill].format = `${Math.round(skills[skill].progress * 100)}% to ${skill.toLowerCase()} ${skills[skill].level + 1}\n(${nFormatter(skills[skill].xpCurrent)} / ${nFormatter(skills[skill].xpForNext)} xp)`;
             if (skill == 'Runecrafting' || skill == 'Carpentry') continue;
