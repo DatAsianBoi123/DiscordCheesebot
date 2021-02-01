@@ -39,10 +39,6 @@ let embedHelp2 = new Discord.MessageEmbed()
 
 client.once('ready', () => {
   console.log('Ready');
-  client.users.get('721020694493790330').send('Ready').catch(err => {
-    console.log(err);
-  });
-
   addData('Verify', 'verify', {
     users: {
       user: null
@@ -200,7 +196,7 @@ client.on('message', async message => {
 
       let nameAPI = async () => {
         let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
-        json = result.json().catch(err => {
+        json = result.json().catch(() => {
           json = undefined;
           embedVerification = new Discord.MessageEmbed()
             .setTitle('Name not found')
@@ -794,6 +790,13 @@ client.on('message', async message => {
       message.channel.send('Successfully reset the poll role ID!');
 
       break;
+    }
+
+    case 'dm': {
+      if (!message.member.hasPermission('ADMINISTRATOR')) return;
+      message.author.send('Hello').catch(() => {
+        message.reply('Could not send message.');
+      });
     }
 
     default: {
