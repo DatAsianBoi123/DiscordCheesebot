@@ -435,6 +435,7 @@ client.on('message', async message => {
             .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
             .setColor('GREEN');
           message.channel.send(embedMessage);
+          console.log(skills);
           return;
         }
       }
