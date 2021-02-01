@@ -251,7 +251,7 @@ client.on('message', async message => {
       for (let i = 0; i < Object.keys(data.users).length; i++) {
         const keys = Object.keys(data.users);
 
-        if (keys[i] == message.author.username && keys[i] != null) return message.reply('You have already verified! If you want to verify again, please contact a staff member.')
+        if (keys[i] == message.author.id && keys[i] != null) return message.reply('You have already verified! If you want to verify again, please contact a staff member.')
         else if (data.users[keys[i]] == name.id && keys[i] != null) return message.reply('This account has already been taken! If you think someone else has verified as you, please contact a staff member.');
       }
 
