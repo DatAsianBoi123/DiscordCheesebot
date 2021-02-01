@@ -404,6 +404,7 @@ client.on('message', async message => {
 
           let skillAvgWithoutProgress = 0;
           let skillAvgWithProgress = 0;
+          let skillText = '';
           /*for (let n = 0; n < Object.keys(skills).length; n++) {
             key = Object.keys(skills)[n];
             skill = skills[key];
