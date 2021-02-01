@@ -544,7 +544,6 @@ client.on('message', async message => {
             keys = Object.keys(dungeon.player_classes);
             classLevels += `${keys[i]} level ${getLevelByXp(dungeon.player_classes[keys[i]].experience, achievements, 'dungeon').level}\n\n`;
           }*/
-          classLevels.replace(/\n+$/, "");
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
             .setDescription(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}`)
