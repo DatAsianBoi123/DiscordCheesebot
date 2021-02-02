@@ -79,7 +79,7 @@ module.exports = {
         let skillAvgWithProgress = 0;
         let skillText = '';
         for (let skill in skills) {
-          skills[skill].format = `${Math.floor(skills[skill].progress * 100)}% to ${skill.toLowerCase()} ${skills[skill].level + 1}\n(${nFormatter(skills[skill].xpCurrent)} / ${nFormatter(skills[skill].xpForNext)} xp)`;
+          skills[skill].format = `${Math.floor(skills[skill].progress * 100)}% to ${skill.toLowerCase()} ${skills[skill].level + 1}\n(${index.nFormatter(skills[skill].xpCurrent)} / ${index.nFormatter(skills[skill].xpForNext)} xp)`;
           if (skill == 'Runecrafting' || skill == 'Carpentry') continue;
           skillAvgWithoutProgress += skills[skill].level;
           skillAvgWithProgress += skills[skill].level + skills[skill].progress;
