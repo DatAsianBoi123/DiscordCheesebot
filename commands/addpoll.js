@@ -4,8 +4,10 @@ module.exports = {
   disabled: false,
   category: 'General',
   async execute(message, args) {
+    const Discord = require('discord.js');
     const index = require('../index');
 
+    const PollID = 758515991683530823n;
     let channelName = message.mentions.channels.first();
 
     if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');

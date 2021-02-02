@@ -4,6 +4,7 @@ module.exports = {
   disabled: false,
   category: 'General',
   async execute(message, args) {
+    const Discord = require('discord.js');
     const index = require('../index');
 
     let deleteNumber = Math.floor(parseFloat(args[0]));

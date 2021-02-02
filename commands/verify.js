@@ -4,6 +4,8 @@ module.exports = {
   disabled: false,
   category: 'General',
   async execute(message, args) {
+    const Discord = require('discord.js');
+    const fetch = require('node-fetch');
     const index = require('../index');
 
     if (!args[0]) return message.reply(`Incorrect command format! \n(${index.prefix}verify <name>)`);

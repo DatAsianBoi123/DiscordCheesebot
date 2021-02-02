@@ -4,6 +4,7 @@ module.exports = {
   disabled: false,
   category: 'General',
   async execute(message, args) {
+    const Discord = require('discord.js');
     const index = require('../index');
 
     if (!args[0]) return message.reply(`Incorrect command format! \n(${index.prefix}skylea <player name> [profile name])`);

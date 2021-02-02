@@ -4,6 +4,7 @@ module.exports = {
   disabled: false,
   category: 'General',
   async execute(message, args) {
+    const Discord = require('discord.js');
     const index = require('../index');
 
     let embedInfo = new Discord.MessageEmbed()

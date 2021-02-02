@@ -4,6 +4,8 @@ module.exports = {
   disabled: false,
   category: 'General',
   async execute(message, args) {
+    const Discord = require('discord.js');
+    const fetch = require('node-fetch');
     const index = require('../index');
 
     let json;
