@@ -534,25 +534,28 @@ client.on('message', async message => {
           const catacombs = dungeon.dungeon_types.catacombs;
 
           let classLevels = {
-            Berserk: 0,
-            Archer: 0,
-            Mage: 0,
-            Tank: 0,
-            Healer: 0
+            berserk: 0,
+            archer: 0,
+            mage: 0,
+            tank: 0,
+            healer: 0
           };
           /*for (let i = 0; i < Object.keys(dungeon.player_classes).length; i++) {
             keys = Object.keys(dungeon.player_classes);
             classLevels += `${keys[i]} level ${getLevelByXp(dungeon.player_classes[keys[i]].experience, achievements, 'dungeon').level}\n\n`;
           }*/
+          for (let dungeon_class in dungeon.player_classes) {
+            classLevels[dungeon_class] = getLevelByXp(dungeon.player_classes[dungeon_class].experience, achievements, 'dungeon');
+          }
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
             .addFields(
               { name: `Cata ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}`, value: 'a'},
-              { name: `Berserk ${getLevelByXp(dungeon.player_classes.berserk.experience, achievements, 'dungeon').level}`, value: 'a', inline: true },
-              { name: `Archer`, value: 'a', inline: true },
-              { name: `Mage`, value: 'a', inline: true },
-              { name: `Tank`, value: 'a', inline: true },
-              { name: `Healer`, value: 'a', inline: true }
+              { name: `Berserk ${classLevels.berserk.level}`, value: 'a', inline: true },
+              { name: `Archer ${classLevels.archer.level}`, value: 'a', inline: true },
+              { name: `Mage ${classLevels.mage.level}`, value: 'a', inline: true },
+              { name: `Tank ${classLevels.tank.level}`, value: 'a', inline: true },
+              { name: `Healer ${classLevels.healer.level}`, value: 'a', inline: true }
             )
             .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
             .setColor('GREEN');
