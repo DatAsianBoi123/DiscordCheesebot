@@ -1,7 +1,9 @@
 module.exports = {
   name: 'resetreqs',
   description: 'Resets guild requirements',
-  async execute() {
+  disabled: true,
+  category: 'Stinky',
+  async execute(message, args) {
 
   }
 }

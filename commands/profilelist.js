@@ -1,7 +1,9 @@
 module.exports = {
   name: 'profilelist',
   description: 'Shows all the skyblock profiles a user has',
-  async execute() {
+  disabled: false,
+  category: 'General',
+  async execute(message, args) {
     const prefix = require('../index').prefix;
 
     let skyblockJSON;
@@ -39,6 +41,5 @@ module.exports = {
       profiles += `\n${skyblockData.profiles[i].cute_name}`;
     }
     message.channel.send(profiles);
-
   }
 }

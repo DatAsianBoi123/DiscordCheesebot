@@ -1,7 +1,9 @@
 module.exports = {
   name: 'checkname',
   description: 'Checks if a minecraft username is available or not',
-  async execute() {
+  disabled: false,
+  category: 'General',
+  async execute(message, args) {
     const prefix = require('../index').prefix;
 
     let json;

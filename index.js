@@ -17,25 +17,15 @@ mongoose.connect(uri, {
   .then(() => console.log('Connected'))
   .catch(err => console.log(err));
 
+const categories = ['General', 'Stinky'];
+var PollID = 758515991683530823;
 
-const help1 = `PREFIX - ${prefix} \n\nhelp - shows this help page (${prefix}help [help page number]) \n\ninfo - shows server info (${prefix}info) \n\nmyinfo - shows a users info (${prefix}myinfo [@user]) \n\nping - Pong! (${prefix}ping) \n\npig - Oink! (${prefix}pig) \n\nskycrypt / sc - shows a player's https://sky.shiiyu.moe (${prefix}skycrypt / sc <player name> [profile name]) \n\npog - displays a pog emote (${prefix}pog <pog name>) \n\nsource - shows the source code for Aspect Of The Cheesebot (${prefix}source) \n\ncheckname - checks if a minecraft user exists (${prefix}checkname <name>)`;
-const help2 = `mybucks - Shows the amount of bucks this user has (${prefix}mybucks [@user]) \n\nbucklist - Shows everyone's burgis bucks on this server (${prefix}bucklist)`;
-var reqs = '50k slayer xp\n20mil net worth\nSkill avg of at least 18.5\nActive at least once a week unless u have a good excuse';
-var PollID;
-var BurgisBucks = {};
-var ShopList = [];
-var CostList = [];
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+for (const files of commandFiles) {
+  const command = require(`./commands/${files}`);
 
-let embedHelp1 = new Discord.MessageEmbed()
-  .setTitle('General Commands')
-  .setDescription(help1)
-  .setFooter('1/2')
-  .setColor('RED');
-let embedHelp2 = new Discord.MessageEmbed()
-  .setTitle('Burgis Buck Commands')
-  .setDescription(help2)
-  .setFooter('2/2')
-  .setColor('ORANGE');
+  client.commands.set(command.name, command);
+}
 
 client.once('ready', () => {
   console.log('Ready');
@@ -57,7 +47,14 @@ client.on('message', async message => {
   const args = message.content.slice(prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
 
-  switch (command) {
+  const commandScript = client.commands.get(command);
+  
+  if (!commandScript) return message.reply(`This command does not exist! (${command})`);
+  if (commandScript.disabled == true) return message.reply(`This command is currently disabled (${command})`);
+
+  commandScript.execute(message, args);
+
+  /*switch (command) {
     case 'help': {
       if (args[0] === '2') return message.channel.send(embedHelp2);
       message.channel.send(embedHelp1);
@@ -572,19 +569,6 @@ client.on('message', async message => {
       break;
     }
 
-    case 'embedtest': {
-      const embed = new Discord.MessageEmbed()
-        .setTitle('Ooh, fancy')
-        .addFields(
-          { name: 'Combat', value: 'Very cool combat stuff', inline: true },
-          { name: 'Foraging', value: 'Cool foraging stuff', inline: true },
-          { name: 'Fishing', value: 'Stinky fishing stuff' }
-      );
-      message.channel.send(embed);
-
-      break;
-    }
-
     //Requirements
 
     case 'requirements':
@@ -793,7 +777,7 @@ client.on('message', async message => {
       if (PollID != undefined) {
         channelName.send(`<@&${PollID}>`);
       }
-      let msg = await channelName.send(embedPoll).catch((error) => {
+      let msg = await channelName.send(embedPoll).catch(() => {
         return message.reply('An error occured');
       });
       await msg.react(':upvote:758527296071794718');
@@ -826,7 +810,7 @@ client.on('message', async message => {
 
       break;
     }
-  }
+  }*/
 });
 
 const getLevelByXp = function (xp, hypixelProfile, type = 'regular') {

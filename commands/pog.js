@@ -1,9 +1,9 @@
 module.exports = {
   name: 'pog',
   description: 'Shows different types of pogs',
-  async execute() {
-    const prefix = require('../index').prefix;
-
+  disabled: false,
+  category: 'General',
+  async execute(message, args) {
     if (!args[0]) return message.reply(`Incorrect command format! \n(${index}pog <pog name>)`);
 
     switch (args[0]) {

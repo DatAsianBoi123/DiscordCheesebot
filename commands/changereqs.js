@@ -1,7 +1,9 @@
 module.exports = {
   name: 'changereqs',
   description: 'Changes requirements',
-  async execute() {
+  disabled: false,
+  category: 'General',
+  async execute(message, args) {
 
   }
 }

@@ -1,7 +1,9 @@
 module.exports = {
   name: 'catainfo',
   description: 'Shows information about a player\'s catacombs',
-  async execute() {
+  disabled: false,
+  category: 'General',
+  async execute(message, args) {
     const prefix = require('../index').prefix;
 
     let skyblockJSON;
@@ -51,15 +53,29 @@ module.exports = {
         const dungeon = member.dungeons;
         const catacombs = dungeon.dungeon_types.catacombs;
 
-        let classLevels = '';
-        for (let i = 0; i < Object.keys(dungeon.player_classes).length; i++) {
-          keys = Object.keys(dungeon.player_classes);
-          classLevels += `${keys[i]} level ${getLevelByXp(dungeon.player_classes[keys[i]].experience, achievements, 'dungeon').level}\n\n`;
+        let classLevels = {
+          berserk: 0,
+          archer: 0,
+          mage: 0,
+          tank: 0,
+          healer: 0
+        };
+        let cataLevels = 0;
+        cataLevels = getLevelByXp(catacombs.experience, achievements, 'dungeon');
+        for (let dungeon_class in dungeon.player_classes) {
+          classLevels[dungeon_class] = getLevelByXp(dungeon.player_classes[dungeon_class].experience, achievements, 'dungeon');
+          classLevels[dungeon_class].format = `${Math.floor(classLevels[dungeon_class].progress * 100)}% to ${dungeon_class.toLowerCase()} ${classLevels[dungeon_class].level + 1}\n(${nFormatter(classLevels[dungeon_class].xpCurrent)} / ${nFormatter(classLevels[dungeon_class].xpForNext)} xp)`;
         }
-        classLevels.replace(/\n+$/, "");
         let embedMessage = new Discord.MessageEmbed()
           .setTitle('Profile Found!')
-          .setDescription(`Cata level ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}\n----------------\n${classLevels}`)
+          .addFields(
+            { name: `Cata ${cataLevels.level}`, value: `${Math.floor(cataLevels.progress * 100)}% to catacombs ${cataLevels.level + 1} (${nFormatter(cataLevels.xpCurrent)} / ${nFormatter(cataLevels.xpForNext)} xp)`},
+            { name: `Berserk ${classLevels.berserk.level}`, value: `${classLevels.berserk.format}`, inline: true },
+            { name: `Archer ${classLevels.archer.level}`, value: `${classLevels.archer.format}`, inline: true },
+            { name: `Mage ${classLevels.mage.level}`, value: `${classLevels.mage.format}`, inline: true },
+            { name: `Tank ${classLevels.tank.level}`, value: `${classLevels.tank.format}`, inline: true },
+            { name: `Healer ${classLevels.healer.level}`, value: `${classLevels.healer.format}`, inline: true }
+          )
           .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
           .setColor('GREEN');
         message.channel.send(embedMessage);

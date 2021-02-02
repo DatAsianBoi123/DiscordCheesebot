@@ -1,7 +1,9 @@
 module.exports = {
   name: 'info',
   description: 'Shows info about the server',
-  async execute() {
+  disabled: false,
+  category: 'General',
+  async execute(message, args) {
     let embedInfo = new Discord.MessageEmbed()
       .setTitle('Server Info:')
       .setDescription(`Server name: ${message.guild.name} \nTotal members: ${message.guild.memberCount}`)

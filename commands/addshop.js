@@ -1,7 +1,9 @@
 module.exports = {
   name: 'addshop',
   description: 'Adds a shop',
-  async execute() {
+  disabled: true,
+  category: 'Stinky',
+  async execute(message, args) {
 
   }
 }

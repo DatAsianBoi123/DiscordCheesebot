@@ -1,9 +1,9 @@
 module.exports = {
   name: 'myinfo',
   description: 'Shows your user information',
-  async execute() {
-    const prefix = require('../index').prefix;
-
+  disabled: false,
+  category: 'General',
+  async execute(message, args) {
     if (!message.mentions.users.size) {
       let personName = message.member.displayName;
       let personID = message.member.id;

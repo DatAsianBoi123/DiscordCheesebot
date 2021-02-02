@@ -1,7 +1,9 @@
 module.exports = {
   name: 'hypixellevel',
   description: 'Shows someone\'s hypixel network level',
-  async execute() {
+  disabled: false,
+  category: 'General',
+  async execute(message, args) {
     const prefix = require('../index').prefix;
 
     let skyblockJSON;
