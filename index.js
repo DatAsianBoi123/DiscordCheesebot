@@ -24,7 +24,7 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 for (const files of commandFiles) {
   const command = require(`./commands/${files}`);
 
-  client.commands.set(command.name, command);
+  client.commands.get(command.name, command);
 }
 
 client.once('ready', () => {
@@ -48,7 +48,7 @@ client.on('message', async message => {
   const command = args.shift().toLowerCase();
 
   const commandScript = client.commands.get(command);
-  
+
   if (!commandScript) return message.reply(`This command does not exist! (${command})`);
   if (commandScript.disabled == true) return message.reply(`This command is currently disabled (${command})`);
 
