@@ -65,7 +65,7 @@ module.exports = {
         };
 
         if (member.experience_skill_combat == undefined) {
-          let apiOffMessage = Discord.MessageEmbed()
+          let apiOffMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
             .setDescription('This person\'s api is turned off.')
             .setColor('GREEN')
