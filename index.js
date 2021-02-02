@@ -544,7 +544,7 @@ client.on('message', async message => {
           cataLevels = getLevelByXp(catacombs.experience, achievements, 'dungeon');
           for (let dungeon_class in dungeon.player_classes) {
             classLevels[dungeon_class] = getLevelByXp(dungeon.player_classes[dungeon_class].experience, achievements, 'dungeon');
-            classLevels[dungeon_class].format = `${Math.floor(classLevels[dungeon_class].progress * 100)}% to ${dungeon_class.toLowerCase()} ${classLevels[dungeon_class].level + 1} (${nFormatter(classLevels[dungeon_class].xpCurrent)} / ${nFormatter(classLevels[dungeon_class].xpForNext)} xp)`;
+            classLevels[dungeon_class].format = `${Math.floor(classLevels[dungeon_class].progress * 100)}% to ${dungeon_class.toLowerCase()} ${classLevels[dungeon_class].level + 1}\n(${nFormatter(classLevels[dungeon_class].xpCurrent)} / ${nFormatter(classLevels[dungeon_class].xpForNext)} xp)`;
           }
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
