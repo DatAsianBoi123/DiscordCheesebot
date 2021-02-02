@@ -9,6 +9,7 @@ module.exports = {
     const fs = require('fs');
     const index = require('../index');
 
+    client.commands = new Discord.Collection();
     const commandFiles = fs.readdirSync('..').filter(file => file.endsWith('.js'));
     for (const files of commandFiles) {
       const command = require(`./commands/${files}`);
