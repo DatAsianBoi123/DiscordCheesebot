@@ -406,7 +406,7 @@ client.on('message', async message => {
           let skillAvgWithProgress = 0;
           let skillText = '';
           for (let skill in skills) {
-            skills[skill].format = `${Math.round(skills[skill].progress * 100)}% to ${skill.toLowerCase()} ${skills[skill].level + 1}\n(${nFormatter(skills[skill].xpCurrent)} / ${nFormatter(skills[skill].xpForNext)} xp)`;
+            skills[skill].format = `${Math.floor(skills[skill].progress * 100)}% to ${skill.toLowerCase()} ${skills[skill].level + 1}\n(${nFormatter(skills[skill].xpCurrent)} / ${nFormatter(skills[skill].xpForNext)} xp)`;
             if (skill == 'Runecrafting' || skill == 'Carpentry') continue;
             skillAvgWithoutProgress += skills[skill].level;
             skillAvgWithProgress += skills[skill].level + skills[skill].progress;
@@ -541,23 +541,20 @@ client.on('message', async message => {
             healer: 0
           };
           let cataLevels = 0;
-          /*for (let i = 0; i < Object.keys(dungeon.player_classes).length; i++) {
-            keys = Object.keys(dungeon.player_classes);
-            classLevels += `${keys[i]} level ${getLevelByXp(dungeon.player_classes[keys[i]].experience, achievements, 'dungeon').level}\n\n`;
-          }*/
           cataLevels = getLevelByXp(catacombs.experience, achievements, 'dungeon');
           for (let dungeon_class in dungeon.player_classes) {
             classLevels[dungeon_class] = getLevelByXp(dungeon.player_classes[dungeon_class].experience, achievements, 'dungeon');
+            classLevels[dungeon_class].format = `${Math.floor(classLevels[dungeon_class].progress * 100)}% to ${dungeon_class.toLowerCase()} ${classLevels[dungeon_class].level + 1} (${nFormatter(classLevels[dungeon_class].xpCurrent)} / ${nFormatter(classLevels[dungeon_class].xpForNext)} xp)`;
           }
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
             .addFields(
-              { name: `Cata ${cataLevels.level}`, value: `${cataLevels.progress * 100}% to catacombs ${cataLevels.level + 1} (${nFormatter(cataLevels.xpCurrent)} / ${nFormatter(cataLevels.xpForNext)})`},
-              { name: `Berserk ${classLevels.berserk.level}`, value: 'a', inline: true },
-              { name: `Archer ${classLevels.archer.level}`, value: 'a', inline: true },
-              { name: `Mage ${classLevels.mage.level}`, value: 'a', inline: true },
-              { name: `Tank ${classLevels.tank.level}`, value: 'a', inline: true },
-              { name: `Healer ${classLevels.healer.level}`, value: 'a', inline: true }
+              { name: `Cata ${cataLevels.level}`, value: `${Math.floor(cataLevels.progress * 100)}% to catacombs ${cataLevels.level + 1} (${nFormatter(cataLevels.xpCurrent)} / ${nFormatter(cataLevels.xpForNext)} xp)`},
+              { name: `Berserk ${classLevels.berserk.level}`, value: `${classLevels.berserk.format}`, inline: true },
+              { name: `Archer ${classLevels.archer.level}`, value: `${classLevels.archer.format}`, inline: true },
+              { name: `Mage ${classLevels.mage.level}`, value: `${classLevels.mage.format}`, inline: true },
+              { name: `Tank ${classLevels.tank.level}`, value: `${classLevels.tank.format}`, inline: true },
+              { name: `Healer ${classLevels.healer.level}`, value: `${classLevels.healer.format}`, inline: true }
             )
             .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
             .setColor('GREEN');
