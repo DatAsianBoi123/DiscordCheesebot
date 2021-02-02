@@ -9,16 +9,14 @@ module.exports = {
     const fs = require('fs');
     const index = require('../index');
 
-    client.commands = new Discord.Collection();
+    let allCommands = {}
     const commandFiles = fs.readdirSync('..').filter(file => file.endsWith('.js'));
     for (const files of commandFiles) {
       const command = require(`../commands/${files}`);
-    
-      client.commands.set(command.name, command);
+
+      allCommands[command.name] = command;
     }
 
-    const commandScript = client.commands.get();
-    let helpText = '';
-    console.log(commandScript);
+    console.log(allCommands.toString());
   }
 }
