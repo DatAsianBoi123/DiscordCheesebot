@@ -9,7 +9,7 @@ module.exports = {
     const index = require('../index');
 
     let allCommands = {}
-    fs.readdirSync('./', (err, files) => {
+    fs.readdir('./', (err, files) => {
       if (err) return console.log(`An error occured ${err}`);
 
       allCommands = files;
