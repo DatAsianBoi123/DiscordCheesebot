@@ -17,7 +17,7 @@ module.exports = {
       client.commands.set(command.name, command);
     }
 
-    const commandScript = client.commands.get();
+    const commandScript = client.commands;
     let helpText = '';
     for (command of commandScript) {
       helpText += `Name: ${command.name}, Description: ${command.description}`;
