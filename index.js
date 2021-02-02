@@ -540,17 +540,19 @@ client.on('message', async message => {
             tank: 0,
             healer: 0
           };
+          let cataLevels = 0;
           /*for (let i = 0; i < Object.keys(dungeon.player_classes).length; i++) {
             keys = Object.keys(dungeon.player_classes);
             classLevels += `${keys[i]} level ${getLevelByXp(dungeon.player_classes[keys[i]].experience, achievements, 'dungeon').level}\n\n`;
           }*/
+          cataLevels = getLevelByXp(catacombs.experience, achievements, 'dungeon');
           for (let dungeon_class in dungeon.player_classes) {
             classLevels[dungeon_class] = getLevelByXp(dungeon.player_classes[dungeon_class].experience, achievements, 'dungeon');
           }
           let embedMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
             .addFields(
-              { name: `Cata ${getLevelByXp(catacombs.experience, achievements, 'dungeon').level}`, value: 'a'},
+              { name: `Cata ${cataLevels.level}`, value: `${cataLevels.progress * 100}% to catacombs ${cataLevels.level + 1} (${nFormatter(cataLevels.xpCurrent)} / ${nFormatter(cataLevels.xpForNext)})`},
               { name: `Berserk ${classLevels.berserk.level}`, value: 'a', inline: true },
               { name: `Archer ${classLevels.archer.level}`, value: 'a', inline: true },
               { name: `Mage ${classLevels.mage.level}`, value: 'a', inline: true },
