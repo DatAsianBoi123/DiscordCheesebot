@@ -13,7 +13,7 @@ module.exports = {
       if (err) return console.log(`An error occured ${err}`);
 
       allCommands = files;
-      console.log(files);
+      console.log(`${files} Callback`);
     });
 
     console.log(allCommands);
