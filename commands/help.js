@@ -17,6 +17,6 @@ module.exports = {
       allCommands[command.name] = command;
     }
 
-    console.log(allCommands.toString());
+    console.log(allCommands);
   }
 }
