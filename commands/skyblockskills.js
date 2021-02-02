@@ -105,7 +105,8 @@ module.exports = {
           .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
           .setColor('GREEN');
         message.channel.send(embedMessage);
-        console.log(member);
+        console.log(member.experience_skill_alchemy);
+        console.log(achievements);
         return;
       }
     }
