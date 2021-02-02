@@ -52,7 +52,7 @@ client.on('message', async message => {
   if (!commandScript) return message.reply(`This command does not exist! (${command})`);
   if (commandScript.disabled == true) return message.reply(`This command is currently disabled (${command})`);
 
-  commandScript.execute(message, args, client);
+  commandScript.execute(message, args);
 });
 
 const getLevelByXp = function (xp, hypixelProfile, type = 'regular') {
