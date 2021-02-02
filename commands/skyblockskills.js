@@ -68,9 +68,10 @@ module.exports = {
           let apiOffMessage = new Discord.MessageEmbed()
             .setTitle('Profile Found!')
             .setDescription('This person\'s api is turned off.')
-            .setColor('GREEN')
+            .setColor('YELLOW')
             .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`);
           message.channel.send(apiOffMessage);
+          return;
         }
 
         skills.Combat = index.getLevelByXp(member.experience_skill_combat, achievements);
