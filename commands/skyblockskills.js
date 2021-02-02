@@ -64,6 +64,15 @@ module.exports = {
           'Runecrafting': 0
         };
 
+        if (member.experience_skill_combat == undefined) {
+          let apiOffMessage = Discord.MessageEmbed()
+            .setTitle('Profile Found!')
+            .setDescription('This person\'s api is turned off.')
+            .setColor('GREEN')
+            .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`);
+          message.channel.send(apiOffMessage);
+        }
+
         skills.Combat = index.getLevelByXp(member.experience_skill_combat, achievements);
         skills.Foraging = index.getLevelByXp(member.experience_skill_foraging, achievements);
         skills.Mining = index.getLevelByXp(member.experience_skill_mining, achievements);
@@ -105,8 +114,6 @@ module.exports = {
           .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
           .setColor('GREEN');
         message.channel.send(embedMessage);
-        console.log(member.experience_skill_alchemy);
-        console.log(achievements);
         return;
       }
     }
