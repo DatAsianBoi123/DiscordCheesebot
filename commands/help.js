@@ -10,11 +10,10 @@ module.exports = {
 
     let allCommands = {}
     const commandFiles = fs.readdirSync('..').filter(file => file.endsWith('.js'));
-    for (const files of commandFiles) {
-      const command = require(`./${files}`);
-
-      allCommands[command.name] = command;
-    }
+    commandFiles.forEach((err, file) => {
+      if (err) return console.log(`An error occured \n${err}`);
+      allCommands[file.name] = file;
+    });
 
     console.log(allCommands);
   }
