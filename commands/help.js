@@ -13,6 +13,7 @@ module.exports = {
     commandFiles.forEach((err, file) => {
       if (err) return console.log(`An error occured \n${err}`);
       allCommands[file.name] = file;
+      console.log(file);
     });
 
     console.log(allCommands);
