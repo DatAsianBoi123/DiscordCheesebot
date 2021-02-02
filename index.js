@@ -20,11 +20,13 @@ mongoose.connect(uri, {
 const categories = ['General', 'Stinky'];
 var PollID = 758515991683530823;
 
+client.commands = new Discord.Collection();
+
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const files of commandFiles) {
   const command = require(`./commands/${files}`);
 
-  client.commands.get(command.name, command);
+  client.commands.set(command.name, command);
 }
 
 client.once('ready', () => {
