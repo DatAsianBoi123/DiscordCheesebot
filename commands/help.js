@@ -11,7 +11,7 @@ module.exports = {
     let allCommands = {}
     const commandFiles = fs.readdirSync('./');
     commandFiles.forEach((file, err) => {
-      if (err) return console.log(`An error occured \n${err}`);
+      if (err) return console.log(`An error occured ${err}`);
       allCommands[file.name] = file;
       console.log(file);
     });
