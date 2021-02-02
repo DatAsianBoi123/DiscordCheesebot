@@ -12,7 +12,7 @@ module.exports = {
     client.commands = new Discord.Collection();
     const commandFiles = fs.readdirSync('..').filter(file => file.endsWith('.js'));
     for (const files of commandFiles) {
-      const command = require(`./commands/${files}`);
+      const command = require(`../commands/${files}`);
     
       client.commands.set(command.name, command);
     }
