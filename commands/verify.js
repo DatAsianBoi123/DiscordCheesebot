@@ -4,7 +4,9 @@ module.exports = {
   disabled: false,
   category: 'General',
   async execute(message, args) {
-    if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}verify <name>)`);
+    const index = require('../index');
+
+    if (!args[0]) return message.reply(`Incorrect command format! \n(${index.prefix}verify <name>)`);
     let json;
 
     let embedVerification;
@@ -24,7 +26,7 @@ module.exports = {
     let name = await nameAPI();
     if (json == undefined) return;
 
-    const data = await getDataByType('Verify', 'verify');
+    const data = await index.getDataByType('Verify', 'verify');
 
     for (let i = 0; i < Object.keys(data.users).length; i++) {
       const keys = Object.keys(data.users);
@@ -43,7 +45,7 @@ module.exports = {
       .setColor('GREEN')
       .setFooter(`Name: ${name.name}, ID: ${name.id}`);
 
-    updateById(data._id, 'verify', object);
+    index.updateById(data._id, 'verify', object);
     message.channel.send(`<@${message.author.id}>`);
     message.channel.send(embedVerification);
 

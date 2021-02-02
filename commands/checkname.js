@@ -4,16 +4,16 @@ module.exports = {
   disabled: false,
   category: 'General',
   async execute(message, args) {
-    const prefix = require('../index').prefix;
+    const index = require('../index');
 
     let json;
-    if (!args[0]) return message.reply(`Incorrect command format! \n(${prefix}checkname <name>)`);
+    if (!args[0]) return message.reply(`Incorrect command format! \n(${index.prefix}checkname <name>)`);
 
     let embedVerification;
 
     let nameAPI = async () => {
       let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
-      json = result.json().catch(err => {
+      json = result.json().catch(() => {
         json = undefined;
         embedVerification = new Discord.MessageEmbed()
           .setTitle('Name not found')

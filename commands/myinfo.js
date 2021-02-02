@@ -4,6 +4,8 @@ module.exports = {
   disabled: false,
   category: 'General',
   async execute(message, args) {
+    const index = require('../index');
+
     if (!message.mentions.users.size) {
       let personName = message.member.displayName;
       let personID = message.member.id;

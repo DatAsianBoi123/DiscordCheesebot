@@ -4,11 +4,11 @@ module.exports = {
   disabled: false,
   category: 'General',
   async execute(message, args) {
-    const prefix = require('../index').prefix;
+    const index = require('../index');
 
     let deleteNumber = Math.floor(parseFloat(args[0]));
 
-    if (isNaN(parseInt(args[0]))) return message.reply(`Incorrect command format! \n(${prefix}delete <amount>)`);
+    if (isNaN(parseInt(args[0]))) return message.reply(`Incorrect command format! \n(${index.prefix}delete <amount>)`);
     if (parseInt(deleteNumber) > 99) return message.reply("You cannot delete more than 99 messages at a time!");
     if (!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply("You do not have permission to use this command!");
 

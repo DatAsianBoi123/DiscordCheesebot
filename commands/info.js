@@ -4,6 +4,8 @@ module.exports = {
   disabled: false,
   category: 'General',
   async execute(message, args) {
+    const index = require('../index');
+
     let embedInfo = new Discord.MessageEmbed()
       .setTitle('Server Info:')
       .setDescription(`Server name: ${message.guild.name} \nTotal members: ${message.guild.memberCount}`)

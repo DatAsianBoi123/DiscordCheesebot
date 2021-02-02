@@ -1,16 +1,16 @@
-const { prefix } = require("..");
-
 module.exports = {
   name: 'addpoll',
   description: 'Creates a poll',
   disabled: false,
   category: 'General',
   async execute(message, args) {
+    const index = require('../index');
+
     let channelName = message.mentions.channels.first();
 
     if (!message.member.hasPermission('ADMINISTRATOR')) return message.reply('You do not have permission to use this command!');
-    if (!args[1]) return message.reply('Incorrect command format! \n(b.addpoll <#channel> <poll>');
-    if (channelName == undefined) return message.reply('Incorrect command format! \n(b.addpoll <#channel> <poll>');
+    if (!args[1]) return message.reply(`Incorrect command format! \n(${index.prefix}addpoll <#channel> <poll>`);
+    if (channelName == undefined) return message.reply(`Incorrect command format! \n(${index.prefix}addpoll <#channel> <poll>`);
 
     let embedPoll = new Discord.MessageEmbed()
       .setTitle('Poll:')

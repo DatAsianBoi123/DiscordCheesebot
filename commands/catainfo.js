@@ -4,13 +4,13 @@ module.exports = {
   disabled: false,
   category: 'General',
   async execute(message, args) {
-    const prefix = require('../index').prefix;
+    const index = require('../index');
 
     let skyblockJSON;
     let accountJSON;
     let hypixelJSON;
     let apikey = process.env.apikey;
-    if (!args[1]) return message.reply(`Incorrect command format! (${prefix}catainfo <name> <profile name>)`);
+    if (!args[1]) return message.reply(`Incorrect command format! (${index.prefix}catainfo <name> <profile name>)`);
 
     let nameAPI = async () => {
       let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
@@ -61,15 +61,15 @@ module.exports = {
           healer: 0
         };
         let cataLevels = 0;
-        cataLevels = getLevelByXp(catacombs.experience, achievements, 'dungeon');
+        cataLevels = index.getLevelByXp(catacombs.experience, achievements, 'dungeon');
         for (let dungeon_class in dungeon.player_classes) {
-          classLevels[dungeon_class] = getLevelByXp(dungeon.player_classes[dungeon_class].experience, achievements, 'dungeon');
-          classLevels[dungeon_class].format = `${Math.floor(classLevels[dungeon_class].progress * 100)}% to ${dungeon_class.toLowerCase()} ${classLevels[dungeon_class].level + 1}\n(${nFormatter(classLevels[dungeon_class].xpCurrent)} / ${nFormatter(classLevels[dungeon_class].xpForNext)} xp)`;
+          classLevels[dungeon_class] = index.getLevelByXp(dungeon.player_classes[dungeon_class].experience, achievements, 'dungeon');
+          classLevels[dungeon_class].format = `${Math.floor(classLevels[dungeon_class].progress * 100)}% to ${dungeon_class.toLowerCase()} ${classLevels[dungeon_class].level + 1}\n(${index.nFormatter(classLevels[dungeon_class].xpCurrent)} / ${index.nFormatter(classLevels[dungeon_class].xpForNext)} xp)`;
         }
         let embedMessage = new Discord.MessageEmbed()
           .setTitle('Profile Found!')
           .addFields(
-            { name: `Cata ${cataLevels.level}`, value: `${Math.floor(cataLevels.progress * 100)}% to catacombs ${cataLevels.level + 1} (${nFormatter(cataLevels.xpCurrent)} / ${nFormatter(cataLevels.xpForNext)} xp)`},
+            { name: `Cata ${cataLevels.level}`, value: `${Math.floor(cataLevels.progress * 100)}% to catacombs ${cataLevels.level + 1} (${index.nFormatter(cataLevels.xpCurrent)} / ${index.nFormatter(cataLevels.xpForNext)} xp)`},
             { name: `Berserk ${classLevels.berserk.level}`, value: `${classLevels.berserk.format}`, inline: true },
             { name: `Archer ${classLevels.archer.level}`, value: `${classLevels.archer.format}`, inline: true },
             { name: `Mage ${classLevels.mage.level}`, value: `${classLevels.mage.format}`, inline: true },

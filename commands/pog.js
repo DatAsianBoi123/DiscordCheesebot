@@ -4,14 +4,16 @@ module.exports = {
   disabled: false,
   category: 'General',
   async execute(message, args) {
-    if (!args[0]) return message.reply(`Incorrect command format! \n(${index}pog <pog name>)`);
+    const index = require('../index');
+
+    if (!args[0]) return message.reply(`Incorrect command format! \n(${index.prefix}pog <pog name>)`);
 
     switch (args[0]) {
       case 'gator': {
         let gatormsg = await message.channel.send('<:GatorPOG:761662766393589770>');
         await gatormsg.react(':GatorPOG:761662766393589770');
 
-        message.delete().catch(err => {
+        message.delete().catch(() => {
           return;
         });
 
@@ -22,7 +24,7 @@ module.exports = {
         let trianglemsg = await message.channel.send('<:TrianglePOG:761668890572226611>');
         await trianglemsg.react(':TrianglePOG:761668890572226611');
 
-        message.delete().catch(err => {
+        message.delete().catch(() => {
           return;
         });
 
@@ -33,7 +35,7 @@ module.exports = {
         let shaggymsg = await message.channel.send('<:ShaggyPOG:761672749667975208>');
         await shaggymsg.react(':ShaggyPOG:761672749667975208');
 
-        message.delete().catch(err => {
+        message.delete().catch(() => {
           return;
         });
 
@@ -44,7 +46,7 @@ module.exports = {
         let impostermsg = await message.channel.send('<:ImpostorPOG:762163842473000981>');
         await impostermsg.react(':ImpostorPOG:762163842473000981');
 
-        message.delete().catch(err => {
+        message.delete().catch(() => {
           return;
         });
 

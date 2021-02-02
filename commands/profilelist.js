@@ -4,12 +4,12 @@ module.exports = {
   disabled: false,
   category: 'General',
   async execute(message, args) {
-    const prefix = require('../index').prefix;
+    const index = require('../index');
 
     let skyblockJSON;
     let accountJSON;
     let apikey = process.env.apikey;
-    if (!args[0]) return message.reply(`Incorrect command format! (${prefix}profilelist <name>)`);
+    if (!args[0]) return message.reply(`Incorrect command format! (${index.prefix}profilelist <name>)`);
 
     let nameAPI = async () => {
       let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);

@@ -4,12 +4,13 @@ module.exports = {
   disabled: false,
   category: 'General',
   async execute(message, args) {
+    const index = require('../index');
 
     let skyblockJSON;
     let accountJSON;
     let hypixelJSON;
     let apikey = process.env.apikey;
-    if (!args[1]) return message.reply(`Incorrect command format! (${prefix}skyblockskills <name> <profile name>)`);
+    if (!args[1]) return message.reply(`Incorrect command format! (${index.prefix}skyblockskills <name> <profile name>)`);
 
     let nameAPI = async () => {
       let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
@@ -61,16 +62,16 @@ module.exports = {
           'Runecrafting': 0
         };
 
-        skills.Combat = getLevelByXp(member.experience_skill_combat, achievements);
-        skills.Foraging = getLevelByXp(member.experience_skill_foraging, achievements);
-        skills.Mining = getLevelByXp(member.experience_skill_mining, achievements);
-        skills.Fishing = getLevelByXp(member.experience_skill_fishing, achievements);
-        skills.Farming = getLevelByXp(member.experience_skill_farming, achievements);
-        skills.Alchemy = getLevelByXp(member.experience_skill_alchemy, achievements);
-        skills.Enchanting = getLevelByXp(member.experience_skill_enchanting, achievements);
-        skills.Taming = getLevelByXp(member.experience_skill_taming, achievements);
-        skills.Carpentry = getLevelByXp(member.experience_skill_carpentry, achievements);
-        skills.Runecrafting = getLevelByXp(member.experience_skill_runecrafting, achievements, 'runecrafting');
+        skills.Combat = index.getLevelByXp(member.experience_skill_combat, achievements);
+        skills.Foraging = index.getLevelByXp(member.experience_skill_foraging, achievements);
+        skills.Mining = index.getLevelByXp(member.experience_skill_mining, achievements);
+        skills.Fishing = index.getLevelByXp(member.experience_skill_fishing, achievements);
+        skills.Farming = index.getLevelByXp(member.experience_skill_farming, achievements);
+        skills.Alchemy = index.getLevelByXp(member.experience_skill_alchemy, achievements);
+        skills.Enchanting = index.getLevelByXp(member.experience_skill_enchanting, achievements);
+        skills.Taming = index.getLevelByXp(member.experience_skill_taming, achievements);
+        skills.Carpentry = index.getLevelByXp(member.experience_skill_carpentry, achievements);
+        skills.Runecrafting = index.getLevelByXp(member.experience_skill_runecrafting, achievements, 'runecrafting');
 
         let skillAvgWithoutProgress = 0;
         let skillAvgWithProgress = 0;
