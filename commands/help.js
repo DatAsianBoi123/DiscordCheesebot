@@ -9,11 +9,10 @@ module.exports = {
     const index = require('../index');
 
     let allCommands = {}
-    const commandFiles = fs.readdirSync('./');
-    commandFiles.forEach((file, err) => {
+    fs.readdirSync('./', (err, files) => {
       if (err) return console.log(`An error occured ${err}`);
-      allCommands[file.name] = file;
-      console.log(file);
+
+      allCommands = files;
     });
 
     console.log(allCommands);
