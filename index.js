@@ -49,7 +49,7 @@ client.on('message', async message => {
 
   const commandScript = client.commands.get(command);
 
-  if (!commandScript) return message.reply(`This command does not exist! (${command})`);
+  if (!commandScript && command != '') return message.reply(`This command does not exist! (${command})`);
   if (commandScript.disabled == true) return message.reply(`This command is currently disabled (${command})`);
 
   commandScript.execute(message, args);
