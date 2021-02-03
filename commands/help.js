@@ -8,6 +8,9 @@ module.exports = {
     const fs = require('fs');
     const index = require('../index');
 
+    if (!args[0]) args[0] = 1;
+    if (isNaN(parseInt(args[0]))) return message.reply(`Incorrect command format! (${index.prefix}help [page number])`);
+
     let allCommands = {}
     async function getFiles() {
       const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -27,7 +30,6 @@ module.exports = {
     }
 
     for (const command in allCommands) {
-      if (isNaN(parseInt(args[0])) && args[0]) return message.reply(`Incorrect command format! (${index.prefix}help [page number])`);
       if (allCommands[command].category != index.categories[parseInt(args[0]) + 1]) return;
 
       if (allCommands[command].disabled == true) {
