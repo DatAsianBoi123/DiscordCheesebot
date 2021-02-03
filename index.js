@@ -216,7 +216,8 @@ module.exports = {
   updateById,
   getLevelByXp,
   nFormatter,
-  prefix
+  prefix,
+  categories
 }
 
 client.login(process.env.token);

@@ -25,7 +25,11 @@ module.exports = {
       color: 15105570,
       fields: []
     }
+
     for (const command in allCommands) {
+      if (isNaN(parseInt(args[0]))) return message.reply(`Incorrect command format! (${index.prefix}help [page number])`);
+      if (allCommands[command].category != index.categories[parseInt(args[0])]) return;
+
       if (allCommands[command].disabled == true) {
         helpEmbed.fields.push({
           name: `~~${allCommands[command].name}~~`,
@@ -40,6 +44,8 @@ module.exports = {
         inline: true
       });
     }
-    message.channel.send({ embed: helpEmbed });
+    message.channel.send({
+      embed: helpEmbed
+    });
   }
 }
