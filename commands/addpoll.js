@@ -27,7 +27,5 @@ module.exports = {
     });
     await msg.react(':upvote:758527296071794718');
     await msg.react(':downvote:758527282532319263');
-
-    break;
   }
 }
