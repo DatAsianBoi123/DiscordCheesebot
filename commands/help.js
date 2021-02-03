@@ -12,7 +12,7 @@ module.exports = {
     if (parseInt(args[0]) > index.categories.length) return message.reply(`This page number doesn't exist!`);
 
     let pageNumber = 0;
-    if (args[0]) pageNumber = parseInt(args[0]) - 1;
+    pageNumber = (args[0]) ? pageNumber = parseInt(args[0]) - 1 : pageNumber = 0;
 
     let allCommands = {}
     async function getFiles() {
@@ -26,9 +26,10 @@ module.exports = {
     await getFiles();
 
     let helpEmbed = {
-      title: 'Help Page 1',
+      title: `${index.categories[pageNumber]} Help Page`,
       description: `Prefix: ${index.prefix}\n\n<> = Required, [] = Optional`,
       color: 15105570,
+      footer: `Page ${pageNumber + 1} / ${index.categories.length}`,
       fields: []
     }
 
