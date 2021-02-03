@@ -11,12 +11,15 @@ module.exports = {
 
     client.commands = new Discord.Collection();
 
-    const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-    for (const files of commandFiles) {
-      const command = require(`../commands/${files}`);
+    async function getFiles() {
+      const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+      for (const files of commandFiles) {
+        const command = require(`../commands/${files}`);
 
-      client.commands.set(command.name, command);
+        client.commands.set(command.name, command);
+      }
     }
-    console.log(client.commands.get());
+    await getFiles();
+    console.log(client.commands);
   }
 }
