@@ -5,21 +5,24 @@ module.exports = {
   category: 'General',
   async execute(message, args) {
     const Discord = require('discord.js');
-    const client = new Discord.Client();
     const fs = require('fs');
     const index = require('../index');
 
-    client.commands = new Discord.Collection();
-
+    let allCommands = {}
     async function getFiles() {
       const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
       for (const files of commandFiles) {
         const command = require(`../commands/${files}`);
 
-        client.commands.set(command.name, command);
+        allCommands[command.name] = command;
       }
     }
     await getFiles();
-    console.log(client.commands);
+
+    let helpText = '';
+    for (const command in allCommands) {
+      helpText += `${command.name}\n`;
+    }
+    message.channel.send(helpText);
   }
 }
