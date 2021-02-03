@@ -9,11 +9,10 @@ module.exports = {
     const index = require('../index');
 
     let allCommands = {}
-    fs.readdir('./', (err, files) => {
+    fs.readdir('.', (err, files) => {
       if (err) return console.log(`An error occured ${err}`);
 
-      allCommands = files;
-      console.log(`${files} Callback`);
+      console.log(files);
     });
 
     console.log(allCommands);
