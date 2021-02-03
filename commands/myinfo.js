@@ -2,7 +2,7 @@ module.exports = {
   name: 'myinfo',
   description: 'Shows your user information',
   disabled: false,
-  category: 'Misc.',
+  category: 'General',
   async execute(message, args) {
     const Discord = require('discord.js');
     const index = require('../index');
