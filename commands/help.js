@@ -29,6 +29,7 @@ module.exports = {
         continue;
       }
       helpEmbed.addField({ name: allCommands[command].name, value: allCommands[command].description, inline: true });
+      console.log(allCommands[command].name);
     }
     message.channel.send(helpEmbed);
   }
