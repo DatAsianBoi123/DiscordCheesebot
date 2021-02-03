@@ -21,7 +21,7 @@ module.exports = {
 
     let helpText = '';
     for (const command in allCommands) {
-      helpText += `${command.name}\n`;
+      helpText += `${command}\n`;
     }
     message.channel.send(helpText);
   }
