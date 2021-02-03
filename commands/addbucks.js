@@ -2,7 +2,7 @@ module.exports = {
   name: 'addbucks',
   description: 'Adds burgis bucks to a user\'s account',
   disabled: true,
-  category: 'Stinky',
+  category: 'Burgis Bucks',
   async execute(message, args) {
 
   }

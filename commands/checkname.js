@@ -2,7 +2,7 @@ module.exports = {
   name: 'checkname',
   description: 'Checks if a minecraft username is available or not',
   disabled: false,
-  category: 'General',
+  category: 'Misc.',
   async execute(message, args) {
     const Discord = require('discord.js');
     const fetch = require('node-fetch');

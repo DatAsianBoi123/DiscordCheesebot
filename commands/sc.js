@@ -2,7 +2,7 @@ module.exports = {
   name: 'sc',
   description: 'Shows a link to a player\'s skycrypt',
   disabled: false,
-  category: 'General',
+  category: 'Skyblock',
   async execute(message, args) {
     const Discord = require('discord.js');
     const index = require('../index');

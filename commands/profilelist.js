@@ -2,7 +2,7 @@ module.exports = {
   name: 'profilelist',
   description: 'Shows all the skyblock profiles a user has',
   disabled: false,
-  category: 'General',
+  category: 'Skyblock',
   async execute(message, args) {
     const Discord = require('discord.js');
     const fetch = require('node-fetch');

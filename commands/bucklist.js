@@ -2,7 +2,7 @@ module.exports = {
   name: 'bucklist',
   description: 'Displays everyone\'s burgis bucks',
   disabled: true,
-  category: 'Stinky',
+  category: 'Burgis Bucks',
   async execute(message, args) {
 
   }

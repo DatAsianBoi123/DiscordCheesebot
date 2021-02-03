@@ -2,7 +2,7 @@ module.exports = {
   name: 'hypixellevel',
   description: 'Shows someone\'s hypixel network level',
   disabled: false,
-  category: 'General',
+  category: 'Hypixel',
   async execute(message, args) {
     const Discord = require('discord.js');
     const fetch = require('node-fetch');

@@ -2,7 +2,7 @@ module.exports = {
   name: 'skyblockskills',
   description: 'Shows information about a player\'s skyblock skills',
   disabled: false,
-  category: 'General',
+  category: 'Skyblock',
   async execute(message, args) {
     const Discord = require('discord.js');
     const fetch = require('node-fetch');

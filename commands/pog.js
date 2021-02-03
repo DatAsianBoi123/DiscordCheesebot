@@ -2,7 +2,7 @@ module.exports = {
   name: 'pog',
   description: 'Shows different types of pogs',
   disabled: false,
-  category: 'General',
+  category: 'Misc.',
   async execute(message, args) {
     const Discord = require('discord.js');
     const index = require('../index');

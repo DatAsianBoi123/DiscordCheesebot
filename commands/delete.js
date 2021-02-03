@@ -2,7 +2,7 @@ module.exports = {
   name: 'delete',
   description: 'Deletes a set amount of messages',
   disabled: false,
-  category: 'General',
+  category: 'Admin',
   async execute(message, args) {
     const Discord = require('discord.js');
     const index = require('../index');

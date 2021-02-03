@@ -2,7 +2,7 @@ module.exports = {
   name: 'verify',
   description: 'Verifies your discord user to your minecraft account',
   disabled: false,
-  category: 'General',
+  category: 'Guild',
   async execute(message, args) {
     const Discord = require('discord.js');
     const fetch = require('node-fetch');

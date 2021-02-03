@@ -2,7 +2,7 @@ module.exports = {
   name: 'buy',
   description: 'Buys an item in a burgis shop',
   disabled: true,
-  category: 'Stinky',
+  category: 'Burgis Bucks',
   async execute(message, args) {
 
   }

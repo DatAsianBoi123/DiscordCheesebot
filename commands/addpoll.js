@@ -2,7 +2,7 @@ module.exports = {
   name: 'addpoll',
   description: 'Creates a poll',
   disabled: false,
-  category: 'General',
+  category: 'Polls',
   async execute(message, args) {
     const Discord = require('discord.js');
     const index = require('../index');

@@ -2,7 +2,7 @@ module.exports = {
   name: 'source',
   description: 'Displays this bot\'s source code',
   disabled: false,
-  category: 'General',
+  category: 'Misc.',
   async execute(message, args) {
     const Discord = require('discord.js');
     const index = require('../index');

@@ -2,7 +2,7 @@ module.exports = {
   name: 'reqs',
   description: 'Shows the requirements of the guild',
   disabled: false,
-  category: 'General',
+  category: 'Guild',
   async execute(message, args) {
 
   }
