@@ -8,8 +8,12 @@ module.exports = {
     const fs = require('fs');
     const index = require('../index');
 
-    if (!args[0]) args[0] = '0';
     if (isNaN(parseInt(args[0]))) return message.reply(`Incorrect command format! (${index.prefix}help [page number])`);
+    if (parseInt(args[0]) + 1 > index.categories.length) return message.reply(`This page number doesn't exist!`);
+
+    const pageNumber;
+    if (args[0]) pageNumber = parseInt(args[0]) + 1;
+    else pageNumber = 0;
 
     let allCommands = {}
     async function getFiles() {
@@ -30,7 +34,7 @@ module.exports = {
     }
 
     for (const command in allCommands) {
-      if (allCommands[command].category != index.categories[parseInt(args[0])]) continue;
+      if (allCommands[command].category != index.categories[pageNumber]) continue;
 
       if (allCommands[command].disabled == true) {
         helpEmbed.fields.push({
