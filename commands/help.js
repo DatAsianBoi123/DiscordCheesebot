@@ -27,6 +27,10 @@ module.exports = {
       }
       helpText += `${command}\n`;
     }
-    message.channel.send(helpText);
+    let HelpEmbed = new Discord.MessageEmbed()
+      .setTitle('Help Screen')
+      .setDescription(`Prefix: ${index.prefix}\n<> = Required, [] = Optional`)
+      .setColor('ORANGE');
+    message.channel.send(HelpEmbed);
   }
 }
