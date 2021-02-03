@@ -19,18 +19,27 @@ module.exports = {
     }
     await getFiles();
 
-    let helpEmbed = new Discord.MessageEmbed()
-      .setTitle('Help Screen')
-      .setDescription(`Prefix: ${index.prefix}\n<> = Required, [] = Optional`)
-      .setColor('ORANGE');
+    let helpEmbed = {
+      title: 'Help Page 1',
+      description: `Prefix: ${index.prefix}\n\n<> = Required, [] = Optional`,
+      color: 15105570,
+      fields: []
+    }
     for (const command in allCommands) {
       if (allCommands[command].disabled == true) {
-        helpEmbed.addField({ name: `~~${allCommands[command].name}~~`, value: 'This command is currently disabled!', inline: true });
+        helpEmbed.fields.push({
+          name: `~~${allCommands[command].name}~~`,
+          value: 'This command is currently disabled',
+          inline: true
+        });
         continue;
       }
-      helpEmbed.addField({ name: allCommands[command].name, value: allCommands[command].description, inline: true });
-      console.log(allCommands[command].name);
+      helpEmbed.fields.push({
+        name: allCommands[command].name,
+        value: allCommands[command].description,
+        inline: true
+      });
     }
-    message.channel.send(helpEmbed);
+    message.channel.send({ embed: helpEmbed });
   }
 }
