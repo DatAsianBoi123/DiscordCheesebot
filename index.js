@@ -16,7 +16,7 @@ mongoose.connect(uri, {
   .then(() => console.log('Connected'))
   .catch(() => console.log(`Error connecting to heroku`));
 
-const categories = ['General', 'Guild', 'Hypixel', 'Skyblock', 'Burgis Bucks', 'Polls', 'Misc.', 'Admin'];
+const categories = ['General', 'Guild', 'Skyblock', 'Burgis Bucks', 'Polls', 'Misc.', 'Admin'];
 
 client.commands = new Discord.Collection()
 

@@ -2,7 +2,7 @@ module.exports = {
   name: 'catainfo',
   description: 'Shows information about a player\'s catacombs',
   disabled: false,
-  category: 'Hypixel',
+  category: 'Skyblock',
   async execute(message, args) {
     const Discord = require('discord.js');
     const fetch = require('node-fetch');
