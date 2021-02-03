@@ -14,7 +14,7 @@ mongoose.connect(uri, {
     useUnifiedTopology: true
   })
   .then(() => console.log('Connected'))
-  .catch(err => console.log(err));
+  .catch(err => console.log(`Error connecting to heroku ${err}`));
 
 const categories = ['General', 'Stinky'];
 
