@@ -22,6 +22,7 @@ module.exports = {
     }
     await getFiles();
 
+    console.log(index.categories[parseInt(args[0]) + 1]);
     let helpEmbed = {
       title: 'Help Page 1',
       description: `Prefix: ${index.prefix}\n\n<> = Required, [] = Optional`,
@@ -30,7 +31,8 @@ module.exports = {
     }
 
     for (const command in allCommands) {
-      if (allCommands[command].category != index.categories[parseInt(args[0]) + 1]) return;
+      //if (allCommands[command].category != index.categories[parseInt(args[0]) + 1]) return;
+      console.log(allCommands[command].category);
 
       if (allCommands[command].disabled == true) {
         helpEmbed.fields.push({
