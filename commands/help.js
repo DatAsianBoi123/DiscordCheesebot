@@ -27,8 +27,8 @@ module.exports = {
     }
 
     for (const command in allCommands) {
-      if (isNaN(parseInt(args[0]))) return message.reply(`Incorrect command format! (${index.prefix}help [page number])`);
-      if (allCommands[command].category != index.categories[parseInt(args[0])]) return;
+      if (isNaN(parseInt(args[0])) && args[0]) return message.reply(`Incorrect command format! (${index.prefix}help [page number])`);
+      if (allCommands[command].category != index.categories[parseInt(args[0]) + 1]) return;
 
       if (allCommands[command].disabled == true) {
         helpEmbed.fields.push({
