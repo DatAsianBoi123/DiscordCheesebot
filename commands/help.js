@@ -28,11 +28,9 @@ module.exports = {
       color: 15105570,
       fields: []
     }
-    console.log(parseInt(args[0]));
-    console.log(index.categories[parseInt(args[0])]);
 
     for (const command in allCommands) {
-      if (allCommands[command].category != index.categories[parseInt(args[0])]) return;
+      if (allCommands[command].category != index.categories[parseInt(args[0])]) continue;
 
       if (allCommands[command].disabled == true) {
         helpEmbed.fields.push({
