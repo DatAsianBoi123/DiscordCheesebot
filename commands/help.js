@@ -9,7 +9,7 @@ module.exports = {
     const index = require('../index');
 
     if (isNaN(parseInt(args[0])) && args[0]) return message.reply(`Incorrect command format! (${index.prefix}help [page number])`);
-    if (parseInt(args[0]) + 1 > index.categories.length) return message.reply(`This page number doesn't exist!`);
+    if (parseInt(args[0]) > index.categories.length) return message.reply(`This page number doesn't exist!`);
 
     let pageNumber = 0;
     if (args[0]) pageNumber = parseInt(args[0]) + 1;
