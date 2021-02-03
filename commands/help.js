@@ -11,9 +11,8 @@ module.exports = {
     if (isNaN(parseInt(args[0]))) return message.reply(`Incorrect command format! (${index.prefix}help [page number])`);
     if (parseInt(args[0]) + 1 > index.categories.length) return message.reply(`This page number doesn't exist!`);
 
-    const pageNumber;
+    const pageNumber = 0;
     if (args[0]) pageNumber = parseInt(args[0]) + 1;
-    else pageNumber = 0;
 
     let allCommands = {}
     async function getFiles() {
