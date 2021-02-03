@@ -23,7 +23,7 @@ module.exports = {
     await getFiles();
 
     console.log(args[0]);
-    console.log(`${index.categories[parseInt(args[0]) + 1]} is the page number`);
+    console.log(`${index.categories[parseInt(args[0])]} is the page number`);
     let helpEmbed = {
       title: 'Help Page 1',
       description: `Prefix: ${index.prefix}\n\n<> = Required, [] = Optional`,
