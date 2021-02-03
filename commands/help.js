@@ -29,7 +29,9 @@ module.exports = {
       title: `${index.categories[pageNumber]} Help Page`,
       description: `Prefix: ${index.prefix}\n\n<> = Required, [] = Optional`,
       color: 15105570,
-      footer: `Page ${pageNumber + 1} / ${index.categories.length}`,
+      footer: {
+        value: `Page ${pageNumber + 1} / ${index.categories.length}`
+      },
       fields: []
     }
 
