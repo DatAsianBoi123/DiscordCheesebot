@@ -21,6 +21,10 @@ module.exports = {
 
     let helpText = '';
     for (const command in allCommands) {
+      if (allCommands[command].disabled == true) {
+        helpText += `~~${command}~~\n`;
+        continue;
+      }
       helpText += `${command}\n`;
     }
     message.channel.send(helpText);
