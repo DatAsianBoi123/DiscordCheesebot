@@ -8,7 +8,7 @@ module.exports = {
     const fs = require('fs');
     const index = require('../index');
 
-    if (!args[0]) args[0] = 1;
+    if (!args[0]) args[0] = '1';
     if (isNaN(parseInt(args[0]))) return message.reply(`Incorrect command format! (${index.prefix}help [page number])`);
 
     let allCommands = {}
@@ -22,7 +22,7 @@ module.exports = {
     }
     await getFiles();
 
-    console.log(index.categories[parseInt(args[0]) + 1]);
+    console.log(`${index.categories[parseInt(args[0]) + 1]} is the page number`);
     let helpEmbed = {
       title: 'Help Page 1',
       description: `Prefix: ${index.prefix}\n\n<> = Required, [] = Optional`,
@@ -31,8 +31,7 @@ module.exports = {
     }
 
     for (const command in allCommands) {
-      //if (allCommands[command].category != index.categories[parseInt(args[0]) + 1]) return;
-      console.log(allCommands[command].category);
+      if (allCommands[command].category != index.categories[parseInt(args[0]) - 1]) return;
 
       if (allCommands[command].disabled == true) {
         helpEmbed.fields.push({
