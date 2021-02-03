@@ -12,7 +12,7 @@ module.exports = {
     if (parseInt(args[0]) > index.categories.length) return message.reply(`This page number doesn't exist!`);
 
     let pageNumber = 0;
-    if (args[0]) pageNumber = parseInt(args[0]) + 1;
+    if (args[0]) pageNumber = parseInt(args[0]) - 1;
 
     let allCommands = {}
     async function getFiles() {
