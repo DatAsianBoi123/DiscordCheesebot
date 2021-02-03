@@ -5,18 +5,12 @@ module.exports = {
   category: 'General',
   async execute(message, args) {
     const Discord = require('discord.js');
+    const client = new Discord.Client();
     const fs = require('fs');
     const index = require('../index');
 
     let allCommands = {}
-    fs.readdir('./commands', (err, files) => {
-      if (err) return console.log(`An error occured ${err}`);
-
-      console.log(files);
-      files.forEach(file => {
-        allCommands[file].name = file;
-      });
-    });
+    console.log(client.commands);
 
     console.log(allCommands);
   }
