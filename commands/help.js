@@ -30,7 +30,7 @@ module.exports = {
       description: `Prefix: ${index.prefix}\n\n<> = Required, [] = Optional`,
       color: 15105570,
       footer: {
-        value: `Page ${pageNumber + 1} / ${index.categories.length}`
+        text: `Page ${pageNumber + 1} / ${index.categories.length}`
       },
       fields: []
     }
