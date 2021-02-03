@@ -9,7 +9,6 @@ module.exports = {
     const fs = require('fs');
     const index = require('../index');
 
-    let allCommands = {}
     client.commands = new Discord.Collection();
 
     const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -19,7 +18,5 @@ module.exports = {
       client.commands.set(command.name, command);
     }
     console.log(client.commands.get());
-
-    console.log(allCommands);
   }
 }
