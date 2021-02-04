@@ -1,5 +1,3 @@
-const reqs = require('./reqs');
-
 module.exports = {
   name: 'changereqs',
   description: 'Changes requirements',
@@ -7,11 +5,9 @@ module.exports = {
   category: 'Guild',
   async execute(message, args) {
     const Discord = require('discord.js');
-    const mongoose = require('mongoose');
     const index = require('../index');
 
     reqs = await index.getDataByType('Reqs', 'reqs');
-    console.log(reqs);
-    index.updateById(reqs._id, 'reqs', args[0]);
+    index.updateById(reqs._id.toString(), 'reqs', args[0]);
   }
 }
