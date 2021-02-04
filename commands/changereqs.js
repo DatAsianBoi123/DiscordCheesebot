@@ -9,7 +9,6 @@ module.exports = {
 
     req = await index.getDataByType('Reqs', 'reqs');
     console.log(`${args[0]}, ${req._id.toString()}`);
-    index.updateById(req._id, 'reqs', args[0]);
-    message.channel.send(req.reqs);
+    index.updateById(req._id.toString(), 'reqs', args[0]);
   }
 }
