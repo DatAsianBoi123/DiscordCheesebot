@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const dataSchema = new Schema({
-  users: {
-    type: Object,
+  reqs: {
+    type: String,
     required: true
   },
   type: {
@@ -14,5 +14,5 @@ const dataSchema = new Schema({
   timestamps: true
 });
 
-const Data = mongoose.model('Verify', dataSchema);
+const Data = mongoose.model('Requirements', dataSchema);
 module.exports = Data;

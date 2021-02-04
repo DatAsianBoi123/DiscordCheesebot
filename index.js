@@ -37,6 +37,9 @@ client.once('ready', () => {
       user: null
     }
   });
+  addData('Requirements', 'reqs', {
+    reqs: 'No reqs for now!'
+  });
 
   client.user.setActivity(`${prefix}help`);
 });
