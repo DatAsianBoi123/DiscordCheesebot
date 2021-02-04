@@ -8,7 +8,8 @@ module.exports = {
     const index = require('../index');
 
     req = await index.getDataByType('Reqs', 'reqs');
-    console.log(`${args[0]}, ${req._id.toString()}`);
-    index.updateById(req._id.toString(), 'reqs', args[0]);
+    index.updateById(req._id.toString(), 'reqs', {
+      reqs: args[0]
+    });
   }
 }
