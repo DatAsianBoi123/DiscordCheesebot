@@ -14,6 +14,9 @@ module.exports = {
     req = await index.getDataByType('Reqs', 'reqs');
     index.updateById(req._id.toString(), 'reqs', {
       reqs: args[0]
+    }).catch(() => {
+      message.channel.send('Something went wrong while updating requirements.');
     });
+    message.channel.send(`Successfully set requirements to \`\`${newReqs}\`\``);
   }
 }
