@@ -13,7 +13,7 @@ module.exports = {
     newReqs = args.join(' ');
     req = await index.getDataByType('Reqs', 'reqs');
     index.updateById(req._id.toString(), 'reqs', {
-      reqs: args[0]
+      reqs: newReqs
     }).catch(() => {
       message.channel.send('Something went wrong while updating requirements.');
     });
