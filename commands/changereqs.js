@@ -7,7 +7,8 @@ module.exports = {
     const Discord = require('discord.js');
     const index = require('../index');
 
-    reqs = await index.getDataByType('Reqs', 'reqs');
-    index.updateById(reqs._id.toString(), 'reqs', args[0]);
+    req = await index.getDataByType('Reqs', 'reqs');
+    index.updateById(req._id.toString(), 'reqs', args[0]);
+    message.channel.send(req.reqs);
   }
 }
