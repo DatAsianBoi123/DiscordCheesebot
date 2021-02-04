@@ -1,7 +1,7 @@
 module.exports = {
   name: 'resetreqs',
   description: 'Resets guild requirements',
-  disabled: true,
+  disabled: false,
   category: 'Guild',
   async execute(message, args) {
     const Discord = require('discord.js');
