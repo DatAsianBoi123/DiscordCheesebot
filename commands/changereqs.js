@@ -7,9 +7,11 @@ module.exports = {
   category: 'Guild',
   async execute(message, args) {
     const Discord = require('discord.js');
+    const mongoose = require('mongoose');
     const index = require('../index');
 
     reqs = await index.getDataByType('Reqs', 'reqs');
+    console.log(reqs);
     index.updateById(reqs._id, 'reqs', args[0]);
   }
 }
