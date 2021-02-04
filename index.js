@@ -37,7 +37,7 @@ client.once('ready', () => {
       user: null
     }
   });
-  addData('Requirements', 'reqs', {
+  addData('Reqs', 'reqs', {
     reqs: 'No reqs for now!'
   });
 
