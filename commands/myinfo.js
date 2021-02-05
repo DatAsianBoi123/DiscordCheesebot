@@ -10,7 +10,7 @@ module.exports = {
 
     if (!message.mentions.users.size && args[0]) {
       client.users.fetch(args[0]).then((user) => {
-        return message.channel.send(`${args[0]}'s name is ${user.username}`);
+        return message.channel.send(args[0]);
       }).catch(() => {
         return message.reply('Couldn\'t find a discord account with that id!');
       });
