@@ -9,11 +9,12 @@ module.exports = {
     const index = require('../index');
 
     if (!message.mentions.users.size && args[0]) {
-      client.users.fetch(args[0]).then((user) => {
+      console.log('ID');
+      /*client.users.fetch(args[0]).then((user) => {
         return message.channel.send(args[0]);
       }).catch(() => {
         return message.reply('Couldn\'t find a discord account with that id!');
-      });
+      });*/
     } else if (!message.mentions.users.size) {
       let personName = message.member.displayName;
       let personID = message.member.id;
