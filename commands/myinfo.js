@@ -9,9 +9,11 @@ module.exports = {
     const index = require('../index');
 
     if (!message.mentions.users.size && args[0]) {
-      const user = client.users.cache.get(args[0]);
-      if (!user) return message.channel.send('Couldn\'t find the user with that id!');
-      return message.channel.send(`${args[0]}'s name is ${user.username}`);
+      client.users.fetch(args[0]).then((user) => {
+        return message.channel.send(`${args[0]}'s name is ${user.username}`);
+      }).catch(() => {
+        return message.reply('Couldn\'t find a discord account with that id!');
+      });
     } else if (!message.mentions.users.size) {
       let personName = message.member.displayName;
       let personID = message.member.id;
