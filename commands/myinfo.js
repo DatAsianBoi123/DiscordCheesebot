@@ -5,6 +5,7 @@ module.exports = {
   category: 'General',
   async execute(message, args) {
     const Discord = require('discord.js');
+    const client = new Discord.Client();
     const index = require('../index');
 
     if (!message.mentions.users.size && args[0]) {
