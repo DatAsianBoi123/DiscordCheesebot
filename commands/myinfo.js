@@ -3,9 +3,8 @@ module.exports = {
   description: 'Shows your user information',
   disabled: false,
   category: 'General',
-  async execute(message, args) {
+  async execute(message, args, client) {
     const Discord = require('discord.js');
-    const client = new Discord.Client();
     const index = require('../index');
 
     if (!message.mentions.users.size && args[0]) {
