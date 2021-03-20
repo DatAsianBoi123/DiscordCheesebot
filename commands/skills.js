@@ -1,5 +1,5 @@
 module.exports = {
-  name: 'skyblockskills',
+  name: 'skills',
   description: 'Shows information about a player\'s skyblock skills',
   disabled: false,
   category: 'Skyblock',

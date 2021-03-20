@@ -38,6 +38,7 @@ module.exports = {
     for (const command in allCommands) {
       if (allCommands[command].category != index.categories[pageNumber]) continue;
 
+      if (allCommands[command].hidden == true) continue;
       if (allCommands[command].disabled == true) {
         helpEmbed.fields.push({
           name: `~~${allCommands[command].name}~~`,

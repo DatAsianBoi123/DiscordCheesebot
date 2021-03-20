@@ -14,9 +14,9 @@ mongoose.connect(uri, {
     useUnifiedTopology: true
   })
   .then(() => console.log('Connected'))
-  .catch(() => console.log(`Error connecting to heroku`));
+  .catch(() => console.log(`Error connecting to MongoDB`));
 
-const categories = ['General', 'Guild', 'Skyblock', 'Burgis Bucks', 'Polls', 'Misc.', 'Admin'];
+const categories = ['General', 'Guild', 'Skyblock', 'Burgis Bucks', 'Misc.'];
 
 client.commands = new Discord.Collection()
 
