@@ -93,7 +93,7 @@ module.exports = {
           let skillxp = require('../skillxp');
 
           if (skills[skill].level > skillxp.skills_cap[skill.toLowerCase()]) skills[skill].level = skillxp.skills_cap[skill.toLowerCase()];
-          if (skills[skill].level == skills[skill].maxLevel) {
+          if (skills[skill].level == skillxp.skills_cap[skill.toLowerCase()]) {
             skills[skill].format = `${index.nFormatter(skills[skill].xpCurrent)} xp\nMAX LEVEL`;
           } else {
             skills[skill].format = `${Math.floor(skills[skill].progress * 100)}% to ${skill.toLowerCase()} ${skills[skill].level + 1}\n(${index.nFormatter(skills[skill].xpCurrent)} / ${index.nFormatter(skills[skill].xpForNext)} xp)`;
