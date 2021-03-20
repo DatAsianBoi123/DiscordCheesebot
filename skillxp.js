@@ -50,10 +50,7 @@ module.exports = {
     47: 3100000,
     48: 3400000,
     49: 3700000,
-    50: 4000000
-  },
-
-  xp_past_50: {
+    50: 4000000,
     51: 4300000,
     52: 4600000,
     53: 4900000,
@@ -69,11 +66,11 @@ module.exports = {
   skills_cap: {
     taming: 50,
     farming: 60,
-    mining: 50,
-    combat: 50,
+    mining: 60,
+    combat: 60,
     foraging: 50,
     fishing: 50,
-    enchanting: 50,
+    enchanting: 60,
     alchemy: 50,
     carpentry: 50,
     runecrafting: 25

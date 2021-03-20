@@ -8,41 +8,41 @@ module.exports = {
     const fetch = require('node-fetch');
     const index = require('../index');
 
-    let skyblockJSON;
-    let accountJSON;
-    let hypixelJSON;
     let apikey = process.env.apikey;
     if (!args[1]) return message.reply(`Incorrect command format! (${index.prefix}skyblockskills <name> <profile name>)`);
 
     let nameAPI = async () => {
+      let JSON;
       let result = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args[0]}`);
-      accountJSON = result.json().catch(() => {
-        accountJSON = undefined;
+      JSON = result.json().catch(() => {
+        JSON = undefined;
       });
-      return accountJSON;
+      return JSON;
     };
     let accountData = await nameAPI();
-    if (accountJSON == undefined) return message.reply('This minecraft account doesn\'t exist');
+    if (accountData == undefined) return message.reply('This minecraft account doesn\'t exist');
 
     let skyblockAPI = async () => {
+      let JSON;
       let result = await fetch(`https://api.hypixel.net/skyblock/profiles?key=${apikey}&uuid=${accountData.id}`);
-      skyblockJSON = result.json().catch(() => {
-        skyblockJSON = undefined;
+      JSON = result.json().catch(() => {
+        JSON = undefined;
       });
-      return skyblockJSON;
+      return JSON;
     };
 
     let hypixelAPI = async () => {
+      let JSON;
       let result = await fetch(`https://api.hypixel.net/player?key=${apikey}&uuid=${accountData.id}`);
-      hypixelJSON = result.json().catch(() => {
-        skyblockJSON = undefined;
+      JSON = result.json().catch(() => {
+        JSON = undefined;
       });
-      return hypixelJSON;
+      return JSON;
     };
 
     let hypixelData = await hypixelAPI();
     let skyblockData = await skyblockAPI();
-    if (skyblockJSON == undefined || accountJSON == undefined || hypixelJSON == undefined || skyblockData.success == false)
+    if (skyblockData == undefined || accountData == undefined || hypixelData == undefined || skyblockData.success == false)
       return message.reply(`An error occured`);
     if (skyblockData.profiles == null) return message.reply(`Looks like this player has never joined skyblock before! (${accountData.name})`);
 
@@ -66,10 +66,9 @@ module.exports = {
 
         if (member.experience_skill_combat == undefined) {
           let apiOffMessage = new Discord.MessageEmbed()
-            .setTitle('Profile Found!')
+            .setTitle(`Displaying Skills for ${accountData.name} - ${profile.cute_name}:`)
             .setDescription('This person\'s api is turned off.')
-            .setColor('YELLOW')
-            .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`);
+            .setColor('YELLOW');
           message.channel.send(apiOffMessage);
           return;
         }
@@ -89,7 +88,11 @@ module.exports = {
         let skillAvgWithProgress = 0;
         let skillText = '';
         for (let skill in skills) {
-          skills[skill].format = `${Math.floor(skills[skill].progress * 100)}% to ${skill.toLowerCase()} ${skills[skill].level + 1}\n(${index.nFormatter(skills[skill].xpCurrent)} / ${index.nFormatter(skills[skill].xpForNext)} xp)`;
+          if (skills[skill].level == skills[skill].maxLevel) {
+            skills[skill].format = `${index.nFormatter(skills[skill].xpCurrent)} xp\nMAX LEVEL`;
+          } else {
+            skills[skill].format = `${Math.floor(skills[skill].progress * 100)}% to ${skill.toLowerCase()} ${skills[skill].level + 1}\n(${index.nFormatter(skills[skill].xpCurrent)} / ${index.nFormatter(skills[skill].xpForNext)} xp)`;
+          }
           if (skill == 'Runecrafting' || skill == 'Carpentry') continue;
           skillAvgWithoutProgress += skills[skill].level;
           skillAvgWithProgress += skills[skill].level + skills[skill].progress;
@@ -98,7 +101,7 @@ module.exports = {
         skillText += `\nSkill average without progress: ${Math.round((skillAvgWithoutProgress / (Object.keys(skills).length - 2)) * 100) / 100}\nSkill average with progress: ${Math.round((skillAvgWithProgress / (Object.keys(skills).length - 2)) * 100) / 100}`;
 
         let embedMessage = new Discord.MessageEmbed()
-          .setTitle('Profile Found!')
+          .setTitle(`Displaying Skills for ${accountData.name} - ${profile.cute_name}:`)
           .addFields(
             { name: `Combat ${skills.Combat.level}`, value: skills.Combat.format, inline: true },
             { name: `Foraging ${skills.Foraging.level}`, value: skills.Foraging.format, inline: true },
@@ -112,7 +115,6 @@ module.exports = {
             { name: `Runecrafting ${skills.Runecrafting.level}`, value: skills.Runecrafting.format, inline: true }
           )
           .setDescription(skillText)
-          .setFooter(`User: ${accountData.name}, Profile: ${profile.cute_name}`)
           .setColor('GREEN');
         message.channel.send(embedMessage);
         return;

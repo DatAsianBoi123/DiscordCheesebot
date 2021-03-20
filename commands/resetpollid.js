@@ -2,7 +2,7 @@ module.exports = {
   name: 'resetpollid',
   description: 'Resets the poll mention ID',
   disabled: true,
-  cateogry: 'General',
+  category: 'General',
   async execute(message, args) {
 
   }
