@@ -92,7 +92,7 @@ module.exports = {
         for (let skill in skills) {
           let skillxp = require('../skillxp');
 
-          if (skills[skill].level > skillxp.skills_cap[skill]) skills[skill].level = skillxp.skills_cap[skill];
+          if (skills[skill].level > skillxp.skills_cap[skill.toLowerCase()]) skills[skill].level = skillxp.skills_cap[skill.toLowerCase()];
           if (skills[skill].level == skills[skill].maxLevel) {
             skills[skill].format = `${index.nFormatter(skills[skill].xpCurrent)} xp\nMAX LEVEL`;
           } else {
