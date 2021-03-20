@@ -1,3 +1,5 @@
+const { skills_cap } = require('../skillxp');
+
 module.exports = {
   name: 'skills',
   description: 'Shows information about a player\'s skyblock skills',
@@ -88,6 +90,9 @@ module.exports = {
         let skillAvgWithProgress = 0;
         let skillText = '';
         for (let skill in skills) {
+          let skillxp = require('../skillxp');
+
+          if (skills[skill].level > skillxp.skills_cap[skill]) skills[skill].level = skillxp.skills_cap[skill];
           if (skills[skill].level == skills[skill].maxLevel) {
             skills[skill].format = `${index.nFormatter(skills[skill].xpCurrent)} xp\nMAX LEVEL`;
           } else {
@@ -103,16 +108,16 @@ module.exports = {
         let embedMessage = new Discord.MessageEmbed()
           .setTitle(`Displaying Skills for ${accountData.name} - ${profile.cute_name}:`)
           .addFields(
-            { name: `Combat ${skills.Combat.level} (${skills.Combat.maxLevel})`, value: skills.Combat.format, inline: true },
-            { name: `Foraging ${skills.Foraging.level} (${skills.Foraging.maxLevel})`, value: skills.Foraging.format, inline: true },
-            { name: `Mining ${skills.Mining.level} (${skills.Mining.maxLevel})`, value: skills.Mining.format, inline: true },
-            { name: `Fishing ${skills.Fishing.level} (${skills.Fishing.maxLevel})`, value: skills.Fishing.format, inline: true },
-            { name: `Farming ${skills.Farming.level} (${skills.Farming.maxLevel})`, value: skills.Farming.format, inline: true },
-            { name: `Alchemy ${skills.Alchemy.level} (${skills.Alchemy.maxLevel})`, value: skills.Alchemy.format, inline: true },
-            { name: `Enchanting ${skills.Enchanting.level} (${skills.Enchanting.maxLevel})`, value: skills.Enchanting.format, inline: true },
-            { name: `Taming ${skills.Taming.level} (${skills.Taming.maxLevel})`, value: skills.Taming.format, inline: true },
-            { name: `Carpentry ${skills.Carpentry.level} (${skills.Carpentry.maxLevel})`, value: skills.Carpentry.format, inline: true },
-            { name: `Runecrafting ${skills.Runecrafting.level} (${skills.Runecrafting.maxLevel})`, value: skills.Runecrafting.format, inline: true }
+            { name: `Combat ${skills.Combat.level}`, value: skills.Combat.format, inline: true },
+            { name: `Foraging ${skills.Foraging.level}`, value: skills.Foraging.format, inline: true },
+            { name: `Mining ${skills.Mining.level}`, value: skills.Mining.format, inline: true },
+            { name: `Fishing ${skills.Fishing.level}`, value: skills.Fishing.format, inline: true },
+            { name: `Farming ${skills.Farming.level}`, value: skills.Farming.format, inline: true },
+            { name: `Alchemy ${skills.Alchemy.level}`, value: skills.Alchemy.format, inline: true },
+            { name: `Enchanting ${skills.Enchanting.level}`, value: skills.Enchanting.format, inline: true },
+            { name: `Taming ${skills.Taming.level}`, value: skills.Taming.format, inline: true },
+            { name: `Carpentry ${skills.Carpentry.level}`, value: skills.Carpentry.format, inline: true },
+            { name: `Runecrafting ${skills.Runecrafting.level}`, value: skills.Runecrafting.format, inline: true }
           )
           .setDescription(skillText)
           .setColor('GREEN');
