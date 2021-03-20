@@ -33,7 +33,16 @@ module.exports = {
     for (let i = 0; i < Object.keys(data.users).length; i++) {
       const keys = Object.keys(data.users);
 
-      if (keys[i] == message.author.id && keys[i] != null) return message.reply('You have already verified! If you want to verify again, please contact a staff member.')
+      if (keys[i] == message.author.id && keys[i] != null) {
+        message.reply('You have already verified! If you want to verify again, please contact a staff member.');
+
+        let verified = message.guild.roles.cache.get('772656381403594762');
+        let unverified = message.guild.roles.cache.get('788543788540362822');
+        message.member.roles.add(verified);
+        message.member.roles.remove(unverified);
+
+        return;
+      }
       else if (data.users[keys[i]] == name.id && keys[i] != null) return message.reply('This account has already been taken! If you think someone else has verified as you, please contact a staff member.');
     }
 
