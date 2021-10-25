@@ -17,6 +17,9 @@ module.exports = {
     ]
   },
   async execute(interaction) {
-    interaction.reply({ content: 'I said it :)' });
-  }
+    await interaction.channel.send(interaction.options.getString('message'));
+
+    interaction.reply({ content: 'I said it :)', ephemeral: true });
+  },
+  permission = 'MANAGE_MESSAGES'
 }

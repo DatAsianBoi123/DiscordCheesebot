@@ -43,8 +43,13 @@ client.on('interactionCreate', async (interaction) => {
 
   for (const command of allCommands) {
     if (command.command.name == interaction.commandName) {
+      if (command.permission && !interaction.memberPermissions.has(command.permission)) {
+        interaction.reply({ content: 'You do not have permission to execute this command.', ephemeral: true });
+        break;
+      }
+
       command.execute(interaction);
-      
+
       break;
     }
   }
