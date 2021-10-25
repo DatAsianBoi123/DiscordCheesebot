@@ -1,3 +1,4 @@
+const { Permissions } = require("discord.js/typings/index.js");
 const { CommandBase } = require("../api/command-base");
 
 /**
@@ -21,5 +22,5 @@ module.exports = {
       interaction.reply({ content: 'I said it :)', ephemeral: true });
     });
   },
-  permission: 'MANAGE_MESSAGES'
+  permission: Permissions.FLAGS.MANAGE_MESSAGES
 }
