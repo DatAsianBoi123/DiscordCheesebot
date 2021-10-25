@@ -9,7 +9,7 @@ module.exports = {
     description: 'Adds a SMP coordinate',
     options: [
       {
-        name: 'Name',
+        name: 'Location Name',
         description: 'The name of the location',
         type: 'STRING',
         required: true
@@ -41,6 +41,6 @@ module.exports = {
     ]
   },
   async execute(interaction) {
-    interaction.reply({ content: `Created a new location called ${interaction.options.getString('Name')} at ${interaction.options.getNumber('X')} ${interaction.options.getNumber('Y')} ${interaction.options.getNumber('Z')} in ${interaction.options.getString('Dimension')}` });
+    interaction.reply({ content: `Created a new location called ${interaction.options.getString('Location Name')} at ${interaction.options.getNumber('X')} ${interaction.options.getNumber('Y')} ${interaction.options.getNumber('Z')} in ${interaction.options.getString('Dimension')}` });
   }
 }
