@@ -45,7 +45,7 @@ client.on('interactionCreate', async (interaction) => {
     if (command.command.name == interaction.commandName) {
       if (command.permission) {
         console.log('Permission exists');
-        if (!interaction.memberPermissions.has(command.permission)) {
+        if (!interaction.memberPermissions.any(command.permission)) {
           console.log('Does not have permission');
           interaction.reply({ content: 'You do not have permission to execute this command.', ephemeral: true });
           break;
