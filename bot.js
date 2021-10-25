@@ -2,6 +2,7 @@ console.log('Starting...');
 
 const { Client, Intents } = require('discord.js');
 const fs = require('fs');
+const { CommandBase } = require('./api/command-base');
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
@@ -22,10 +23,13 @@ client.on('ready', () => {
 
   const commandFiles = fs.readdirSync('./commands', file => file.endsWith('.js'));
   for (const command of commandFiles) {
+    /**
+     * @type { CommandBase }
+     */
     const cmd = require(`./commands/${command}`);
 
-    allCommands.push(cmd.name);
-    commands.create(cmd);
+    allCommands.push(cmd.command.name);
+    commands.create(cmd.command);
   }
 });
 
@@ -34,19 +38,17 @@ client.on('interactionCreate', async (interaction) => {
     return;
   }
 
-  const { commandName, options } = interaction;
+  for (const commandName in allCommands) {
+    if (commandName == interaction.commandName) {
+      /**
+       * @type { CommandBase }
+       */
+      const command = require(`./commands/${commandName}`);
 
-  if (commandName === 'ping') {
-    interaction.reply({
-      content: String(Date.now() - interaction.createdTimestamp)
-    });
-  } else if (commandName === 'say') {
-    interaction.channel.send(options.getString('message'));
+      command.execute(interaction);
 
-    interaction.reply({
-      content: 'Done!',
-      ephemeral: true
-    });
+      break;
+    }
   }
 });
 
