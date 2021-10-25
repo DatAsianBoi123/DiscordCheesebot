@@ -38,7 +38,7 @@ client.on('interactionCreate', async (interaction) => {
     return;
   }
 
-  for (const commandName in allCommands) {
+  for (const commandName of allCommands) {
     console.log(`Looping through all commands... ${commandName} == ${allCommands} ?`);
     if (commandName == interaction.commandName) {
       console.log(`Found a match! ${commandName}`);
