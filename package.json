@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^13.2.0",
-    "nodemon": "^2.0.14"
+    "discord.js": "^13.2.0"
   }
 }
