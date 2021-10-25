@@ -13,7 +13,7 @@ class CommandBase {
 
   /**
    * Required permission to execute the command (optional)
-   * @type { import("discord.js/typings/index.js").PermissionString }
+   * @type { import("discord.js/typings/index.js").PermissionResolvable }
    */
   permission
 }
