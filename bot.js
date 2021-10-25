@@ -39,7 +39,7 @@ client.on('interactionCreate', async (interaction) => {
   }
 
   for (const commandName in allCommands) {
-    console.log('Looping through all commands...');
+    console.log(`Looping through all commands... ${commandName} == ${allCommands} ?`);
     if (commandName == interaction.commandName) {
       console.log(`Found a match! ${commandName}`);
       /**
@@ -52,6 +52,8 @@ client.on('interactionCreate', async (interaction) => {
       break;
     }
   }
+
+  console.log('No command matches');
 });
 
 client.login(process.env.token);
