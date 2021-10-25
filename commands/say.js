@@ -17,10 +17,10 @@ module.exports = {
       }
     ]
   },
+  permission: Permissions.FLAGS.MANAGE_MESSAGES,
   async execute(interaction) {
     interaction.channel.send(interaction.options.getString('message')).then(() => {
       interaction.reply({ content: 'I said it :)', ephemeral: true });
     });
-  },
-  permission: Permissions.FLAGS.MANAGE_MESSAGES
+  }
 }
