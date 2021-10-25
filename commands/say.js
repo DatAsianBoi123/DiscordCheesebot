@@ -21,5 +21,5 @@ module.exports = {
       interaction.reply({ content: 'I said it :)', ephemeral: true });
     });
   },
-  permission = 'MANAGE_MESSAGES'
+  permission: 'MANAGE_MESSAGES'
 }
