@@ -1,5 +1,3 @@
-import { CommandInteraction } from "discord.js/typings/index.js";
-
 export class CommandBase {
   /**
    * The command data
@@ -9,7 +7,7 @@ export class CommandBase {
 
   /**
    * 
-   * @param {CommandInteraction} interaction The interaction
+   * @param {import("discord.js/typings/index.js").CommandInteraction} interaction The interaction
    */
   async execute(interaction) { }
 }
