@@ -44,15 +44,11 @@ client.on('interactionCreate', async (interaction) => {
   for (const command of allCommands) {
     if (command.command.name == interaction.commandName) {
       if (command.permission) {
-        console.log('Permission exists');
-        if (!interaction.memberPermissions.any(command.permission)) {
-          console.log('Does not have permission');
+        if (!interaction.memberPermissions.has(command.permission)) {
           interaction.reply({ content: 'You do not have permission to execute this command.', ephemeral: true });
           break;
         }
       }
-
-      console.log(interaction.memberPermissions.toArray());
 
       command.execute(interaction);
 
