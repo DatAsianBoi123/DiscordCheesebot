@@ -1,4 +1,4 @@
-const { Permissions } = require("discord.js/typings/index.js");
+const { Permissions } = require("discord.js/typings/index");
 const { CommandBase } = require("../api/command-base");
 
 /**
