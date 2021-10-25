@@ -1,4 +1,4 @@
-export class CommandBase {
+class CommandBase {
   /**
    * The command data
    * @type { import("discord.js/typings/index.js").ApplicationCommandData }
@@ -10,4 +10,8 @@ export class CommandBase {
    * @param {import("discord.js/typings/index.js").CommandInteraction} interaction The interaction
    */
   async execute(interaction) { }
+}
+
+module.exports = {
+  CommandBase
 }
