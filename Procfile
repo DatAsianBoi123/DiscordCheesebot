@@ -1,1 +1,1 @@
-worker: ts-node .
+worker: node .
