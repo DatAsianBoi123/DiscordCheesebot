@@ -39,7 +39,9 @@ client.on('interactionCreate', async (interaction) => {
   }
 
   for (const commandName in allCommands) {
+    console.log('Looping through all commands...');
     if (commandName == interaction.commandName) {
+      console.log(`Found a match! ${commandName}`);
       /**
        * @type { CommandBase }
        */
