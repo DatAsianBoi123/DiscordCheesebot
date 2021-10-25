@@ -50,6 +50,8 @@ client.on('interactionCreate', async (interaction) => {
           interaction.reply({ content: 'You do not have permission to execute this command.', ephemeral: true });
           break;
         }
+      } else {
+        console.log('Permission does not exist');
       }
 
       command.execute(interaction);
