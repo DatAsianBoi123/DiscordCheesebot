@@ -5,29 +5,35 @@ const { CommandBase } = require("../api/command-base");
  */
 module.exports = {
   command: {
-    name: 'add',
+    name: 'createlocation',
     description: 'Adds a SMP coordinate',
     options: [
       {
-        name: 'x',
+        name: 'Name',
+        description: 'The name of the location',
+        type: 'STRING',
+        required: true
+      },
+      {
+        name: 'X',
         description: 'The x coordinate',
         type: 'NUMBER',
         required: true
       },
       {
-        name: 'y',
+        name: 'Y',
         description: 'The y coordinate',
         type: 'NUMBER',
         required: true
       },
       {
-        name: 'z',
+        name: 'Z',
         description: 'The z coordinate',
         type: 'NUMBER',
         required: true
       },
       {
-        name: 'dimension',
+        name: 'Dimension',
         description: 'The coordinate dimension',
         type: 'STRING',
         required: true
@@ -35,6 +41,6 @@ module.exports = {
     ]
   },
   async execute(interaction) {
-    interaction.reply({ content: `Created a new coordinate ${interaction.options.getNumber('x')} ${interaction.options.getNumber('y')} ${interaction.options.getNumber('z')} in ${interaction.options.getString('dimension')}` });
+    interaction.reply({ content: `Created a new location called ${interaction.options.getString('Name')} at ${interaction.options.getNumber('X')} ${interaction.options.getNumber('Y')} ${interaction.options.getNumber('Z')} in ${interaction.options.getString('Dimension')}` });
   }
 }
