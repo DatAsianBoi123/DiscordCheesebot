@@ -1,3 +1,5 @@
+console.log('Starting...');
+
 const { Client, Intents } = require('discord.js');
 const fs = require('fs');
 
