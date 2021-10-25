@@ -6,6 +6,9 @@ const { CommandBase } = require('./api/command-base');
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
+/**
+ * @type { CommandBase[] }
+ */
 const allCommands = [];
 
 client.on('ready', () => {
@@ -28,7 +31,7 @@ client.on('ready', () => {
      */
     const cmd = require(`./commands/${command}`);
 
-    allCommands.push(cmd.command.name);
+    allCommands.push(cmd);
     commands.create(cmd.command);
   }
 });
@@ -38,17 +41,10 @@ client.on('interactionCreate', async (interaction) => {
     return;
   }
 
-  for (const commandName of allCommands) {
-    console.log(`Looping through all commands... ${commandName} == ${allCommands} ?`);
-    if (commandName == interaction.commandName) {
-      console.log(`Found a match! ${commandName}`);
-      /**
-       * @type { CommandBase }
-       */
-      const command = require(`./commands/${commandName}`);
-
+  for (const command of allCommands) {
+    if (command.command.name == interaction.commandName) {
       command.execute(interaction);
-
+      
       break;
     }
   }
