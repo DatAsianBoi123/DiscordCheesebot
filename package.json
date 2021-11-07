@@ -5,7 +5,7 @@
   "main": "bot.js",
   "scripts": {
     "start": "node .",
-    "resetcommads": "node . removecommands"
+    "resetcommands": "node . removecommands"
   },
   "author": "",
   "license": "ISC",

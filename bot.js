@@ -29,7 +29,7 @@ client.on('ready', () => {
   if (argv[2] == 'removecommands') {
     console.log('Removing commands...');
     removeAllCommands().then(() => {
-      console.log('Done. Restart now');
+      console.log('Done');
     });
   } else {
     setupWOKCommands();
@@ -44,6 +44,8 @@ function setupWOKCommands() {
     name: 'SMP',
     emoji: '👌'
   }]);
+
+  client.login(TOKEN);
 }
 
 async function removeAllCommands() {
@@ -59,5 +61,3 @@ async function removeAllCommands() {
     return Promise.all(promises);
   });
 }
-
-client.login(TOKEN);

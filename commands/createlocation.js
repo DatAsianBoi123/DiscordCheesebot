@@ -74,7 +74,7 @@ module.exports = {
         inline: false
       }, {
         name: 'Dimension',
-        value: parseDimension(parseInt(dimension)),
+        value: parseDimension(parseInt(dimension)) == null ? 'Error' : parseDimension(parseInt(dimension)),
         inline: false
       })
       .setColor('GREEN')
