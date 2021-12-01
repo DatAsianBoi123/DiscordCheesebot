@@ -4,6 +4,10 @@ import { Routes } from 'discord-api-types/v9';
 import { TOKEN, CLIENT_ID, GUILD_ID } from './config';
 import { ICommand } from './typings';
 
+const global = process.argv.slice(2)[0] == 'global';
+
+console.log(`Registering ${global ? 'global' : 'guild'} commands...`);
+
 const commands = [];
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.ts'));
 
@@ -37,7 +41,7 @@ for (const file of commandFiles) {
 
 const rest = new REST({ version: '9' }).setToken(TOKEN);
 
-if (process.argv.slice(3)[0] == '--global') {
+if (global) {
   rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands })
     .then(() => console.log('Successfully registered application commands.'))
     .catch(console.error);
