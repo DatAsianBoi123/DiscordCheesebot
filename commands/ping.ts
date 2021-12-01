@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageEmbed } from 'discord.js';
+import { ColorResolvable, MessageEmbed } from 'discord.js';
 import { ICommand } from '../typings';
 
 module.exports = {
@@ -8,12 +8,25 @@ module.exports = {
     .setDescription('Pings the bot'),
 
   callback: async ({ interaction }) => {
+    const clientPing = Date.now() - interaction.createdTimestamp;
+
+    let pingColor: ColorResolvable;
+
+    if (clientPing < 150) {
+      pingColor = 'GREEN';
+    } else if (clientPing < 300) {
+      pingColor = 'YELLOW';
+    } else {
+      pingColor = 'RED';
+    }
+
     const embed = new MessageEmbed()
       .setTitle('🏓 Pong!')
       .addField(
         'Client Ping',
-        `${Date.now() - interaction.createdTimestamp}ms`,
-      );
+        `${clientPing}ms`,
+      )
+      .setColor(pingColor);
 
     interaction.reply({ embeds: [embed] });
   },
