@@ -1,0 +1,16 @@
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { CacheType, Client, CommandInteraction, CommandInteractionOptionResolver, Guild, TextChannel, User } from 'discord.js';
+
+interface ICallbackObject {
+  channel: TextChannel
+  client: Client
+  guild: Guild
+  args: Omit<CommandInteractionOptionResolver<CacheType>, 'getMessage' | 'getFocused'>,
+  interaction: CommandInteraction
+  user: User
+}
+
+export interface ICommand {
+  data: SlashCommandBuilder
+  callback(obj: ICallbackObject): Promise<void>
+}
