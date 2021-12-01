@@ -7,8 +7,6 @@ module.exports = {
     .setName('ping')
     .setDescription('Pings the bot'),
 
-  skip: true,
-
   callback: async ({ interaction }) => {
     const embed = new MessageEmbed()
       .setTitle('🏓 Pong!')
