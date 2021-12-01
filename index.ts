@@ -38,6 +38,8 @@ for (const file of commandFiles) {
 
 client.once('ready', async () => {
   console.log(`Ready! Logged in as ${client.user.tag}`);
+
+  client.user.setActivity({ name: 'everything', type: 'WATCHING' });
 });
 
 client.on('interactionCreate', async interaction => {
