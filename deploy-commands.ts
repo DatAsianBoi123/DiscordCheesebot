@@ -24,6 +24,12 @@ for (const file of commandFiles) {
     continue;
   }
 
+  if (command.skip) {
+    console.log(`Skipped command ${command.data.name}`);
+
+    continue;
+  }
+
   console.log(`Registering command ${command.data.name} in file ${file}`);
 
   commands.push(command.data.toJSON());
@@ -31,6 +37,12 @@ for (const file of commandFiles) {
 
 const rest = new REST({ version: '9' }).setToken(TOKEN);
 
-rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: commands })
-  .then(() => console.log('Successfully registered application commands.'))
-  .catch(console.error);
+if (process.argv.slice(2)[0] == '--global') {
+  rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands })
+    .then(() => console.log('Successfully registered application commands.'))
+    .catch(console.error);
+} else {
+  rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: commands })
+    .then(() => console.log('Successfully registered guild application commands.'))
+    .catch(console.error);
+}
