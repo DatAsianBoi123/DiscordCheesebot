@@ -2,17 +2,22 @@
   "name": "discordcheesebot",
   "version": "1.0.0",
   "description": "",
-  "main": "bot.js",
+  "main": "index.ts",
   "scripts": {
-    "start": "node .",
-    "resetcommands": "node . removecommands"
+    "start": "ts-node .",
+    "reloadcommands": ""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/builders": "^0.8.2",
     "@discordjs/rest": "^0.1.0-canary.0",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/parser": "^5.5.0",
+    "discord-api-types": "^0.25.2",
     "discord.js": "^13.2.0",
-    "wokcommands": "^1.5.3"
+    "eslint": "^8.3.0",
+    "ts-node": "^10.4.0"
   },
   "engines": {
     "node": "16.x"
