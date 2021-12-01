@@ -3,7 +3,7 @@ import { Client, Collection, Intents, InteractionReplyOptions, TextChannel } fro
 import { CLIENT_ID, GUILD_ID, TOKEN } from './config';
 import { ICommand } from './typings';
 import { REST } from '@discordjs/rest';
-import { Routes } from 'discord-api-types';
+import { Routes } from 'discord-api-types/v9';
 
 const client = new Client({ intents: Intents.FLAGS.GUILDS });
 
