@@ -12,5 +12,6 @@ interface ICallbackObject {
 
 export interface ICommand {
   data: SlashCommandBuilder
+  skip?: boolean
   callback(obj: ICallbackObject): Promise<void>
 }
