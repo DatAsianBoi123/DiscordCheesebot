@@ -1,7 +1,9 @@
 import fs from 'fs';
 import { Client, Collection, Intents, InteractionReplyOptions, TextChannel } from 'discord.js';
-import { TOKEN } from './config';
+import { CLIENT_ID, GUILD_ID, TOKEN } from './config';
 import { ICommand } from './typings';
+import { REST } from '@discordjs/rest';
+import { Routes } from 'discord-api-types';
 
 const client = new Client({ intents: Intents.FLAGS.GUILDS });
 
@@ -32,6 +34,11 @@ for (const file of commandFiles) {
 
 client.once('ready', async () => {
   console.log(`Ready! Logged in as ${client.user.tag}`);
+
+  const rest = new REST({ version: '9' }).setToken(TOKEN);
+
+  rest.get(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID))
+    .then(console.log);
 });
 
 client.on('interactionCreate', async interaction => {
