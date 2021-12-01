@@ -12,9 +12,9 @@ module.exports = {
 
     let pingColor: ColorResolvable;
 
-    if (clientPing < 150) {
+    if (clientPing < 50) {
       pingColor = 'GREEN';
-    } else if (clientPing < 300) {
+    } else if (clientPing < 100) {
       pingColor = 'YELLOW';
     } else {
       pingColor = 'RED';
