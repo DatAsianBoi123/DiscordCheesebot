@@ -37,7 +37,7 @@ for (const file of commandFiles) {
 
 const rest = new REST({ version: '9' }).setToken(TOKEN);
 
-if (process.argv.slice(2)[0] == '--global') {
+if (process.argv.slice(3)[0] == '--global') {
   rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands })
     .then(() => console.log('Successfully registered application commands.'))
     .catch(console.error);
