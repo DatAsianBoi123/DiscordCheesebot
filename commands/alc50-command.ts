@@ -3,7 +3,8 @@ import { ICommand } from '../typings';
 import { API_KEY } from '../config';
 import fetch from 'node-fetch';
 import { MessageEmbed } from 'discord.js';
-import { NumberUtils } from '../util/number-util';
+import { NumberUtil } from '../util/number-util';
+import { SkillsUtil } from '../util/skyblock-skill-util';
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -72,6 +73,6 @@ module.exports = {
 
     const alchemyXp = profile.members[mojangJSON.id].experience_skill_alchemy;
 
-    interaction.editReply(`Alchemy xp: ${NumberUtils.format(alchemyXp, 2)}`);
+    interaction.editReply(`Alchemy level: ${SkillsUtil.getLevel(alchemyXp)}`);
   },
 } as ICommand;
