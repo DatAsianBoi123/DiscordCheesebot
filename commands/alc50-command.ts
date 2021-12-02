@@ -25,7 +25,7 @@ module.exports = {
     const mojangData = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args.getString('name')}`);
 
     if (mojangData.status == 204) {
-      interaction.editReply(`The player ${args.getString('name')} was not found`);
+      await interaction.editReply(`The player ${args.getString('name')} was not found`);
 
       return;
     }
@@ -40,7 +40,7 @@ module.exports = {
         .setTitle('Error')
         .setDescription(`Code: **${hypixelData.status}**\nReason: ${hypixelJSON.cause}`);
 
-      interaction.editReply({ embeds: [errorEmbed] });
+      await interaction.editReply({ embeds: [errorEmbed] });
 
       return;
     }
