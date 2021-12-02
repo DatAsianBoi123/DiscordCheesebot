@@ -36,6 +36,8 @@ module.exports = {
     const hypixelJSON = await hypixelData.clone().json();
 
     if (!hypixelJSON.success) {
+      console.log('nope');
+
       const errorEmbed = new MessageEmbed()
         .setTitle('Error')
         .setDescription(`Code: **${hypixelData.status}**\nReason: ${hypixelJSON.cause}`);
@@ -45,6 +47,7 @@ module.exports = {
       return;
     }
 
+    console.log('Found');
     interaction.editReply(`Found! First profile cute name: ${hypixelJSON.profiles[0].cute_name}`);
   },
 } as ICommand;
