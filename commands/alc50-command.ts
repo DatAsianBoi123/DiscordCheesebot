@@ -24,7 +24,7 @@ module.exports = {
 
     const mojangData = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args.getString('name')}`);
 
-    console.log(mojangData.status == 204);
+    console.log(mojangData.status);
     if (mojangData.status == 204) {
       await interaction.editReply(`The player ${args.getString('name')} was not found`);
 
