@@ -6,7 +6,7 @@ import { ICommand } from './typings';
 
 const global = process.argv.slice(2)[0] == 'global';
 
-console.log(`Registering ${global ? 'global' : 'guild'} commands...`);
+console.log(`Reloading ${global ? 'global' : 'guild'} commands...`);
 
 const commands = [];
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.ts'));
