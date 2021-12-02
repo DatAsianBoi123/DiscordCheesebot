@@ -47,7 +47,16 @@ module.exports = {
       return;
     }
 
-    console.log('Found');
-    interaction.editReply(`Found! First profile cute name: ${hypixelJSON.profiles[0].cute_name}`);
+    let profile = args.getString('profile') ? null : hypixelJSON.profiles[0];
+
+    if (!profile) {
+      for (const playerProfile of hypixelJSON.profiles) {
+        if (playerProfile.cute_name.toLowerCase() == args.getString('profile').toLowerCase()) {
+          profile = playerProfile;
+        }
+      }
+    }
+
+    interaction.editReply(`Found! ID is ${profile.profile_id}`);
   },
 } as ICommand;
