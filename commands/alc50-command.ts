@@ -20,7 +20,7 @@ module.exports = {
     }),
 
   callback: async ({ interaction, args }) => {
-    interaction.deferReply();
+    await interaction.deferReply();
 
     const mojangData = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args.getString('player')}`);
 
