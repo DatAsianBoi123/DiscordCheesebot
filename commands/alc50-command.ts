@@ -32,8 +32,8 @@ module.exports = {
 
     const mojangJSON = await mojangData.json();
 
-    const hypixelData = await fetch(`https://api.hypixel.net/skyblock/profiles?key=${API_KEY}&uuid=${mojangJSON.id}`);
-    const hypixelJSON = await hypixelData.clone().json();
+    const hypixelData = await fetch(`https://api.hypixel.net/skyblock/profiles?uuid=${mojangJSON.id}&key=${API_KEY}`);
+    const hypixelJSON = await hypixelData.json();
 
     if (!hypixelJSON.success) {
       console.log('nope');
