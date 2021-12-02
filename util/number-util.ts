@@ -1,4 +1,4 @@
-export class NumberUtils {
+export class NumberUtil {
   public static format(num: number, digits: number) {
     if (num === Infinity) return '∞';
 
