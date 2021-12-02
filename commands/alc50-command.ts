@@ -3,6 +3,7 @@ import { ICommand } from '../typings';
 import { API_KEY } from '../config';
 import fetch from 'node-fetch';
 import { MessageEmbed } from 'discord.js';
+import { NumberUtils } from '../util/number-util';
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -40,7 +41,8 @@ module.exports = {
 
       const errorEmbed = new MessageEmbed()
         .setTitle('Error')
-        .setDescription(`Code: **${hypixelData.status}**\nReason: ${hypixelJSON.cause}`);
+        .setDescription(`Code: **${hypixelData.status}**\nReason: ${hypixelJSON.cause}`)
+        .setColor('RED');
 
       await interaction.editReply({ embeds: [errorEmbed] });
 
@@ -53,10 +55,23 @@ module.exports = {
       for (const playerProfile of hypixelJSON.profiles) {
         if (playerProfile.cute_name.toLowerCase() == args.getString('profile').toLowerCase()) {
           profile = playerProfile;
+
+          break;
         }
       }
+
+      const errorEmbed = new MessageEmbed()
+        .setTitle('Error')
+        .setDescription(`Code: **404**\nReason: The profile ${args.getString('profile')} was not found.`)
+        .setColor('RED');
+
+      await interaction.editReply({ embeds: [errorEmbed] });
+
+      return;
     }
 
-    interaction.editReply(`Found! ID is ${profile.profile_id}`);
+    const alchemyXp = profile.members[mojangJSON.id].experience_skill_alchemy;
+
+    interaction.reply(`Alchemy xp: ${NumberUtils.format(alchemyXp, 2)}`);
   },
 } as ICommand;
