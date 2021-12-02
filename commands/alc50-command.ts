@@ -72,6 +72,6 @@ module.exports = {
 
     const alchemyXp = profile.members[mojangJSON.id].experience_skill_alchemy;
 
-    interaction.reply(`Alchemy xp: ${NumberUtils.format(alchemyXp, 2)}`);
+    interaction.editReply(`Alchemy xp: ${NumberUtils.format(alchemyXp, 2)}`);
   },
 } as ICommand;
