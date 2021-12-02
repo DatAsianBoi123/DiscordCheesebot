@@ -69,5 +69,7 @@ export class SkillsUtil {
     for (let i = 0; i < 61; i++) {
       level = totalXp > this.cumulativeXp[i] ? i : level;
     }
+
+    return level;
   }
 }
