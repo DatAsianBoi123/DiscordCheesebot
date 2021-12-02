@@ -22,11 +22,10 @@ module.exports = {
   callback: async ({ interaction, args }) => {
     interaction.deferReply();
 
-    const mojangData = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args.getString('name')}`);
+    const mojangData = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args.getString('player')}`);
 
-    console.log(mojangData.status);
     if (mojangData.status == 204) {
-      await interaction.editReply(`The player ${args.getString('name')} was not found`);
+      await interaction.editReply(`The player ${args.getString('player')} was not found`);
 
       return;
     }
