@@ -58,7 +58,7 @@ client.on('interactionCreate', async interaction => {
       content: 'There was an error executing this command',
     };
 
-    interaction.replied ? interaction.editReply(reply) : interaction.reply(reply);
+    interaction.replied || interaction.deferred ? interaction.editReply(reply) : interaction.reply(reply);
   }
 });
 
