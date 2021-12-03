@@ -9,11 +9,11 @@ export class NumberUtil {
       },
       {
         value: 1E3,
-        symbol: 'k',
+        symbol: 'K',
       },
       {
         value: 1E6,
-        symbol: 'm',
+        symbol: 'M',
       },
       {
         value: 1E9,
