@@ -1,3 +1,5 @@
+import { SkillResolvable } from '../typings';
+
 export class SkillsUtil {
   private static cumulativeXp = {
     0: 0,
@@ -62,14 +64,28 @@ export class SkillsUtil {
     59: 104672425,
     60: 111672425,
   };
+  private static level60Skills: SkillResolvable[] = [
+    'FARMING',
+    'MINING',
+    'COMBAT',
+    'ENCHANTING',
+  ];
 
-  public static getLevel(totalXp: number) {
+  public static getLevel(totalXp: number, skill: SkillResolvable) {
+    const maxLevel = this.level60Skills.includes(skill) ? 61 : 51;
     let level = 0;
 
-    for (let i = 0; i < 61; i++) {
+    for (let i = 0; i < maxLevel; i++) {
       level = totalXp > this.cumulativeXp[i] ? i : level;
     }
 
     return level;
+  }
+
+  public static getXpForLevel(level: number) {
+    if (level < 0) return 0;
+    if (level > 60) return this.cumulativeXp[60];
+
+    return this.cumulativeXp[level];
   }
 }
