@@ -15,3 +15,5 @@ export interface ICommand {
   skip?: boolean
   callback(obj: ICallbackObject): Promise<void>
 }
+
+export type SkillResolvable = 'FARMING' | 'MINING' | 'COMBAT' | 'FORAGING' | 'FISHING' | 'ENCHANTING' | 'ALCHEMY' | 'TAMING';
