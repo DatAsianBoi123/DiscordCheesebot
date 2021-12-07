@@ -4,11 +4,10 @@ import { Routes } from 'discord-api-types/v9';
 import { TOKEN, CLIENT_ID, GUILD_ID } from './config';
 import { ICommand } from './typings';
 
-const global = process.argv.slice(2)[0] == 'global';
+console.log('Reloading commands...');
 
-console.log(`Reloading ${global ? 'global' : 'guild'} commands...`);
-
-const commands = [];
+const guildCommands = [];
+const globalCommands = [];
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.ts'));
 
 for (const file of commandFiles) {
@@ -34,19 +33,30 @@ for (const file of commandFiles) {
     continue;
   }
 
-  console.log(`Registering command ${command.data.name} in file ${file}`);
+  console.log(`Registered ${command.type.toLowerCase()} command ${command.data.name} in file ${file}`);
 
-  commands.push(command.data.toJSON());
+  command.type === 'GLOBAL' ? globalCommands.push(command.data.toJSON()) : guildCommands.push(command.data.toJSON());
 }
 
 const rest = new REST({ version: '9' }).setToken(TOKEN);
 
-if (global) {
-  rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands })
-    .then(() => console.log('Successfully registered application commands.'))
-    .catch(console.error);
-} else {
-  rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: commands })
-    .then(() => console.log('Successfully registered guild application commands.'))
-    .catch(console.error);
+registerCommands()
+  .then(() => console.log('Done'));
+
+async function registerCommands() {
+  if (guildCommands.length > 0) {
+    await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: guildCommands })
+      .then(() => console.log(`Successfully registered ${guildCommands.length} guild commands`))
+      .catch(() => console.log('An error occured when registering guild commands'));
+  } else {
+    console.log('No guild commands! Skipping');
+  }
+
+  if (globalCommands.length > 0) {
+    await rest.put(Routes.applicationCommands(CLIENT_ID), { body: globalCommands })
+      .then(() => console.log(`Successfully registered ${globalCommands.length} global commands`))
+      .catch(() => console.log('An error occured when registering global commands'));
+  } else {
+    console.log('No global commands! Skipping');
+  }
 }

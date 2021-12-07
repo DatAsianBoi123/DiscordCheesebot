@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { Client, Collection, Intents, InteractionReplyOptions, TextChannel } from 'discord.js';
+import { Client, Collection, Intents, InteractionReplyOptions } from 'discord.js';
 import { TOKEN } from './config';
 import { ICommand } from './typings';
 
@@ -31,7 +31,7 @@ for (const file of commandFiles) {
     continue;
   }
 
-  console.log(`Registering command ${command.data.name} in file ${file}`);
+  console.log(`Registered command ${command.data.name} in file ${file}`);
 
   commands.set(command.data.name, command);
 }
@@ -43,11 +43,15 @@ client.once('ready', async () => {
 });
 
 client.on('interactionCreate', async interaction => {
-  if (!interaction.isCommand() || !(interaction.channel instanceof TextChannel)) return;
+  if (!interaction.isCommand()) return;
 
   const command = commands.get(interaction.commandName);
 
   if (!command) return;
+
+  const disallowedTextChannels = command.disallowedTextChannels ?? [];
+
+  if (disallowedTextChannels.includes(interaction.channel)) return interaction.reply('This command is not enabled here');
 
   try {
     await command.callback({ interaction: interaction, channel: interaction.channel, args: interaction.options, client: interaction.client, guild: interaction.guild, user: interaction.user });

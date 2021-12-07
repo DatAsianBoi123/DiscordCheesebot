@@ -7,6 +7,8 @@ module.exports = {
     .setName('ping')
     .setDescription('Pings the bot'),
 
+  type: 'GUILD',
+
   callback: async ({ interaction }) => {
     const clientPing = Date.now() - interaction.createdTimestamp;
 

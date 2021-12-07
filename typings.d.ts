@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { CacheType, Client, CommandInteraction, CommandInteractionOptionResolver, Guild, TextChannel, User } from 'discord.js';
+import { CacheType, Client, CommandInteraction, CommandInteractionOptionResolver, Guild, TextBasedChannels, User } from 'discord.js';
 
 interface ICallbackObject {
-  channel: TextChannel
+  channel: TextBasedChannels
   client: Client
   guild: Guild
   args: Omit<CommandInteractionOptionResolver<CacheType>, 'getMessage' | 'getFocused'>,
@@ -10,9 +10,11 @@ interface ICallbackObject {
   user: User
 }
 
-export interface ICommand {
+export type ICommand = {
   data: SlashCommandBuilder
   skip?: boolean
+  disallowedTextChannels?: TextBasedChannels[]
+  type: 'GUILD' | 'GLOBAL'
   callback(obj: ICallbackObject): Promise<void>
 }
 
