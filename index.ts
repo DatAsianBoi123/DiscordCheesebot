@@ -64,10 +64,13 @@ async function start() {
             },
           ],
         });
+
+        console.log(`Successfully updated permissions for command ${command.data.name}`);
       }
     });
 
-    await client.guilds.cache.get(GUILD_ID).commands.permissions.set({ fullPermissions });
+    client.guilds.cache.get(GUILD_ID).commands.permissions.set({ fullPermissions })
+      .then(() => console.log('Successfully updated all permissions'));
 
     client.user.setActivity({ name: 'everything', type: 'WATCHING' });
   });
