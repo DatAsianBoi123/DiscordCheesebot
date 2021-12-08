@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { CacheType, Client, CommandInteraction, CommandInteractionOptionResolver, Guild, TextBasedChannels, User } from 'discord.js';
+import { CacheType, Client, CommandInteraction, CommandInteractionOptionResolver, Guild, Snowflake, TextBasedChannels, ThreadChannelTypes, User } from 'discord.js';
 
 interface ICallbackObject {
   channel: TextBasedChannels
@@ -10,12 +10,19 @@ interface ICallbackObject {
   user: User
 }
 
-export type ICommand = {
+export interface ICommand {
   data: SlashCommandBuilder
   skip?: boolean
-  disallowedTextChannels?: TextBasedChannels[]
+  disallowedTextChannels?: ('DM' | 'GUILD_TEXT' | 'GUILD_NEWS' | ThreadChannelTypes)[]
+  adminCommand: boolean
   type: 'GUILD' | 'GLOBAL'
   callback(obj: ICallbackObject): Promise<void>
+}
+
+export type CommandOptions = {
+  name: string
+  client: Client
+  guildId?: Snowflake
 }
 
 export type SkillResolvable = 'FARMING' | 'MINING' | 'COMBAT' | 'FORAGING' | 'FISHING' | 'ENCHANTING' | 'ALCHEMY' | 'TAMING';
