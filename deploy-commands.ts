@@ -33,7 +33,7 @@ for (const file of commandFiles) {
     continue;
   }
 
-  console.log(`Registered ${command.type.toLowerCase()} command ${command.data.name} in file ${file}`);
+  console.log(`Registering ${command.type.toLowerCase()} command ${command.data.name} in file ${file}`);
 
   command.type === 'GLOBAL' ? globalCommands.push(command.data.toJSON()) : guildCommands.push(command.data.toJSON());
 }
