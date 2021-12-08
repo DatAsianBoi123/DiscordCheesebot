@@ -44,19 +44,11 @@ registerCommands()
   .then(() => console.log('Done'));
 
 async function registerCommands() {
-  if (guildCommands.length > 0) {
-    await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: guildCommands })
-      .then(() => console.log(`Successfully registered ${guildCommands.length} guild commands`))
-      .catch(() => console.log('An error occured when registering guild commands'));
-  } else {
-    console.log('No guild commands! Skipping');
-  }
+  await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: guildCommands })
+    .then(() => console.log(`Successfully registered ${guildCommands.length} guild commands`))
+    .catch(() => console.log('An error occured when registering guild commands'));
 
-  if (globalCommands.length > 0) {
-    await rest.put(Routes.applicationCommands(CLIENT_ID), { body: globalCommands })
-      .then(() => console.log(`Successfully registered ${globalCommands.length} global commands`))
-      .catch(() => console.log('An error occured when registering global commands'));
-  } else {
-    console.log('No global commands! Skipping');
-  }
+  await rest.put(Routes.applicationCommands(CLIENT_ID), { body: globalCommands })
+    .then(() => console.log(`Successfully registered ${globalCommands.length} global commands`))
+    .catch(() => console.log('An error occured when registering global commands'));
 }
