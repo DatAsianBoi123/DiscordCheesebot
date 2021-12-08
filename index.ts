@@ -37,35 +37,37 @@ async function start() {
       continue;
     }
 
-    // TODO: Update global command permissions as well
-    const applicationCommand = command.type === 'GLOBAL' ? await DiscordUtil.getCommandFromName({ name: command.data.name, client: client }) : await DiscordUtil.getCommandFromName({ name: command.data.name, client: client, guildId: GUILD_ID });
-
-    if (!applicationCommand) {
-      console.log(`Skipped permissions for command ${command.data.name}: Command not found`);
-    } else {
-      command.adminCommand ? applicationCommand.defaultPermission = false : applicationCommand.defaultPermission = true;
-
-      fullPermissions.push({
-        id: applicationCommand.id,
-        permissions: [
-          {
-            id: ADMIN_ROLE_ID,
-            permission: true,
-            type: 'ROLE',
-          },
-        ],
-      });
-    }
-
     console.log(`Registered command ${command.data.name} in file ${file}`);
 
     commands.set(command.data.name, command);
   }
 
-  await client.guilds.cache.get(GUILD_ID).commands.permissions.set({ fullPermissions });
-
   client.once('ready', async () => {
     console.log(`Ready! Logged in as ${client.user.tag}`);
+
+    commands.forEach(async command => {
+      // TODO: Update global command permissions as well
+      const applicationCommand = command.type === 'GLOBAL' ? await DiscordUtil.getCommandFromName({ name: command.data.name, client: client }) : await DiscordUtil.getCommandFromName({ name: command.data.name, client: client, guildId: GUILD_ID });
+
+      if (!applicationCommand) {
+        console.log(`Skipped permissions for command ${command.data.name}: Command not found`);
+      } else {
+        command.adminCommand ? applicationCommand.defaultPermission = false : applicationCommand.defaultPermission = true;
+
+        fullPermissions.push({
+          id: applicationCommand.id,
+          permissions: [
+            {
+              id: ADMIN_ROLE_ID,
+              permission: true,
+              type: 'ROLE',
+            },
+          ],
+        });
+      }
+    });
+
+    await client.guilds.cache.get(GUILD_ID).commands.permissions.set({ fullPermissions });
 
     client.user.setActivity({ name: 'everything', type: 'WATCHING' });
   });
