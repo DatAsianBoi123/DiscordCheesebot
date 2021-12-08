@@ -22,6 +22,7 @@ module.exports = {
     }),
 
   type: 'GUILD',
+  adminCommand: false,
 
   callback: async ({ interaction, args }) => {
     await interaction.deferReply();
