@@ -1,8 +1,7 @@
 import fs from 'fs';
-import { Client, Collection, GuildApplicationCommandPermissionData, Intents, InteractionReplyOptions } from 'discord.js';
-import { ADMIN_ROLE_ID, GUILD_ID, TOKEN } from './config';
+import { Client, Collection, Intents, InteractionReplyOptions } from 'discord.js';
+import { TOKEN } from './config';
 import { ICommand } from './typings';
-import { DiscordUtil } from './util/discord-util';
 
 const client = new Client({ intents: Intents.FLAGS.GUILDS });
 
@@ -11,7 +10,6 @@ start();
 
 async function start() {
   const commands = new Collection<string, ICommand>();
-  const fullPermissions: GuildApplicationCommandPermissionData[] = [];
   const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.ts'));
 
   for (const file of commandFiles) {
@@ -44,33 +42,6 @@ async function start() {
 
   client.once('ready', async () => {
     console.log(`Ready! Logged in as ${client.user.tag}`);
-
-    commands.forEach(async command => {
-      // TODO: Update global command permissions as well
-      const applicationCommand = command.type === 'GLOBAL' ? await DiscordUtil.getCommandFromName({ name: command.data.name, client: client }) : await DiscordUtil.getCommandFromName({ name: command.data.name, client: client, guildId: GUILD_ID });
-
-      if (!applicationCommand) {
-        console.log(`Skipped permissions for command ${command.data.name}: Command not found`);
-      } else {
-        command.adminCommand ? applicationCommand.defaultPermission = false : applicationCommand.defaultPermission = true;
-
-        fullPermissions.push({
-          id: applicationCommand.id,
-          permissions: [
-            {
-              id: ADMIN_ROLE_ID,
-              permission: true,
-              type: 'ROLE',
-            },
-          ],
-        });
-
-        console.log(`Successfully updated permissions for command ${command.data.name}`);
-      }
-    });
-
-    client.guilds.cache.get(GUILD_ID).commands.permissions.set({ fullPermissions })
-      .then(() => console.log('Successfully updated all permissions'));
 
     client.user.setActivity({ name: 'everything', type: 'WATCHING' });
   });

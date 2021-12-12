@@ -14,7 +14,6 @@ export interface ICommand {
   data: SlashCommandBuilder
   skip?: boolean
   disallowedTextChannels?: ('DM' | 'GUILD_TEXT' | 'GUILD_NEWS' | ThreadChannelTypes)[]
-  adminCommand: boolean
   type: 'GUILD' | 'GLOBAL'
   callback(obj: ICallbackObject): Promise<void>
 }
