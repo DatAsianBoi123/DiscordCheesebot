@@ -14,6 +14,8 @@ module.exports = {
   type: 'GUILD',
 
   callback: async ({ interaction, channel }) => {
+    console.log(interaction.memberPermissions.has('MANAGE_MESSAGES'));
+
     if (!interaction.memberPermissions?.has('MANAGE_MESSAGES')) return interaction.reply({ content: 'You do not have permission to use this command', ephemeral: true });
 
     const embed = new MessageEmbed()
