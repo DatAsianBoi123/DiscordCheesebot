@@ -45,7 +45,7 @@ registerCommands()
 
 async function registerCommands() {
   await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: guildCommands })
-    .then(() => console.log(`Successfully registered ${guildCommands.length} guild commands`))
+    .then((data) => console.log(`Successfully registered ${guildCommands.length} guild commands`, data))
     .catch(() => console.log('An error occured when registering guild commands'));
 
   await rest.put(Routes.applicationCommands(CLIENT_ID), { body: globalCommands })
