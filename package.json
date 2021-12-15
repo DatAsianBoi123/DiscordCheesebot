@@ -17,6 +17,8 @@
     "discord-api-types": "^0.25.2",
     "discord.js": "^13.2.0",
     "eslint": "^8.3.0",
+    "mongodb": "^4.2.2",
+    "mongoose": "^6.1.2",
     "ts-node": "^10.4.0"
   },
   "engines": {
