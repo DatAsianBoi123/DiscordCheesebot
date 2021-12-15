@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose';
 import mongoose from 'mongoose';
 
-interface Command {
+export interface IGuildCommand {
   id: string,
   application_id: string,
   version: string,
@@ -16,7 +16,7 @@ interface Command {
   options: Array<unknown>,
 }
 
-const commandSchema = new Schema<Command>({
+const commandSchema = new Schema<IGuildCommand>({
   id: { type: String, required: true },
   application_id: { type: String, required: true },
   version: { type: String, required: true },
@@ -34,5 +34,5 @@ const commandSchema = new Schema<Command>({
 });
 
 export default {
-  model: mongoose.model<Command>('GuildApplicationCommand', commandSchema),
+  model: mongoose.model<IGuildCommand>('GuildApplicationCommand', commandSchema),
 };

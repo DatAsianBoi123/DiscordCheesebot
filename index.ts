@@ -1,12 +1,31 @@
 import fs from 'fs';
 import { Client, Collection, Intents, InteractionReplyOptions } from 'discord.js';
-import { TOKEN } from './config';
+import { MONGO_PASS, TOKEN } from './config';
 import { ICommand } from './typings';
+import mongoose from 'mongoose';
+import guildCommandModel from './models/guild-command-model';
+import cache from './cache';
 
 const client = new Client({ intents: Intents.FLAGS.GUILDS });
 
-//* (MongoDB Stuff).then(() =>
-start();
+const uri = `mongodb+srv://DatAsianBoi123:${MONGO_PASS}@mydiscordbot.xudyc.mongodb.net/discord-bot?retryWrites=true&w=majority`;
+mongoose.connect(uri).then(async () => {
+  console.log('Connected to MongoDB');
+
+  guildCommandModel.model.find({}, (err, allCommands) => {
+    if (err) return console.error(err);
+
+    cache.guildCommandCache.clear();
+
+    for (const command of allCommands) {
+      cache.guildCommandCache.set(command.id, command);
+    }
+
+    console.log(cache.guildCommandCache);
+
+    start();
+  });
+}).catch(() => console.log('An error occurred when connecting to MongoDB'));
 
 async function start() {
   const commands = new Collection<string, ICommand>();
@@ -24,7 +43,7 @@ async function start() {
         continue;
       }
     } catch (err) {
-      console.log(`An error occured when registering command ${command.data.name} in file ${file}: ${err.message}`);
+      console.log(`An error occurred when registering command ${command.data.name} in file ${file}: ${err.message}`);
 
       continue;
     }
