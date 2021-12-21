@@ -1,6 +1,8 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageEmbed } from 'discord.js';
+import { Collection, MessageEmbed } from 'discord.js';
 import { ICommand } from '../typings';
+
+const allEmbeds = new Collection<number, MessageEmbed>();
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -16,12 +18,9 @@ module.exports = {
   callback: async ({ interaction, channel }) => {
     if (!interaction.memberPermissions?.has('MANAGE_MESSAGES')) return interaction.reply({ content: 'You do not have permission to use this command', ephemeral: true });
 
-    const embed = new MessageEmbed()
-      .setTitle('Test')
-      .setDescription('Poggers');
+    const id = allEmbeds.size + 1;
+    allEmbeds.set(id, new MessageEmbed());
 
-    await channel.send({ embeds: [embed] });
-
-    interaction.reply({ content: 'Sent', ephemeral: true });
+    interaction.reply({ content: `Created a new embed with the ID of ${id}`, ephemeral: true });
   },
 } as ICommand;
