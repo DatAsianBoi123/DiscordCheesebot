@@ -21,8 +21,6 @@ mongoose.connect(uri).then(async () => {
       cache.guildCommandCache.set(command.id, command);
     }
 
-    console.log(cache.guildCommandCache);
-
     start();
   });
 }).catch(() => console.log('An error occurred when connecting to MongoDB'));
