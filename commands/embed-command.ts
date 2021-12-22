@@ -41,7 +41,7 @@ module.exports = {
   callback: async ({ interaction, args, channel }) => {
     if (!interaction.memberPermissions?.has('MANAGE_MESSAGES')) return interaction.reply({ content: 'You do not have permission to use this command', ephemeral: true });
 
-    const id = args.getNumber('id');
+    const id = args.getInteger('id');
 
     switch (args.getSubcommand()) {
     case 'create':
