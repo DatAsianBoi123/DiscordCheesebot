@@ -13,11 +13,26 @@ module.exports = {
         .setDescription('Creates a new message embed');
     })
     .addSubcommand(subcommand => {
+      return subcommand.setName('title')
+        .setDescription('Sets the embed title')
+        .addIntegerOption(option => {
+          return option.setName('id')
+            .setDescription('The id of the message embed')
+            .setRequired(true);
+        })
+        .addStringOption(option => {
+          return option.setName('title')
+            .setDescription('The new title')
+            .setRequired(true);
+        });
+    })
+    .addSubcommand(subcommand => {
       return subcommand.setName('send')
         .setDescription('Sends a message embed')
         .addNumberOption(option => {
           return option.setName('id')
-            .setDescription('The id of the message embed');
+            .setDescription('The id of the message embed')
+            .setRequired(true);
         });
     }),
 
@@ -38,7 +53,18 @@ module.exports = {
       break;
 
     case 'send':
+      if (!allEmbeds.has(id)) return interaction.reply({ content: `No embed found with the id of ${id}`, ephemeral: true });
+
       channel.send({ embeds: [allEmbeds.get(id)] });
+
+      break;
+
+    case 'title':
+      if (!allEmbeds.has(id)) return interaction.reply({ content: `No embed found with the id of ${id}`, ephemeral: true });
+
+      allEmbeds.get(id).setTitle(args.getString('title'));
+
+      interaction.reply({ content: `Changed the title to ${args.getString('title')}`, ephemeral: true });
     }
   },
 } as ICommand;
