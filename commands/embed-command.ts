@@ -29,7 +29,7 @@ module.exports = {
     .addSubcommand(subcommand => {
       return subcommand.setName('send')
         .setDescription('Sends a message embed')
-        .addNumberOption(option => {
+        .addIntegerOption(option => {
           return option.setName('id')
             .setDescription('The id of the message embed')
             .setRequired(true);
