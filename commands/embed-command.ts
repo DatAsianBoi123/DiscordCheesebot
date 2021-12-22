@@ -55,7 +55,9 @@ module.exports = {
     case 'send':
       if (!allEmbeds.has(id)) return interaction.reply({ content: `No embed found with the id of ${id}`, ephemeral: true });
 
-      channel.send({ embeds: [allEmbeds.get(id)] });
+      await channel.send({ embeds: [allEmbeds.get(id)] });
+
+      interaction.reply({ content: `Sent embed with id ${id}`, ephemeral: true });
 
       break;
 
