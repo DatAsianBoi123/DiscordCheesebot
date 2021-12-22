@@ -42,10 +42,9 @@ for (const file of commandFiles) {
 
 const rest = new REST({ version: '9' }).setToken(TOKEN);
 
-registerCommands()
-  .then(() => console.log('Done'));
+registerGuildApplicationCommands();
 
-async function registerCommands() {
+async function registerGuildApplicationCommands() {
   await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: guildCommands })
     .then(async (data) => {
       console.log(`Successfully registered ${guildCommands.length} guild commands`);
@@ -65,11 +64,15 @@ async function registerCommands() {
           }
 
           console.log('Updated MongoDB');
+
+          await registerGlobalApplicationCommands();
         }
       }).catch(() => console.log('Error occurred when connecting to MongoDB'));
     })
     .catch(() => console.log('An error occurred when registering guild commands'));
+}
 
+async function registerGlobalApplicationCommands() {
   await rest.put(Routes.applicationCommands(CLIENT_ID), { body: globalCommands })
     .then(() => console.log(`Successfully registered ${globalCommands.length} global commands`))
     .catch(() => console.log('An error occurred when registering global commands'));
