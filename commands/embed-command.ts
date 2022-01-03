@@ -38,35 +38,40 @@ module.exports = {
 
   type: 'GUILD',
 
-  callback: async ({ interaction, args, channel }) => {
-    if (!interaction.memberPermissions?.has('MANAGE_MESSAGES')) return interaction.reply({ content: 'You do not have permission to use this command', ephemeral: true });
+  listeners: {
+    onExecute: async ({ interaction, args, channel }) => {
+      if (!interaction.memberPermissions?.has('MANAGE_MESSAGES')) return interaction.reply({ content: 'You do not have permission to use this command', ephemeral: true });
 
-    const id = args.getInteger('id');
+      const id = args.getInteger('id');
 
-    switch (args.getSubcommand()) {
-    case 'create':
-      const newId = allEmbeds.size + 1;
-      allEmbeds.set(newId, new MessageEmbed());
+      switch (args.getSubcommand()) {
+      case 'create':
+        const newId = allEmbeds.size + 1;
+        allEmbeds.set(newId, new MessageEmbed());
 
-      interaction.reply({ content: `Created a new embed with the ID of ${newId}`, ephemeral: true });
+        interaction.reply({ content: `Created a new embed with the ID of ${newId}`, ephemeral: true });
 
-      break;
+        break;
 
-    case 'send':
-      if (!allEmbeds.has(id)) return interaction.reply({ content: `No embed found with the id of ${id}`, ephemeral: true });
+      case 'send':
+        if (!allEmbeds.has(id)) return interaction.reply({ content: `No embed found with the id of ${id}`, ephemeral: true });
 
-      await channel.send({ embeds: [allEmbeds.get(id)] });
+        await channel.send({ embeds: [allEmbeds.get(id)] });
 
-      interaction.reply({ content: `Sent embed with id ${id}`, ephemeral: true });
+        interaction.reply({ content: `Sent embed with id ${id}`, ephemeral: true });
 
-      break;
+        break;
 
-    case 'title':
-      if (!allEmbeds.has(id)) return interaction.reply({ content: `No embed found with the id of ${id}`, ephemeral: true });
+      case 'title':
+        if (!allEmbeds.has(id)) return interaction.reply({ content: `No embed found with the id of ${id}`, ephemeral: true });
 
-      allEmbeds.get(id).setTitle(args.getString('title'));
+        allEmbeds.get(id).setTitle(args.getString('title'));
 
-      interaction.reply({ content: `Changed the title to ${args.getString('title')}`, ephemeral: true });
-    }
+        interaction.reply({ content: `Changed the title to ${args.getString('title')}`, ephemeral: true });
+      }
+    },
+    onError: ({ error, interaction }) => {
+      interaction.replied ? interaction.editReply({ content: `An error occurred: ${error.message}` }) : interaction.reply({ content: `An error occurred: ${error.message}`, ephemeral: true });
+    },
   },
 } as ICommand;

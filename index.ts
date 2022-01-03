@@ -35,7 +35,7 @@ async function start() {
     try {
       command = require(`./commands/${file}`);
 
-      if (!command || !command.data || !command.callback) {
+      if (!command?.data || !command?.type || !command?.listeners?.onExecute) {
         console.log(`Command in file ${file} is not registered correctly, skipping`);
 
         continue;
@@ -75,15 +75,19 @@ async function start() {
     if (disallowedTextChannels.includes(interaction.channel.type)) return interaction.reply('This command is not enabled here');
 
     try {
-      await command.callback({ interaction: interaction, channel: interaction.channel, args: interaction.options, client: interaction.client, guild: interaction.guild, user: interaction.user });
+      await command.listeners.onExecute({ interaction: interaction, channel: interaction.channel, args: interaction.options, client: interaction.client, guild: interaction.guild, user: interaction.user });
     } catch (error) {
       console.error(error);
 
-      const reply: InteractionReplyOptions = {
-        content: 'There was an error executing this command',
-      };
+      if (command.listeners.onError) {
+        command.listeners.onError({ interaction, error });
+      } else {
+        const reply: InteractionReplyOptions = {
+          content: 'There was an error executing this command',
+        };
 
-      interaction.replied || interaction.deferred ? interaction.editReply(reply) : interaction.reply(reply);
+        interaction.replied || interaction.deferred ? interaction.editReply(reply) : interaction.reply(reply);
+      }
     }
   });
 

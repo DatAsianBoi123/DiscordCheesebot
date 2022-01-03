@@ -18,7 +18,7 @@ for (const file of commandFiles) {
   try {
     command = require(`./commands/${file}`);
 
-    if (!command || !command.data || !command.callback) {
+    if (!command?.data || !command?.type || !command?.listeners?.onExecute) {
       console.log(`Command in file ${file} is not registered correctly, skipping`);
 
       continue;

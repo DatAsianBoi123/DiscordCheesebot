@@ -10,12 +10,22 @@ interface ICallbackObject {
   user: User
 }
 
+interface IErrorObject {
+  error: Error
+  interaction: CommandInteraction
+}
+
+interface IListeners {
+  onExecute(obj: ICallbackObject): Promise<void>
+  onError?(obj: IErrorObject): Promise<void>
+}
+
 export interface ICommand {
   data: SlashCommandBuilder
   skip?: boolean
   disallowedTextChannels?: ('DM' | 'GUILD_TEXT' | 'GUILD_NEWS' | ThreadChannelTypes)[]
   type: 'GUILD' | 'GLOBAL'
-  callback(obj: ICallbackObject): Promise<void>
+  listeners: IListeners
 }
 
 export type CommandOptions = {
