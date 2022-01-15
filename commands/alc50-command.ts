@@ -29,7 +29,7 @@ module.exports = {
 
       const mojangData = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args.getString('player')}`);
 
-      if (mojangData.status == 204) {
+      if (mojangData.status === 204) {
         await interaction.editReply(`The player ${args.getString('player')} was not found`);
 
         return;
@@ -41,8 +41,6 @@ module.exports = {
       const hypixelJSON = await hypixelData.json();
 
       if (!hypixelJSON.success) {
-        console.log('nope');
-
         const errorEmbed = new MessageEmbed()
           .setTitle('Error')
           .setDescription(`Code: **${hypixelData.status}**\nReason: ${hypixelJSON.cause}`)
@@ -57,27 +55,42 @@ module.exports = {
 
       if (!profile) {
         for (const playerProfile of hypixelJSON.profiles) {
-          if (playerProfile.cute_name.toLowerCase() == args.getString('profile').toLowerCase()) {
+          if (playerProfile.cute_name.toLowerCase() === args.getString('profile').toLowerCase()) {
             profile = playerProfile;
-
-            break;
           }
         }
 
+        if (!profile) {
+          const errorEmbed = new MessageEmbed()
+            .setTitle('Error')
+            .setDescription(`Code: **404**\nReason: The profile ${args.getString('profile')} was not found.`)
+            .setTimestamp(Date.now())
+            .setColor('RED');
+
+          await interaction.editReply({ embeds: [errorEmbed] });
+
+          return;
+        }
+      }
+
+      const player = profile.members[mojangJSON.id];
+      const alchemyXp: number = player.experience_skill_alchemy;
+
+      if (alchemyXp === null) {
         const errorEmbed = new MessageEmbed()
           .setTitle('Error')
-          .setDescription(`Code: **404**\nReason: The profile ${args.getString('profile')} was not found.`)
-          .setColor('RED');
+          .setDescription(`${player.game_mode === 'ironman' ? '<:ironman:932021735639891968>' : ''} ${mojangJSON.name} has their skill API disabled.`)
+          .setColor('RED')
+          .setFooter(`Profile: ${profile.cute_name}`)
+          .setTimestamp(Date.now());
 
         await interaction.editReply({ embeds: [errorEmbed] });
 
         return;
       }
 
-      const alchemyXp: number = profile.members[mojangJSON.id].experience_skill_alchemy;
-
       const skillEmbed = new MessageEmbed()
-        .setTitle(`Displaying Alchemy Stats for ${mojangJSON.name}`)
+        .setTitle(`Displaying Alchemy Stats for ${player.game_mode === 'ironman' ? '<:ironman:932021735639891968>' : ''} ${mojangJSON.name}`)
         .addField(`Alchemy ${SkillsUtil.getLevel(alchemyXp, 'ALCHEMY')}`,
           `${NumberUtil.format(alchemyXp, 2)} / ${NumberUtil.format(SkillsUtil.getXpForLevel(50), 2)} XP (${Math.round((alchemyXp / SkillsUtil.getXpForLevel(50)) * 10000) / 100}%) to Alchemy 50`)
         .setColor('PURPLE')
