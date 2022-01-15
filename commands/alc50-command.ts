@@ -76,10 +76,17 @@ module.exports = {
       const player = profile.members[mojangJSON.id];
       const alchemyXp: number = player.experience_skill_alchemy;
 
-      if (alchemyXp === null) {
+      let icon = '';
+      if (profile.game_mode === 'ironman') {
+        icon = '<:ironman:932021735639891968>';
+      } else if (profile.game_mode === 'bingo') {
+        icon = ':game_die:';
+      }
+
+      if (alchemyXp === undefined) {
         const errorEmbed = new MessageEmbed()
           .setTitle('Error')
-          .setDescription(`${profile.game_mode === 'ironman' ? '<:ironman:932021735639891968>' : ''}${mojangJSON.name} has their skill API disabled.`)
+          .setDescription(`${icon}${mojangJSON.name} has their skill API disabled.`)
           .setColor('RED')
           .setFooter(`Profile: ${profile.cute_name}`)
           .setTimestamp(Date.now());
@@ -90,7 +97,7 @@ module.exports = {
       }
 
       const skillEmbed = new MessageEmbed()
-        .setTitle(`Displaying Alchemy Stats for ${player.game_mode === 'ironman' ? '<:ironman:932021735639891968>' : ''} ${mojangJSON.name}`)
+        .setTitle(`Displaying Alchemy Stats for ${icon}${mojangJSON.name}`)
         .addField(`Alchemy ${SkillsUtil.getLevel(alchemyXp, 'ALCHEMY')}`,
           `${NumberUtil.format(alchemyXp, 2)} / ${NumberUtil.format(SkillsUtil.getXpForLevel(50), 2)} XP (${Math.round((alchemyXp / SkillsUtil.getXpForLevel(50)) * 10000) / 100}%) to Alchemy 50`)
         .setColor('PURPLE')
