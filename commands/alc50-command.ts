@@ -74,26 +74,13 @@ module.exports = {
       }
 
       const player = profile.members[mojangJSON.id];
-      const alchemyXp: number = player.experience_skill_alchemy;
+      const alchemyXp: number = player.experience_skill_alchemy ?? 0;
 
       let icon = '';
       if (profile.game_mode === 'ironman') {
         icon = '<:ironman:932021735639891968>';
       } else if (profile.game_mode === 'bingo') {
         icon = ':game_die:';
-      }
-
-      if (alchemyXp === undefined) {
-        const errorEmbed = new MessageEmbed()
-          .setTitle('Error')
-          .setDescription(`${mojangJSON.name} has their skill API disabled.`)
-          .setColor('RED')
-          .setFooter(`Profile: ${icon}${profile.cute_name}`)
-          .setTimestamp(Date.now());
-
-        await interaction.editReply({ embeds: [errorEmbed] });
-
-        return;
       }
 
       const skillEmbed = new MessageEmbed()
