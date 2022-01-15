@@ -79,7 +79,7 @@ module.exports = {
       if (alchemyXp === null) {
         const errorEmbed = new MessageEmbed()
           .setTitle('Error')
-          .setDescription(`${player.game_mode === 'ironman' ? '<:ironman:932021735639891968>' : ''} ${mojangJSON.name} has their skill API disabled.`)
+          .setDescription(`${profile.game_mode === 'ironman' ? '<:ironman:932021735639891968>' : ''}${mojangJSON.name} has their skill API disabled.`)
           .setColor('RED')
           .setFooter(`Profile: ${profile.cute_name}`)
           .setTimestamp(Date.now());
