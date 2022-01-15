@@ -86,9 +86,9 @@ module.exports = {
       if (alchemyXp === undefined) {
         const errorEmbed = new MessageEmbed()
           .setTitle('Error')
-          .setDescription(`${icon}${mojangJSON.name} has their skill API disabled.`)
+          .setDescription(`${mojangJSON.name} has their skill API disabled.`)
           .setColor('RED')
-          .setFooter(`Profile: ${profile.cute_name}`)
+          .setFooter(`Profile: ${icon}${profile.cute_name}`)
           .setTimestamp(Date.now());
 
         await interaction.editReply({ embeds: [errorEmbed] });
@@ -97,11 +97,11 @@ module.exports = {
       }
 
       const skillEmbed = new MessageEmbed()
-        .setTitle(`Displaying Alchemy Stats for ${icon}${mojangJSON.name}`)
+        .setTitle(`Displaying Alchemy Stats for ${mojangJSON.name}`)
         .addField(`Alchemy ${SkillsUtil.getLevel(alchemyXp, 'ALCHEMY')}`,
           `${NumberUtil.format(alchemyXp, 2)} / ${NumberUtil.format(SkillsUtil.getXpForLevel(50), 2)} XP (${Math.round((alchemyXp / SkillsUtil.getXpForLevel(50)) * 10000) / 100}%) to Alchemy 50`)
         .setColor('PURPLE')
-        .setFooter(`Profile: ${profile.cute_name}`)
+        .setFooter(`Profile: ${icon}${profile.cute_name}`)
         .setTimestamp(Date.now());
 
       interaction.editReply({ embeds: [skillEmbed] });
