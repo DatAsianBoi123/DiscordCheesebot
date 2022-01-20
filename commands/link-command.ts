@@ -16,7 +16,7 @@ module.exports = {
 
   listeners: {
     onExecute: async ({ interaction, user, args }) => {
-      interaction.deferReply({ ephemeral: true });
+      await interaction.deferReply({ ephemeral: true });
 
       await accountLinksModel.model.create({
         discord_id: user.id,
