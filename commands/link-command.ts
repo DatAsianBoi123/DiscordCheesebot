@@ -26,7 +26,9 @@ module.exports = {
       interaction.editReply('Done');
     },
     onError: async ({ interaction, error }) => {
-      interaction.deferred ? interaction.editReply(`Uh oh... ${error.name}`) : interaction.reply({ content: `Uh oh... ${error.name}`, ephemeral: true });
+      console.log('An error occurred when executing the link command');
+      console.log(error);
+      interaction.deferred ? interaction.editReply(`Uh oh... ${error.message}`) : interaction.reply({ content: `Uh oh... ${error.name}`, ephemeral: true });
     },
   },
 } as ICommand;
