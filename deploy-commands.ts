@@ -42,7 +42,12 @@ for (const file of commandFiles) {
 
 const rest = new REST({ version: '9' }).setToken(TOKEN);
 
-registerGuildApplicationCommands();
+registerGuildApplicationCommands().then(() => {
+  console.log('Successful!');
+}).catch(err => {
+  console.log('Oops, and error occurred');
+  console.error(err);
+});
 
 async function registerGuildApplicationCommands() {
   await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: guildCommands })
