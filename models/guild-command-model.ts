@@ -1,22 +1,22 @@
 import { Schema } from 'mongoose';
 import mongoose from 'mongoose';
 
-export interface IGuildCommand {
-  id: string,
-  application_id: string,
-  version: string,
-  default_permission: boolean,
-  default_member_permissions: Record<string, unknown>,
-  type: number,
-  name: string,
-  name_localizations: Record<string, unknown>,
-  description: string,
-  description_localizations: Record<string, unknown>,
-  guild_id: string,
-  options: Array<unknown>,
+export interface IGuildCommandModel {
+  id: string
+  application_id: string
+  version: string
+  default_permission: boolean
+  default_member_permissions: Record<string, unknown>
+  type: number
+  name: string
+  name_localizations: Record<string, unknown>
+  description: string
+  description_localizations: Record<string, unknown>
+  guild_id: string
+  options: Array<unknown>
 }
 
-const commandSchema = new Schema<IGuildCommand>({
+const schema = new Schema<IGuildCommandModel>({
   id: { type: String, required: true },
   application_id: { type: String, required: true },
   version: { type: String, required: true },
@@ -34,5 +34,5 @@ const commandSchema = new Schema<IGuildCommand>({
 });
 
 export default {
-  model: mongoose.model<IGuildCommand>('GuildApplicationCommand', commandSchema),
+  model: mongoose.model<IGuildCommandModel>('GuildApplicationCommand', schema),
 };
