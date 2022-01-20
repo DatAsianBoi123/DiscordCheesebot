@@ -25,5 +25,8 @@ module.exports = {
 
       interaction.editReply('Done');
     },
+    onError: async ({ interaction, error }) => {
+      interaction.deferred ? interaction.editReply(`Uh oh... ${error.name}`) : interaction.reply({ content: `Uh oh... ${error.name}`, ephemeral: true });
+    },
   },
 } as ICommand;
