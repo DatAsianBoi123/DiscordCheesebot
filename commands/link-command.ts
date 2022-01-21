@@ -3,6 +3,7 @@ import { MessageEmbed } from 'discord.js';
 import { API_KEY } from '../config';
 import accountLinksModel from '../models/account-links-model';
 import { ICommand } from '../typings';
+import fetch from 'node-fetch';
 
 module.exports = {
   data: new SlashCommandBuilder()
