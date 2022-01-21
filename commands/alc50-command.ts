@@ -51,6 +51,12 @@ module.exports = {
         return;
       }
 
+      if (!hypixelJSON.profiles) {
+        await interaction.editReply('That player never joined skyblock');
+
+        return;
+      }
+
       let profile = args.getString('profile') ? null : hypixelJSON.profiles[0];
 
       if (!profile) {
@@ -64,7 +70,7 @@ module.exports = {
           const errorEmbed = new MessageEmbed()
             .setTitle('Error')
             .setDescription(`Code: **404**\nReason: The profile ${args.getString('profile')} was not found.`)
-            .setTimestamp(Date.now())
+            .setTimestamp()
             .setColor('RED');
 
           await interaction.editReply({ embeds: [errorEmbed] });
