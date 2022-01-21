@@ -29,9 +29,7 @@ const schema = new Schema<IGuildCommandModel>({
   description_localizations: Object,
   guild_id: { type: String, required: true },
   options: Array,
-}, {
-  timestamps: true,
-});
+}, { timestamps: true });
 
 export default {
   model: mongoose.model<IGuildCommandModel>('GuildApplicationCommand', schema),
