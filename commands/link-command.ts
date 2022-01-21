@@ -51,7 +51,7 @@ module.exports = {
         return;
       }
 
-      if (hypixelJSON.player.socialMedia.links.DISCORD !== user.tag) {
+      if (hypixelJSON.player.socialMedia?.links?.DISCORD !== user.tag) {
         await interaction.editReply('Your discord account is not linked with your hypixel account!');
 
         return;
