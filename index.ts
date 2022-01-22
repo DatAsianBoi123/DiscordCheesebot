@@ -41,7 +41,7 @@ async function start() {
         continue;
       }
     } catch (err) {
-      console.log(`An error occurred when registering command ${command.data.name} in file ${file}: ${err.message}`);
+      console.log(`An error occurred when registering the command in file ${file}: ${err.message}`);
 
       continue;
     }
