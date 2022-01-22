@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { ICommand } from '../typings';
+import { ICommand, MinecraftUserFetchModel, SkyblockProfilesFetchModel } from '../typings';
 import { API_KEY } from '../config';
 import fetch from 'node-fetch';
 import { MessageEmbed } from 'discord.js';
@@ -35,10 +35,10 @@ module.exports = {
         return;
       }
 
-      const mojangJSON = await mojangData.json();
+      const mojangJSON = await mojangData.json() as MinecraftUserFetchModel;
 
       const hypixelData = await fetch(`https://api.hypixel.net/skyblock/profiles?uuid=${mojangJSON.id}&key=${API_KEY}`);
-      const hypixelJSON = await hypixelData.json();
+      const hypixelJSON = await hypixelData.json() as SkyblockProfilesFetchModel;
 
       if (!hypixelJSON.success) {
         const errorEmbed = new MessageEmbed()
@@ -83,10 +83,18 @@ module.exports = {
       const alchemyXp: number = player.experience_skill_alchemy ?? 0;
 
       let icon = '';
-      if (profile.game_mode === 'ironman') {
+      switch (profile.game_mode) {
+      case 'bingo':
+        icon = 'game_die';
+        break;
+
+      case 'ironman':
         icon = '<:ironman:932021735639891968>';
-      } else if (profile.game_mode === 'bingo') {
-        icon = ':game_die:';
+        break;
+
+      case 'island':
+        icon = ':island:';
+        break;
       }
 
       const skillEmbed = new MessageEmbed()

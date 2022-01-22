@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import { MessageEmbed } from 'discord.js';
 import { API_KEY } from '../config';
 import accountLinksModel from '../models/account-links-model';
-import { ICommand } from '../typings';
+import { HypixelPlayerFetchModel, ICommand, MinecraftUserFetchModel } from '../typings';
 import fetch from 'node-fetch';
 
 module.exports = {
@@ -29,10 +29,10 @@ module.exports = {
         return;
       }
 
-      const mojangJSON = await mojangData.json();
+      const mojangJSON = await mojangData.json() as MinecraftUserFetchModel;
 
       const hypixelData = await fetch(`https://api.hypixel.net/player?uuid=${mojangJSON.id}&key=${API_KEY}`);
-      const hypixelJSON = await hypixelData.json();
+      const hypixelJSON = await hypixelData.json() as HypixelPlayerFetchModel;
 
       if (!hypixelJSON.success) {
         const errorEmbed = new MessageEmbed()
