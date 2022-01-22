@@ -19,7 +19,7 @@ module.exports = {
 
   listeners: {
     onExecute: async ({ interaction, user, args }) => {
-      await interaction.deferReply({ ephemeral: true });
+      await interaction.deferReply();
 
       const mojangData = await fetch(`https://api.mojang.com/users/profiles/minecraft/${args.getString('name')}`);
 
@@ -52,7 +52,7 @@ module.exports = {
       }
 
       if (hypixelJSON.player.socialMedia?.links?.DISCORD !== user.tag) {
-        await interaction.editReply('Your discord account is not linked with your hypixel account!');
+        await interaction.editReply('That hypixel account is not linked with your discord account!');
 
         return;
       }
@@ -65,15 +65,11 @@ module.exports = {
       const embed = new MessageEmbed()
         .setTitle('Success!')
         .setDescription(`Successfully linked your discord account with the minecraft account ${mojangJSON.name}`)
+        .setFooter({ text: `Minecraft UUID: ${mojangJSON.id}, Discord ID: ${user.id}` })
         .setTimestamp()
         .setColor('GREEN');
 
       interaction.editReply({ embeds: [embed] });
-    },
-    onError: async ({ interaction, error }) => {
-      console.log('An error occurred when executing the link command');
-      console.log(error);
-      interaction.deferred ? interaction.editReply(`Uh oh... ${error.message}`) : interaction.reply({ content: `Uh oh... ${error.name}`, ephemeral: true });
     },
   },
 } as ICommand;
