@@ -20,6 +20,8 @@ module.exports = {
 
   listeners: {
     onExecute: async ({ interaction, args, user: author }) => {
+      await interaction.deferReply();
+
       const user = args.getUser('user') ?? author;
 
       switch (args.getSubcommand()) {
@@ -33,7 +35,7 @@ module.exports = {
           });
         }
 
-        interaction.reply(`${user.username} has ${model.balance} burgis bucks`);
+        interaction.editReply(`${user.username} has ${model.balance} burgis bucks`);
 
         break;
       }
