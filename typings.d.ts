@@ -1,13 +1,14 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { CacheType, Client, CommandInteraction, CommandInteractionOptionResolver, Guild, TextBasedChannel, ThreadChannelTypes, User } from 'discord.js';
+import { CacheType, Client, CommandInteraction, CommandInteractionOptionResolver, Guild, GuildMember, TextBasedChannel, ThreadChannelTypes, User } from 'discord.js';
 
 interface ICallbackObject {
   channel: TextBasedChannel;
   client: Client;
-  guild: Guild;
+  guild?: Guild;
   args: Omit<CommandInteractionOptionResolver<CacheType>, 'getMessage' | 'getFocused'>;
   interaction: CommandInteraction;
   user: User;
+  member?: GuildMember;
 }
 
 interface IErrorObject {

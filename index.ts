@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { Client, Collection, Intents, InteractionReplyOptions } from 'discord.js';
+import { Client, Collection, GuildMember, Intents, InteractionReplyOptions } from 'discord.js';
 import { MONGO_PASS, TOKEN } from './config';
 import { ICommand } from './typings';
 import mongoose from 'mongoose';
@@ -75,7 +75,7 @@ async function start() {
     if (disallowedTextChannels.includes(interaction.channel.type)) return interaction.reply('This command is not enabled here');
 
     try {
-      await command.listeners.onExecute({ interaction: interaction, channel: interaction.channel, args: interaction.options, client: interaction.client, guild: interaction.guild, user: interaction.user });
+      await command.listeners.onExecute({ interaction: interaction, channel: interaction.channel, args: interaction.options, client: interaction.client, guild: interaction.guild, user: interaction.user, member: interaction.member as GuildMember });
     } catch (error) {
       console.error(error);
 
