@@ -37,6 +37,7 @@ module.exports = {
     }),
 
   type: 'GUILD',
+  skip: true,
 
   listeners: {
     onExecute: async ({ interaction, args, channel }) => {
