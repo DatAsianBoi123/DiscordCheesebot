@@ -1,8 +1,8 @@
 import { model, Schema } from 'mongoose';
 
 export interface IAccountLinkModel {
-  minecraft_uuid: string
-  discord_id: string
+  minecraft_uuid: string;
+  discord_id: string;
 }
 
 const schema = new Schema<IAccountLinkModel>({

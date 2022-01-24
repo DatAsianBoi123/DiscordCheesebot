@@ -37,7 +37,9 @@
 		"object-curly-spacing": ["error", "always"],
 		"prefer-const": "error",
 		"quotes": ["error", "single"],
-		"semi": ["error", "always"],
+		"semi": "off",
+		"@typescript-eslint/semi": ["error"],
+		"@typescript-eslint/member-delimiter-style": ["error"],
 		"space-before-blocks": "error",
 		"space-before-function-paren": ["error", {
 			"anonymous": "never",
