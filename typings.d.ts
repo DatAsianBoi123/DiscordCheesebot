@@ -17,7 +17,7 @@ interface IErrorObject {
 }
 
 interface IListeners {
-  onExecute(obj: ICallbackObject): Promise<void>;
+  onExecute(obj: ICallbackObject): Promise<unknown>;
   onError?(obj: IErrorObject): Promise<void>;
 }
 
