@@ -79,6 +79,19 @@ type SkyblockGameModes = 'bingo' | 'ironman' | 'island';
 
 type BankTransactionActions = 'DEPOSIT' | 'WITHDRAW';
 
+export interface IClientOptions {
+  guildId: string;
+  mongoURI?: string;
+  logInfo?: boolean;
+}
+
+export interface IDeployCommandsOptions {
+  token: string;
+  guildId: string;
+  userId: string;
+  logInfo?: boolean;
+}
+
 export interface ICommand {
   data: SlashCommandBuilder;
   skip?: boolean;
@@ -86,6 +99,8 @@ export interface ICommand {
   type: 'GUILD' | 'GLOBAL';
   listeners: IListeners;
 }
+
+export type LoggerLevels = 'DEBUG' | 'INFO' | 'WARNING' | 'ERROR' | 'CRITICAL';
 
 export type MinecraftUserFetchModel = {
   name: string;
