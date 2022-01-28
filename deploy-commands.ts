@@ -22,6 +22,11 @@ for (const file of commandFiles) {
     continue;
   }
 
+  if (command.skip) {
+    BurgerClient.logger.log(`Skipped command ${command.data.name}.`);
+    continue;
+  }
+
   allCommands.push(command);
 }
 
