@@ -87,7 +87,7 @@ export class BurgerClient {
     return this._commands.clone();
   }
 
-  public static deployCommands(options: IDeployCommandsOptions, commands: ICommand[], logInfo = true) {
+  public static async deployCommands(options: IDeployCommandsOptions, commands: ICommand[], logInfo = true) {
     options.logInfo ??= true;
 
     const rest = new REST({ version: '9' }).setToken(options.token);
@@ -115,13 +115,10 @@ export class BurgerClient {
     for (const command of commands) {
       if (options.logInfo) BurgerClient.logger.log(`Loaded command ${command.data.name}.`);
       command.type === 'GUILD' ? guildCommands.push(command.data.toJSON()) : globalCommands.push(command.data.toJSON());
-
-      deployGuildCommands(guildCommands).then(() => {
-        deployGlobalCommands(globalCommands).then(() => {
-          BurgerClient.logger.log('Done!');
-        });
-      });
     }
+
+    await deployGuildCommands(guildCommands);
+    await deployGlobalCommands(globalCommands);
   }
 
   public static isValid(command: ICommand) {
