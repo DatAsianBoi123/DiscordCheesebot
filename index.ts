@@ -1,95 +1,43 @@
 import fs from 'fs';
-import { Client, Collection, GuildMember, Intents, InteractionReplyOptions } from 'discord.js';
-import { MONGO_PASS, TOKEN } from './config';
+import { Client, Intents } from 'discord.js';
+import { GUILD_ID, MONGO_PASS, TOKEN } from './config';
+import { BurgerClient } from './api/burger-client';
 import { ICommand } from './typings';
-import mongoose from 'mongoose';
-import guildCommandModel from './models/guild-command-model';
-import cache from './cache';
 
 const client = new Client({ intents: Intents.FLAGS.GUILDS });
 
-const uri = `mongodb+srv://DatAsianBoi123:${MONGO_PASS}@mydiscordbot.xudyc.mongodb.net/discord-bot?retryWrites=true&w=majority`;
-mongoose.connect(uri).then(async () => {
-  console.log('Connected to MongoDB');
+let burgerClient: BurgerClient;
 
-  guildCommandModel.model.find({}, (err, allCommands) => {
-    if (err) return console.error(err);
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.ts'));
 
-    cache.guildCommandCache.clear();
-
-    for (const command of allCommands) {
-      cache.guildCommandCache.set(command.id, command);
-    }
-
-    start();
+client.once('ready', async () => {
+  burgerClient = new BurgerClient(client, {
+    guildId: GUILD_ID,
+    mongoURI: `mongodb+srv://DatAsianBoi123:${MONGO_PASS}@mydiscordbot.xudyc.mongodb.net/discord-bot?retryWrites=true&w=majority`,
   });
-}).catch(() => console.log('An error occurred when connecting to MongoDB'));
-
-async function start() {
-  const commands = new Collection<string, ICommand>();
-  const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.ts'));
 
   for (const file of commandFiles) {
-    let command: ICommand = null;
+    let command: ICommand;
 
     try {
       command = require(`./commands/${file}`);
-
-      if (!command?.data || !command?.type || !command?.listeners?.onExecute) {
-        console.log(`Command in file ${file} is not registered correctly, skipping`);
-
-        continue;
-      }
     } catch (err) {
-      console.log(`An error occurred when registering the command in file ${file}: ${err.message}`);
-
+      BurgerClient.logger.log(`An error occurred when registering the command in file ${file}: ${err.message}`, 'ERROR');
       continue;
     }
 
-    if (command.skip) {
-      console.log(`Skipped command ${command.data.name}`);
-
-      continue;
-    }
-
-    console.log(`Registered command ${command.data.name} in file ${file}`);
-
-    commands.set(command.data.name, command);
+    burgerClient.registerCommand(command, file);
   }
 
-  client.once('ready', async () => {
-    console.log(`Ready! Logged in as ${client.user.tag}`);
+  console.log(`Ready! Logged in as ${client.user.tag}`);
 
-    client.user.setActivity({ name: 'everything', type: 'WATCHING' });
-  });
+  client.user.setActivity({ name: 'everything', type: 'WATCHING' });
+});
 
-  client.on('interactionCreate', async interaction => {
-    if (!interaction.isCommand()) return;
+client.on('interactionCreate', async interaction => {
+  if (!interaction.isCommand()) return;
 
-    const command = commands.get(interaction.commandName);
+  await burgerClient.resolveCommand(interaction);
+});
 
-    if (!command) return;
-
-    const disallowedTextChannels = command.disallowedTextChannels ?? [];
-
-    if (disallowedTextChannels.includes(interaction.channel.type)) return interaction.reply('This command is not enabled here');
-
-    try {
-      await command.listeners.onExecute({ interaction: interaction, channel: interaction.channel, args: interaction.options, client: interaction.client, guild: interaction.guild, user: interaction.user, member: interaction.member as GuildMember });
-    } catch (error) {
-      console.error(error);
-
-      if (command.listeners.onError) {
-        command.listeners.onError({ interaction, error });
-      } else {
-        const reply: InteractionReplyOptions = {
-          content: 'There was an error executing this command',
-        };
-
-        interaction.replied || interaction.deferred ? interaction.editReply(reply) : interaction.reply(reply);
-      }
-    }
-  });
-
-  client.login(TOKEN);
-}
+client.login(TOKEN);
