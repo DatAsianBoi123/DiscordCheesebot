@@ -81,6 +81,7 @@ type BankTransactionActions = 'DEPOSIT' | 'WITHDRAW';
 
 export interface IClientOptions {
   guildId: string;
+  adminRoleId: string;
   mongoURI?: string;
   logInfo?: boolean;
 }
@@ -96,6 +97,7 @@ export interface ICommand {
   data: SlashCommandBuilder;
   skip?: boolean;
   disallowedTextChannels?: ('DM' | 'GUILD_TEXT' | 'GUILD_NEWS' | ThreadChannelTypes)[];
+  adminCommand?: boolean;
   type: 'GUILD' | 'GLOBAL';
   listeners: IListeners;
 }
