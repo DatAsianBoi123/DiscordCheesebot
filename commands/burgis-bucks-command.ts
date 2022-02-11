@@ -95,7 +95,7 @@ module.exports = {
         case 'ADD':
           const buckModel = await burgisBuckModel.model.findOne({ id: user.id }) ?? await burgisBuckModel.model.create({ id: user.id, balance: 0 });
 
-          buckModel.update({ $set: { balance: buckModel.balance + args.getInteger('amount') } });
+          await buckModel.update({ $set: { balance: buckModel.balance + args.getInteger('amount') } });
 
           interaction.editReply(`Successfully added ${args.getInteger('amount')} to ${user.username}'s account`);
 
