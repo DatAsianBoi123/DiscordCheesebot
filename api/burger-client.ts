@@ -65,9 +65,8 @@ export class BurgerClient {
 
     if (disallowedTextChannels.includes(interaction.channel.type)) return interaction.reply('This command is not enabled here');
 
-    try {
-      await command.listeners.onExecute({ interaction: interaction, channel: interaction.channel, args: interaction.options, client: interaction.client, guild: interaction.guild, user: interaction.user, member: interaction.member as GuildMember });
-    } catch (error) {
+    await command.listeners.onExecute({ interaction: interaction, channel: interaction.channel, args: interaction.options, client: interaction.client, guild: interaction.guild, user: interaction.user, member: interaction.member as GuildMember }).catch(error => {
+      BurgerClient.logger.log(`An error occurred when executing command ${command.data.name}: ${error.message}`);
       if (command.listeners.onError) {
         command.listeners.onError({ interaction, error });
       } else {
@@ -77,7 +76,7 @@ export class BurgerClient {
 
         interaction.replied || interaction.deferred ? interaction.editReply(reply) : interaction.reply(reply);
       }
-    }
+    });
   }
 
   public getClient() {
@@ -96,11 +95,7 @@ export class BurgerClient {
     const deployGuildCommands = async (guildCommands: unknown[]) => {
       await rest.put(Routes.applicationGuildCommands(options.userId, options.guildId), { body: guildCommands })
         .catch(err => {
-          BurgerClient.logger.log(`An error occurred when deploying guild commands: ${err.name}`, 'ERROR');
-          BurgerClient.logger.log('-------------------');
-          BurgerClient.logger.log('Stacktrace:');
-          BurgerClient.logger.log(err.stack);
-          BurgerClient.logger.log('-------------------');
+          BurgerClient.logger.log(`An error occurred when deploying guild commands: ${err.message}`, 'ERROR');
           return;
         });
       if (logInfo) BurgerClient.logger.log(`Successfully registered ${guildCommands.length} guild commands.`);
