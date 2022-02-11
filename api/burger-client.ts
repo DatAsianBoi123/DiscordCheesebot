@@ -96,7 +96,7 @@ export class BurgerClient {
     const deployGuildCommands = async (guildCommands: unknown[]) => {
       await rest.put(Routes.applicationGuildCommands(options.userId, options.guildId), { body: guildCommands })
         .catch(err => {
-          BurgerClient.logger.log(`An error occurred when deploying guild commands: ${err.name}: ${err.message}`, 'ERROR');
+          BurgerClient.logger.log(`An error occurred when deploying guild commands: ${err.name}`, 'ERROR');
           BurgerClient.logger.log('-------------------');
           BurgerClient.logger.log('Stacktrace:');
           BurgerClient.logger.log(err.stack);
