@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
+import { MessageEmbed } from 'discord.js';
 import burgisBuckModel from '../models/burgis-buck-model';
 import { ICommand } from '../typings';
 
@@ -28,6 +29,28 @@ module.exports = {
             .setDescription('The amount to set by')
             .setRequired(true);
         });
+    })
+    .addSubcommand(subcommand => {
+      return subcommand.setName('operation')
+        .setDescription('Performs an operation on a user')
+        .addStringOption(option => {
+          return option.setName('operation')
+            .setDescription('The operation')
+            .addChoices([
+              ['add', 'ADD'],
+              ['subtract', 'SUBTRACT'],
+            ]);
+        })
+        .addUserOption(option => {
+          return option.setName('user')
+            .setDescription('The user')
+            .setRequired(true);
+        })
+        .addIntegerOption(option => {
+          return option.setName('amount')
+            .setDescription('The amount')
+            .setRequired(true);
+        });
     }),
 
   type: 'GUILD',
@@ -41,16 +64,15 @@ module.exports = {
 
       switch (args.getSubcommand()) {
       case 'bal':
-        let model = await burgisBuckModel.model.findOne({ id: user.id });
+        const model = await burgisBuckModel.model.findOne({ id: user.id }) ?? await burgisBuckModel.model.create({ id: user.id, balance: 0 });
 
-        if (!model) {
-          model = await burgisBuckModel.model.create({
-            id: user.id,
-            balance: 0,
-          });
-        }
+        const embed = new MessageEmbed()
+          .setTitle(user.username)
+          .addField('Balance', model.balance.toString())
+          .setTimestamp()
+          .setColor('ORANGE');
 
-        interaction.editReply(`${user.username} has ${model.balance} burgis bucks`);
+        interaction.editReply({ embeds: [embed] });
 
         break;
 
@@ -62,6 +84,22 @@ module.exports = {
         await burgisBuckModel.model.updateOne({ id: user.id }, { $set: { balance: amount } }, { upsert: true });
 
         interaction.editReply(`Successfully set ${user.username}'s burgis bucks to ${amount}`);
+
+        break;
+
+      case 'operation':
+        if (!interaction.memberPermissions?.has('MANAGE_GUILD')) return interaction.editReply('You do not have permission to use this command');
+
+        switch (args.getString('operation')) {
+        case 'ADD':
+          const buckModel = await burgisBuckModel.model.findOne({ id: user.id }) ?? await burgisBuckModel.model.create({ id: user.id, balance: 0 });
+
+          buckModel.update({ $set: { balance: buckModel.balance + args.getInteger('amount') } });
+
+          interaction.reply(`Successfully added ${args.getInteger('amount')} to ${user.username}'s account`);
+
+          break;
+        }
 
         break;
       }
