@@ -39,7 +39,8 @@ module.exports = {
             .addChoices([
               ['add', 'ADD'],
               ['subtract', 'SUBTRACT'],
-            ]);
+            ])
+            .setRequired(true);
         })
         .addUserOption(option => {
           return option.setName('user')
