@@ -13,6 +13,7 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 client.once('ready', async () => {
   burgerClient = new BurgerClient(client, {
     guildId: GUILD_ID,
+    adminRoleId: '738963940712906793',
     mongoURI: `mongodb+srv://DatAsianBoi123:${MONGO_PASS}@mydiscordbot.xudyc.mongodb.net/discord-bot?retryWrites=true&w=majority`,
   });
 
@@ -28,8 +29,6 @@ client.once('ready', async () => {
 
     burgerClient.registerCommand(command, file);
   }
-
-  console.log(`Ready! Logged in as ${client.user.tag}`);
 
   client.user.setActivity({ name: 'everything', type: 'WATCHING' });
 });
