@@ -95,9 +95,8 @@ export class BurgerClient {
 
     const deployGuildCommands = async (guildCommands: unknown[]) => {
       await rest.put(Routes.applicationGuildCommands(options.userId, options.guildId), { body: guildCommands })
-        .catch(() => {
-          BurgerClient.logger.log('An error occurred when deploying guild commands.', 'CRITICAL');
-          process.exit(1);
+        .catch(err => {
+          BurgerClient.logger.log(`An error occurred when deploying guild commands: ${err.name}`, 'ERROR');
         });
       if (logInfo) BurgerClient.logger.log(`Successfully registered ${guildCommands.length} guild commands.`);
     };
@@ -105,7 +104,7 @@ export class BurgerClient {
     const deployGlobalCommands = async (globalCommands: unknown[]) => {
       await rest.put(Routes.applicationCommands(options.userId), { body: globalCommands })
         .catch(() => {
-          BurgerClient.logger.log('An error occurred when deploying global commands.', 'CRITICAL');
+          BurgerClient.logger.log('An error occurred when deploying global commands.', 'ERROR');
         });
       if (logInfo) BurgerClient.logger.log(`Successfully registered ${globalCommands.length} global commands.`);
     };
