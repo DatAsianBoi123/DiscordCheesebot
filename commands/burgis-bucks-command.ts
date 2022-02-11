@@ -62,14 +62,13 @@ module.exports = {
       await interaction.deferReply();
 
       const user = args.getUser('user') ?? author;
+      const buckModel = await burgisBuckModel.model.findOne({ id: user.id }) ?? await burgisBuckModel.model.create({ id: user.id, balance: 0 });
 
       switch (args.getSubcommand()) {
       case 'bal':
-        const model = await burgisBuckModel.model.findOne({ id: user.id }) ?? await burgisBuckModel.model.create({ id: user.id, balance: 0 });
-
         const embed = new MessageEmbed()
           .setTitle(user.username)
-          .addField('Balance', model.balance.toString())
+          .addField('Balance', buckModel.balance.toString())
           .setTimestamp()
           .setColor('ORANGE');
 
@@ -93,11 +92,16 @@ module.exports = {
 
         switch (args.getString('operation')) {
         case 'ADD':
-          const buckModel = await burgisBuckModel.model.findOne({ id: user.id }) ?? await burgisBuckModel.model.create({ id: user.id, balance: 0 });
-
           await buckModel.update({ $set: { balance: buckModel.balance + args.getInteger('amount') } });
 
           interaction.editReply(`Successfully added ${args.getInteger('amount')} to ${user.username}'s account`);
+
+          break;
+
+        case 'SUBTRACT':
+          await buckModel.update({ $set: { balance: buckModel.balance - args.getInteger('amount') } });
+
+          interaction.editReply(`Successfully subtracted ${args.getInteger('amount')} to ${user.username}'s account`);
 
           break;
         }
