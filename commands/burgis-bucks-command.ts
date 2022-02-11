@@ -97,7 +97,7 @@ module.exports = {
 
           buckModel.update({ $set: { balance: buckModel.balance + args.getInteger('amount') } });
 
-          interaction.reply(`Successfully added ${args.getInteger('amount')} to ${user.username}'s account`);
+          interaction.editReply(`Successfully added ${args.getInteger('amount')} to ${user.username}'s account`);
 
           break;
         }
