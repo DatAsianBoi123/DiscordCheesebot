@@ -141,7 +141,7 @@ export class BurgerClient {
         guildCommandModels.push({ id, name, description, guild_id });
       }
 
-      await guildCommandModel.model.deleteMany();
+      await guildCommandModel.model.deleteMany({});
       guildCommandModel.model.create(guildCommandModels);
     }
   }
