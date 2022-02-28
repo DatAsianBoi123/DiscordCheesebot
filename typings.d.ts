@@ -90,6 +90,7 @@ export interface IDeployCommandsOptions {
   token: string;
   guildId: string;
   userId: string;
+  mongoURI?: string;
   logInfo?: boolean;
 }
 

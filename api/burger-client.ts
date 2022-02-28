@@ -4,6 +4,7 @@ import { IClientOptions, ICommand, IDeployCommandsOptions } from '../typings';
 import mongoose from 'mongoose';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
+import guildCommandModel from '../models/guild-command-model';
 
 export class BurgerClient {
   public static readonly logger = new Logger('Burger Client');
@@ -66,7 +67,7 @@ export class BurgerClient {
     if (disallowedTextChannels.includes(interaction.channel.type)) return interaction.reply('This command is not enabled here');
 
     await command.listeners.onExecute({ interaction: interaction, channel: interaction.channel, args: interaction.options, client: interaction.client, guild: interaction.guild, user: interaction.user, member: interaction.member as GuildMember }).catch(error => {
-      BurgerClient.logger.log(`An error occurred when executing command ${command.data.name}: ${error.message}`);
+      BurgerClient.logger.log(`An error occurred when executing command ${command.data.name}: ${error.message}`, 'ERROR');
       if (command.listeners.onError) {
         command.listeners.onError({ interaction, error });
       } else {
@@ -87,8 +88,19 @@ export class BurgerClient {
     return this._commands.clone();
   }
 
-  public static async deployCommands(options: IDeployCommandsOptions, commands: ICommand[], logInfo = true) {
+  public static async deployCommands(options: IDeployCommandsOptions, commands: ICommand[]) {
     options.logInfo ??= true;
+
+    if (options.mongoURI) {
+      if (!mongoose.connection) {
+        await mongoose.connect(options.mongoURI).then(() => {
+          if (options.logInfo) this.logger.log('Connected to MongoDB.');
+        }).catch(() => {
+          this.logger.log('An error occurred when connecting to MongoDB.', 'ERROR');
+          return;
+        });
+      }
+    }
 
     const rest = new REST({ version: '9' }).setToken(options.token);
 
@@ -98,7 +110,7 @@ export class BurgerClient {
           BurgerClient.logger.log(`An error occurred when deploying guild commands: ${err.message}`, 'ERROR');
           return;
         });
-      if (logInfo) BurgerClient.logger.log(`Successfully registered ${guildCommands.length} guild commands.`);
+      if (options.logInfo) BurgerClient.logger.log(`Successfully registered ${guildCommands.length} guild commands.`);
     };
 
     const deployGlobalCommands = async (globalCommands: unknown[]) => {
@@ -107,7 +119,7 @@ export class BurgerClient {
           BurgerClient.logger.log('An error occurred when deploying global commands.', 'ERROR');
           return;
         });
-      if (logInfo) BurgerClient.logger.log(`Successfully registered ${globalCommands.length} global commands.`);
+      if (options.logInfo) BurgerClient.logger.log(`Successfully registered ${globalCommands.length} global commands.`);
     };
 
     const guildCommands = [];
@@ -120,6 +132,18 @@ export class BurgerClient {
 
     await deployGuildCommands(guildCommands);
     await deployGlobalCommands(globalCommands);
+
+    if (mongoose.connection) {
+      const guildCommandModels = [];
+
+      for (const command of guildCommands) {
+        const { id, name, description, guild_id } = command;
+        guildCommandModels.push({ id, name, description, guild_id });
+      }
+
+      await guildCommandModel.model.deleteMany();
+      guildCommandModel.model.create(guildCommandModels);
+    }
   }
 
   public static isValid(command: ICommand) {

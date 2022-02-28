@@ -1,7 +1,7 @@
 import { BurgerClient } from './api/burger-client';
 import fs from 'fs';
 import { ICommand } from './typings';
-import { CLIENT_ID, GUILD_ID, TOKEN } from './config';
+import { CLIENT_ID, GUILD_ID, MONGO_PASS, TOKEN } from './config';
 
 const allCommands = [];
 
@@ -34,4 +34,5 @@ BurgerClient.deployCommands({
   guildId: GUILD_ID,
   token: TOKEN,
   userId: CLIENT_ID,
+  mongoURI: `mongodb+srv://DatAsianBoi123:${MONGO_PASS}@mydiscordbot.xudyc.mongodb.net/discord-bot?retryWrites=true&w=majority`,
 }, allCommands);
