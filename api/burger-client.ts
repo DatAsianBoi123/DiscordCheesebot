@@ -137,12 +137,13 @@ export class BurgerClient {
       const guildCommandModels = [];
 
       for (const command of guildCommands) {
+        console.log(command);
         const { id, name, description, guild_id } = command;
         guildCommandModels.push({ id, name, description, guild_id });
       }
 
       await guildCommandModel.model.deleteMany({});
-      guildCommandModel.model.create(guildCommandModels);
+      await guildCommandModel.model.create(guildCommandModels);
     }
   }
 
