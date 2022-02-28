@@ -11,7 +11,7 @@ export class Logger {
   public log(message: string, level: LoggerLevels = 'INFO') {
     switch (level) {
     case 'DEBUG':
-      console.log(chalk.blue(`${this.name}> `) + message);
+      console.log(chalk.blue(`${this.name}>`) + ` ${message}`);
       break;
 
     case 'INFO':
@@ -19,15 +19,15 @@ export class Logger {
       break;
 
     case 'WARNING':
-      console.log(chalk.bgYellow(`${this.name}> `) + message);
+      console.log(chalk.bgYellow(`${this.name}>`) + ` ${message}`);
       break;
 
     case 'ERROR':
-      console.log(chalk.red(`${this.name}> `) + message);
+      console.log(chalk.red(`${this.name}>`) + ` ${message}`);
       break;
 
     case 'CRITICAL':
-      console.log(chalk.bgRed(`${this.name}> `) + message);
+      console.log(chalk.bgRed(`${this.name}>`) + ` ${message}`);
       break;
     }
   }
