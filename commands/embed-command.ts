@@ -37,7 +37,8 @@ module.exports = {
     }),
 
   type: 'GUILD',
-  skip: true,
+  adminCommand: true,
+  skip: false,
 
   listeners: {
     onExecute: async ({ interaction, args, channel }) => {
