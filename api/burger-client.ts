@@ -148,6 +148,7 @@ export class BurgerClient {
 
       await guildCommandModel.model.deleteMany({});
       await guildCommandModel.model.create(guildCommandModels);
+      if (options.logInfo) this.logger.log('Populated guild commands');
     }
   }
 
