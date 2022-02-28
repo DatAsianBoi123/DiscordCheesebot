@@ -35,4 +35,6 @@ BurgerClient.deployCommands({
   token: TOKEN,
   userId: CLIENT_ID,
   mongoURI: `mongodb+srv://DatAsianBoi123:${MONGO_PASS}@mydiscordbot.xudyc.mongodb.net/discord-bot?retryWrites=true&w=majority`,
-}, allCommands);
+}, allCommands).then(() => {
+  process.exit(0);
+});
