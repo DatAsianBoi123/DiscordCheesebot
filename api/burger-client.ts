@@ -106,6 +106,9 @@ export class BurgerClient {
 
     const deployGuildCommands = async (guildCommands: unknown[]) => {
       await rest.put(Routes.applicationGuildCommands(options.userId, options.guildId), { body: guildCommands })
+        .then(allGuildCommands => {
+          deployedGuildCommands = allGuildCommands as unknown[];
+        })
         .catch(err => {
           BurgerClient.logger.log(`An error occurred when deploying guild commands: ${err.message}`, 'ERROR');
           return;
@@ -125,6 +128,8 @@ export class BurgerClient {
     const guildCommands = [];
     const globalCommands = [];
 
+    let deployedGuildCommands = [];
+
     for (const command of commands) {
       if (options.logInfo) BurgerClient.logger.log(`Loaded command ${command.data.name}.`);
       command.type === 'GUILD' ? guildCommands.push(command.data.toJSON()) : globalCommands.push(command.data.toJSON());
@@ -136,7 +141,7 @@ export class BurgerClient {
     if (mongoose.connection.readyState === 1) {
       const guildCommandModels = [];
 
-      for (const command of guildCommands) {
+      for (const command of deployedGuildCommands) {
         console.log(command);
         const { id, name, description, guild_id } = command;
         guildCommandModels.push({ id, name, description, guild_id });
