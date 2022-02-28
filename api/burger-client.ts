@@ -92,7 +92,7 @@ export class BurgerClient {
     options.logInfo ??= true;
 
     if (options.mongoURI) {
-      if (!mongoose.connection) {
+      if (mongoose.connection.readyState !== 1) {
         await mongoose.connect(options.mongoURI).then(() => {
           if (options.logInfo) this.logger.log('Connected to MongoDB.');
         }).catch(() => {
@@ -133,7 +133,7 @@ export class BurgerClient {
     await deployGuildCommands(guildCommands);
     await deployGlobalCommands(globalCommands);
 
-    if (mongoose.connection) {
+    if (mongoose.connection.readyState === 1) {
       const guildCommandModels = [];
 
       for (const command of guildCommands) {
