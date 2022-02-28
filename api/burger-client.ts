@@ -13,7 +13,7 @@ export class BurgerClient {
   private _options: IClientOptions;
   private _commands = new Collection<string, ICommand>();
 
-  constructor(client: Client, options: IClientOptions) {
+  constructor(client: Client, options: IClientOptions, callback = () => {return;}) {
     if (!client.isReady()) {
       BurgerClient.logger.log('Client has not logged in yet.', 'CRITICAL');
       process.exit(1);
@@ -31,10 +31,13 @@ export class BurgerClient {
         mongoose.connect(options.mongoURI).then(() => {
           if (options.logInfo) BurgerClient.logger.log('Connected to MongoDB.');
           if (options.logInfo) BurgerClient.logger.log(`Ready! Logged in as ${client.user.tag}`);
+          callback();
         }).catch(() => {
           BurgerClient.logger.log('An error occurred when connecting to MongoDB.', 'ERROR');
           process.exit(1);
         });
+      } else {
+        callback();
       }
     });
 
@@ -55,6 +58,28 @@ export class BurgerClient {
 
     if (this._options.logInfo) BurgerClient.logger.log(`Registered command ${displayName}.`);
     this._commands.set(command.data.name, command);
+  }
+
+  public async updatePermissions() {
+    if (this._options.logInfo) BurgerClient.logger.log('Updating guild command permissions...');
+    const commands = await this._client.guilds.cache.get(this._options.guildId).commands.fetch();
+
+    // TODO: Bulk Update Permissions
+    this._commands.filter(command => command.adminCommand).forEach(async (command, name) => {
+      const found = commands.find(cmd => cmd.name === name);
+      await found.setDefaultPermission(false);
+      await found.permissions.set({ permissions: [
+        {
+          id: this._options.adminRoleId,
+          type: 'ROLE',
+          permission: true,
+        },
+      ] });
+
+      if (this._options.logInfo) BurgerClient.logger.log(`Updated permission for command ${name}.`);
+    });
+
+    if (this._options.logInfo) BurgerClient.logger.log('Done!');
   }
 
   public async resolveCommand(interaction: CommandInteraction) {
@@ -148,7 +173,7 @@ export class BurgerClient {
 
       await guildCommandModel.model.deleteMany({});
       await guildCommandModel.model.create(guildCommandModels);
-      if (options.logInfo) this.logger.log('Populated guild commands');
+      if (options.logInfo) this.logger.log('Populated guild commands.');
     }
   }
 
