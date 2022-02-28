@@ -142,7 +142,6 @@ export class BurgerClient {
       const guildCommandModels = [];
 
       for (const command of deployedGuildCommands) {
-        console.log(command);
         const { id, name, description, guild_id } = command;
         guildCommandModels.push({ id, name, description, guild_id });
       }
