@@ -67,6 +67,10 @@ export class BurgerClient {
     // TODO: Bulk Update Permissions
     this._commands.filter(command => command.adminCommand).forEach(async (command, name) => {
       const found = commands.find(cmd => cmd.name === name);
+      if (!found) {
+        BurgerClient.logger.log(`Command not found: ${name}.`, 'WARNING');
+        return;
+      }
       await found.setDefaultPermission(false);
       await found.permissions.set({ permissions: [
         {
