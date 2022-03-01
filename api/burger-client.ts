@@ -63,9 +63,10 @@ export class BurgerClient {
   public async updatePermissions() {
     if (this._options.logInfo) BurgerClient.logger.log('Updating guild command permissions...');
     const commands = await this._client.guilds.cache.get(this._options.guildId).commands.fetch();
+    const adminCommands = this._commands.filter(command => command.adminCommand);
 
     // TODO: Bulk Update Permissions
-    this._commands.filter(command => command.adminCommand).forEach(async (command, name) => {
+    for (const [name] of adminCommands) {
       const found = commands.find(cmd => cmd.name === name);
       if (!found) {
         BurgerClient.logger.log(`Command not found: ${name}.`, 'WARNING');
@@ -81,7 +82,7 @@ export class BurgerClient {
       ] });
 
       if (this._options.logInfo) BurgerClient.logger.log(`Updated permission for command ${name}.`);
-    });
+    }
 
     if (this._options.logInfo) BurgerClient.logger.log('Done!');
   }
