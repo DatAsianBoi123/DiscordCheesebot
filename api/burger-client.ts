@@ -70,7 +70,7 @@ export class BurgerClient {
       const found = commands.find(cmd => cmd.name === name);
       if (!found) {
         BurgerClient.logger.log(`Command not found: ${name}.`, 'WARNING');
-        return;
+        continue;
       }
       await found.setDefaultPermission(false);
       await found.permissions.set({ permissions: [
