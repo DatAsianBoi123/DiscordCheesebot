@@ -119,13 +119,19 @@ export class BurgerClient {
   public async resolveCommand(interaction: CommandInteraction) {
     const command = this._commands.get(interaction.commandName);
 
-    if (!command) return BurgerClient.logger.log(`The command ${interaction.commandName} was not registered.`, 'WARNING');
+    if (!command) {
+      BurgerClient.logger.log(`The command ${interaction.commandName} was not registered.`, 'WARNING');
+      interaction.reply('This command is not registered, please report this!');
+      return;
+    }
 
     const disallowedTextChannels = command.disallowedTextChannels ?? [];
+    const member = interaction.member as GuildMember;
 
     if (disallowedTextChannels.includes(interaction.channel.type)) return interaction.reply('This command is not enabled here');
+    if (interaction.inGuild() && command.adminCommand && !member.roles.cache.has(this._options.adminRoleId)) return interaction.reply('You do not have permission to use this command');
 
-    await command.listeners.onExecute({ interaction: interaction, channel: interaction.channel, args: interaction.options, client: interaction.client, guild: interaction.guild, user: interaction.user, member: interaction.member as GuildMember }).catch(error => {
+    await command.listeners.onExecute({ interaction: interaction, channel: interaction.channel, args: interaction.options, client: interaction.client, guild: interaction.guild, user: interaction.user, member }).catch(error => {
       BurgerClient.logger.log(`An error occurred when executing command ${command.data.name}: ${error.message}`, 'ERROR');
       if (command.listeners.onError) {
         command.listeners.onError({ interaction, error });
