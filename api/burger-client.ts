@@ -159,12 +159,13 @@ export class BurgerClient {
     }
 
     BurgerClient.logger.log(commandFiles.join(', '), 'DEBUG');
+    BurgerClient.logger.log(commandFiles.length + '');
 
     for (const file of commandFiles) {
       let command: ICommand;
 
       try {
-        command = require(`./commands/${file}`);
+        command = require(`${dir}/${file}`);
       } catch (err) {
         BurgerClient.logger.log(`An error occurred when registering the command in file ${file}: ${err.message}`, 'ERROR');
         continue;
