@@ -6,5 +6,6 @@ BurgerClient.deployCommands({
   token: TOKEN,
   userId: CLIENT_ID,
 }, BurgerClient.allCommandsInDir('./commands')).then(() => {
+  console.log('Done');
   process.exit(0);
 });
