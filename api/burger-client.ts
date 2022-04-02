@@ -129,7 +129,13 @@ export class BurgerClient {
     const member = interaction.member as GuildMember;
 
     if (disallowedTextChannels.includes(interaction.channel.type)) return interaction.reply('This command is not enabled here');
-    if (interaction.inGuild() && command.adminCommand && !member.roles.cache.has(this._options.adminRoleId)) return interaction.reply('You do not have permission to use this command');
+    if (interaction.inGuild() && command.adminCommand && !member.roles.cache.has(this._options.adminRoleId)) {
+      BurgerClient.logger.log('A non-admin tried to use an admin command! Reloading permissions...', 'WARNING');
+      await this.updatePermissions();
+      if (this._options.logInfo) BurgerClient.logger.log('Done!');
+      await interaction.reply('You do not have permission to use this command');
+      return;
+    }
 
     await command.listeners.onExecute({ interaction: interaction, channel: interaction.channel, args: interaction.options, client: interaction.client, guild: interaction.guild, user: interaction.user, member }).catch(error => {
       BurgerClient.logger.log(`An error occurred when executing command ${command.data.name}: ${error.message}`, 'ERROR');
