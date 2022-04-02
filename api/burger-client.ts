@@ -57,12 +57,11 @@ export class BurgerClient {
       return null;
     }
 
-    const rootRequire = require.bind(require.main);
     for (const file of commandFiles) {
       let command: ICommand;
 
       try {
-        command = rootRequire(`${dir}/${file}`);
+        command = require.main.require(`${dir}/${file}`);
       } catch (err) {
         BurgerClient.logger.log(`An error occurred when registering the command in file ${file}: ${err.message}`, 'ERROR');
         continue;
@@ -163,7 +162,7 @@ export class BurgerClient {
       let command: ICommand;
 
       try {
-        command = require(`${dir}/${file}`);
+        command = require.main.require(`${dir}/${file}`);
       } catch (err) {
         BurgerClient.logger.log(`An error occurred when registering the command in file ${file}: ${err.message}`, 'ERROR');
         continue;
