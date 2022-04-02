@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 import guildCommandModel from '../models/guild-command-model';
+import fs from 'fs';
 
 export class BurgerClient {
   public static readonly logger = new Logger('Burger Client');
@@ -43,6 +44,34 @@ export class BurgerClient {
 
     this._client = client;
     this._options = options;
+  }
+
+  public registerAllCommands(dir: string): ICommand[] | null {
+    const commands: ICommand[] = [];
+    let commandFiles: string[];
+
+    try {
+      commandFiles = fs.readdirSync(dir).filter(file => file.endsWith('.ts'));
+    } catch (e) {
+      BurgerClient.logger.log('Invalid Directory', 'ERROR');
+      return null;
+    }
+
+    for (const file of commandFiles) {
+      let command: ICommand;
+
+      try {
+        command = require(`./commands/${file}`);
+      } catch (err) {
+        BurgerClient.logger.log(`An error occurred when registering the command in file ${file}: ${err.message}`, 'ERROR');
+        continue;
+      }
+
+      this.registerCommand(command, file);
+      commands.push(command);
+    }
+
+    return commands;
   }
 
   public registerCommand(command: ICommand, displayName: string) {
@@ -116,6 +145,43 @@ export class BurgerClient {
 
   public getCommands() {
     return this._commands.clone();
+  }
+
+  public static allCommandsInDir(dir: string): ICommand[] | null {
+    const commands: ICommand[] = [];
+    let commandFiles: string[];
+
+    try {
+      commandFiles = fs.readdirSync(dir).filter(file => file.endsWith('.ts'));
+    } catch (e) {
+      BurgerClient.logger.log('Invalid Directory', 'ERROR');
+      return null;
+    }
+
+    for (const file of commandFiles) {
+      let command: ICommand;
+
+      try {
+        command = require(`./commands/${file}`);
+      } catch (err) {
+        BurgerClient.logger.log(`An error occurred when registering the command in file ${file}: ${err.message}`, 'ERROR');
+        continue;
+      }
+
+      if (!BurgerClient.isValid(command)) {
+        BurgerClient.logger.log(`The command ${file} is not registered correctly.`, 'WARNING');
+        continue;
+      }
+
+      if (command.skip) {
+        BurgerClient.logger.log(`Skipped command ${command.data.name}.`);
+        continue;
+      }
+
+      commands.push(command);
+    }
+
+    return commands;
   }
 
   public static async deployCommands(options: IDeployCommandsOptions, commands: ICommand[]) {
