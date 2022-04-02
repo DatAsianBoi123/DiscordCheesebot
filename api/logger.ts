@@ -23,7 +23,7 @@ export class Logger {
       break;
 
     case 'WARNING':
-      console.log(customChalk.bgYellow(`${this.name}>`) + ` ${message}`);
+      console.log(customChalk.bgYellow.black(`${this.name}>`) + ` ${message}`);
       break;
 
     case 'ERROR':
@@ -31,7 +31,7 @@ export class Logger {
       break;
 
     case 'CRITICAL':
-      console.log(customChalk.bgRed(`${this.name}>`) + ` ${message}`);
+      console.log(customChalk.bgRed.black(`${this.name}>`) + ` ${message}`);
       break;
     }
   }
