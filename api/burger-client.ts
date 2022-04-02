@@ -110,7 +110,7 @@ export class BurgerClient {
         },
       ] });
 
-      if (this._options.logInfo) BurgerClient.logger.log(`Updated permission for command ${name}.`);
+      if (this._options.logInfo) BurgerClient.logger.log(`Updated permissions for command ${name}.`);
     }
 
     if (this._options.logInfo) BurgerClient.logger.log('Done!');
@@ -132,7 +132,6 @@ export class BurgerClient {
     if (interaction.inGuild() && command.adminCommand && !member.roles.cache.has(this._options.adminRoleId)) {
       BurgerClient.logger.log('A non-admin tried to use an admin command! Reloading permissions...', 'WARNING');
       await this.updatePermissions();
-      if (this._options.logInfo) BurgerClient.logger.log('Done!');
       await interaction.reply('You do not have permission to use this command');
       return;
     }
