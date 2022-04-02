@@ -158,6 +158,8 @@ export class BurgerClient {
       return null;
     }
 
+    BurgerClient.logger.log(commandFiles.join(', '), 'DEBUG');
+
     for (const file of commandFiles) {
       let command: ICommand;
 
