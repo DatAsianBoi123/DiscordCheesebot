@@ -8,7 +8,7 @@ let burgerClient: BurgerClient;
 
 client.once('ready', async () => {
   const callback = () => {
-    burgerClient.registerAllCommands('./commands');
+    burgerClient.registerAllCommands('./command');
 
     client.user.setActivity({ name: 'everything', type: 'WATCHING' });
 
