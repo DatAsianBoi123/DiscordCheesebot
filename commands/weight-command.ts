@@ -76,13 +76,39 @@ module.exports = {
 
       const coinData = {
         goldMetersPerIngot: 1 / 9,
-        goldIngotsPerCoin: 0.375,
-        weightOfGoldMeterInKilo: 19300,
+        goldIngotsPerCoin: 0.25,
+        weightOfGoldMeterInKilo: 19_300,
+      };
+      const miscellaneous = {
+        planeWeight: 200_000,
+      };
+      const stages = {
+        Chad: 1_000_000_000_000,
+        Ripped: 10_000_000_000,
+        Buff: 50_000_000,
+        Strong: 5_000_000,
+        Average: 800_000,
+        Weak: 100_000,
+        Nerd: 10_000,
+        'Are you even trying?': 0,
       };
 
       const coins = profile.members[mojangJSON.id].coin_purse;
+      const purseWeight = coinData.goldIngotsPerCoin * coins * coinData.goldMetersPerIngot * coinData.weightOfGoldMeterInKilo;
+      let stage: string;
+      for (stage in stages) {
+        if (purseWeight >= stages[stage]) break;
+      }
 
-      interaction.editReply(`Weight: ${NumberUtil.format((coins * coinData.goldIngotsPerCoin) * coinData.goldMetersPerIngot * coinData.weightOfGoldMeterInKilo, 3)}kg`);
+      const embed = new MessageEmbed()
+        .setTitle(`${mojangJSON.name}'s Asian Weight on ${profile.cute_name}`)
+        .setDescription(`Purse Weight: **${NumberUtil.format(purseWeight, 3)} kilograms** (Thats about **${Math.round(purseWeight / miscellaneous.planeWeight).toLocaleString('en-US')} planes** in your purse!)\nStage: **${stage}**`)
+        .setThumbnail(`https://mc-heads.net/body/${mojangJSON.id}`)
+        .addField('Variables Used', `Gold Ingots per Coin: ${coinData.goldIngotsPerCoin}\nGold Blocks per Ingot: ${(coinData.goldMetersPerIngot).toFixed(2)}\nWeight of Gold Block: ${coinData.weightOfGoldMeterInKilo.toLocaleString('en-US')}kg`)
+        .setColor('GREEN')
+        .setTimestamp();
+
+      interaction.editReply({ embeds: [embed] });
     },
   },
 } as ICommand;
