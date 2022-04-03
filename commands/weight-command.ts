@@ -10,7 +10,7 @@ module.exports = {
     .setName('weight')
     .setDescription('Calculates how much your purse weighs')
     .addStringOption(option => {
-      return option.setName('name')
+      return option.setName('player')
         .setDescription('The name of the player')
         .setRequired(true);
     })
