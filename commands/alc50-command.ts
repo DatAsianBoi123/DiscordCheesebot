@@ -81,7 +81,7 @@ module.exports = {
       let icon = '';
       switch (profile.game_mode) {
       case 'bingo':
-        icon = 'game_die';
+        icon = ':game_die:';
         break;
 
       case 'ironman':
