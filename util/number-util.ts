@@ -17,19 +17,19 @@ export class NumberUtil {
       },
       {
         value: 1E9,
-        symbol: 'G',
+        symbol: 'B',
       },
       {
         value: 1E12,
-        symbol: 'T',
+        symbol: 't',
       },
       {
         value: 1E15,
-        symbol: 'P',
+        symbol: 'q',
       },
       {
         value: 1E18,
-        symbol: 'E',
+        symbol: 'Q',
       },
     ];
     const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
