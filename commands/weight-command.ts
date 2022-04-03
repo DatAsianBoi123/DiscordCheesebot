@@ -82,7 +82,7 @@ module.exports = {
 
       const coins = profile.members[mojangJSON.id].coin_purse;
 
-      interaction.reply(`Weight: ${NumberUtil.format((coins * coinData.goldIngotsPerCoin) * coinData.goldMetersPerIngot * coinData.weightOfGoldMeterInKilo, 3)}kg`);
+      interaction.editReply(`Weight: ${NumberUtil.format((coins * coinData.goldIngotsPerCoin) * coinData.goldMetersPerIngot * coinData.weightOfGoldMeterInKilo, 3)}kg`);
     },
   },
 } as ICommand;
