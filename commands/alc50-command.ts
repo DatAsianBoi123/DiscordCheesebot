@@ -12,12 +12,12 @@ module.exports = {
     .setDescription('Shows how much xp is needed for alchemy 50, as well as cost')
     .addStringOption(option => {
       return option.setName('player')
-        .setDescription('The player name')
+        .setDescription('The name of the player')
         .setRequired(true);
     })
     .addStringOption(option => {
       return option.setName('profile')
-        .setDescription('The player profile')
+        .setDescription('The player\'s profile')
         .setRequired(false);
     }),
 
@@ -60,11 +60,7 @@ module.exports = {
       let profile = args.getString('profile') ? null : hypixelJSON.profiles[0];
 
       if (!profile) {
-        for (const playerProfile of hypixelJSON.profiles) {
-          if (playerProfile.cute_name.toLowerCase() === args.getString('profile').toLowerCase()) {
-            profile = playerProfile;
-          }
-        }
+        profile = hypixelJSON.profiles.find((playerProfile) => playerProfile.cute_name.toLowerCase() === args.getString('profile').toLowerCase());
 
         if (!profile) {
           const errorEmbed = new MessageEmbed()
