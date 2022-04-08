@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { ColorResolvable, MessageEmbed } from 'discord.js';
+import { API_KEY } from '../config';
 import { ICommand } from '../typings';
 
 module.exports = {
@@ -23,11 +24,19 @@ module.exports = {
         pingColor = 'RED';
       }
 
+      const currentTime = Date.now();
+      await fetch(`https://api.hypixel.net/key?key=${API_KEY}`);
+      const apiPing = currentTime - Date.now();
+
       const embed = new MessageEmbed()
         .setTitle('🏓 Pong!')
         .addField(
           'Client Ping',
           `${clientPing}ms`,
+        )
+        .addField(
+          'Hypixel API Latency',
+          `${apiPing}ms`,
         )
         .setColor(pingColor);
 
