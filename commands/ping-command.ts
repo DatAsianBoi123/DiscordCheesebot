@@ -27,7 +27,7 @@ module.exports = {
 
       const currentTime = Date.now();
       await fetch(`https://api.hypixel.net/key?key=${API_KEY}`);
-      const apiPing = currentTime - Date.now();
+      const apiPing = Date.now() - currentTime;
 
       const embed = new MessageEmbed()
         .setTitle('🏓 Pong!')
