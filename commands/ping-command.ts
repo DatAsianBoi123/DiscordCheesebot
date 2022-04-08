@@ -2,6 +2,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import { ColorResolvable, MessageEmbed } from 'discord.js';
 import { API_KEY } from '../config';
 import { ICommand } from '../typings';
+import fetch from 'node-fetch';
 
 module.exports = {
   data: new SlashCommandBuilder()
