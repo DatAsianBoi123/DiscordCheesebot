@@ -93,31 +93,30 @@ export class BurgerClient {
    * @deprecated
    */
   public async updatePermissions() {
-    BurgerClient.logger.log('This method is deprecated!', 'ERROR');
-    // if (this._options.logInfo) BurgerClient.logger.log('Updating guild command permissions...');
-    // const commands = await this._client.guilds.cache.get(this._options.guildId).commands.fetch();
-    // const adminCommands = this._commands.filter(command => command.adminCommand);
+    if (this._options.logInfo) BurgerClient.logger.log('Updating guild command permissions...');
+    const commands = await this._client.guilds.cache.get(this._options.guildId).commands.fetch();
+    const adminCommands = this._commands.filter(command => command.adminCommand);
 
-    // // TODO: Bulk Update Permissions
-    // for (const [name] of adminCommands) {
-    //   const found = commands.find(cmd => cmd.name === name);
-    //   if (!found) {
-    //     BurgerClient.logger.log(`Command not found: ${name}.`, 'WARNING');
-    //     continue;
-    //   }
-    //   await found.setDefaultPermission(false);
-    //   await found.permissions.set({ permissions: [
-    //     {
-    //       id: this._options.adminRoleId,
-    //       type: 'ROLE',
-    //       permission: true,
-    //     },
-    //   ] });
+    // TODO: Bulk Update Permissions
+    for (const [name] of adminCommands) {
+      const found = commands.find(cmd => cmd.name === name);
+      if (!found) {
+        BurgerClient.logger.log(`Command not found: ${name}.`, 'WARNING');
+        continue;
+      }
+      await found.setDefaultPermission(false);
+      await found.permissions.set({ permissions: [
+        {
+          id: this._options.adminRoleId,
+          type: 'ROLE',
+          permission: true,
+        },
+      ] });
 
-    //   if (this._options.logInfo) BurgerClient.logger.log(`Updated permissions for command ${name}.`);
-    // }
+      if (this._options.logInfo) BurgerClient.logger.log(`Updated permissions for command ${name}.`);
+    }
 
-    // if (this._options.logInfo) BurgerClient.logger.log('Done!');
+    if (this._options.logInfo) BurgerClient.logger.log('Done!');
   }
 
   public async resolveCommand(interaction: CommandInteraction) {
