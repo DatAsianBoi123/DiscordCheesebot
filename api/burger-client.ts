@@ -130,8 +130,6 @@ export class BurgerClient {
 
     if (disallowedTextChannels.includes(interaction.channel.type)) return interaction.reply('This command is not enabled here');
     if (interaction.inGuild() && command.adminCommand && !member.roles.cache.has(this._options.adminRoleId)) {
-      BurgerClient.logger.log('A non-admin tried to use an admin command! Reloading permissions...', 'WARNING');
-      await this.updatePermissions();
       await interaction.reply('You do not have permission to use this command');
       return;
     }
