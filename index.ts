@@ -12,7 +12,7 @@ client.once('ready', async () => {
 
     client.user.setActivity({ name: 'everything', type: 'WATCHING' });
 
-    burgerClient.updatePermissions();
+    // burgerClient.updatePermissions();
   };
 
   burgerClient = new BurgerClient(client, {

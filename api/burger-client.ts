@@ -89,6 +89,9 @@ export class BurgerClient {
     this._commands.set(command.data.name, command);
   }
 
+  /**
+   * @deprecated
+   */
   public async updatePermissions() {
     if (this._options.logInfo) BurgerClient.logger.log('Updating guild command permissions...');
     const commands = await this._client.guilds.cache.get(this._options.guildId).commands.fetch();
