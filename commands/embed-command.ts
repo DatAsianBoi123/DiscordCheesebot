@@ -6,7 +6,6 @@ const allEmbeds = new Collection<number, MessageEmbed>();
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setDefaultMemberPermissions(1 << 13)
     .setName('embedbuilder')
     .setDescription('A builder for creating custom message embeds')
     .addSubcommand(subcommand => {
