@@ -36,10 +36,13 @@ module.exports = {
         .addStringOption(option => {
           return option.setName('operation')
             .setDescription('The operation')
-            .addChoices([
-              ['add', 'ADD'],
-              ['subtract', 'SUBTRACT'],
-            ])
+            .addChoices({
+              name: 'add',
+              value: 'ADD',
+            }, {
+              name: 'subtract',
+              value: 'SUBTRACT',
+            })
             .setRequired(true);
         })
         .addUserOption(option => {
