@@ -97,7 +97,7 @@ export interface IDeployCommandsOptions {
 export interface ICommand {
   data: SlashCommandBuilder;
   skip?: boolean;
-  disallowedTextChannels?: ('DM' | 'GUILD_TEXT' | 'GUILD_NEWS' | ThreadChannelTypes)[];
+  disallowedTextChannels?: ('DM' | 'GUILD_TEXT' | 'GUILD_NEWS' | ThreadChannelTypes | 'GUILD_VOICE')[];
   adminCommand?: boolean;
   type: 'GUILD' | 'GLOBAL';
   listeners: IListeners;

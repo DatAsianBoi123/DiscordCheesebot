@@ -210,7 +210,7 @@ export class BurgerClient {
       }
     }
 
-    const rest = new REST({ version: '9' }).setToken(options.token);
+    const rest = new REST({ version: '10' }).setToken(options.token);
 
     const deployGuildCommands = async (guildCommands: unknown[]) => {
       await rest.put(Routes.applicationGuildCommands(options.userId, options.guildId), { body: guildCommands })
