@@ -15,32 +15,33 @@ export class BurgerClient {
   private _commands = new Collection<string, ICommand>();
 
   constructor(intents: number[], options: IClientOptions) {
-    this._client = new Client({ intents: [...intents] });
+    this._client = new Client({ intents });
 
     options.logInfo ??= true;
 
-    this._client.guilds.fetch().then(() => {
-      if (!this._client.guilds.cache.has(options.guildId)) {
-        BurgerClient.logger.log('The bot is not a part of that guild.', 'CRITICAL');
+    if (options.mongoURI) {
+      mongoose.connect(options.mongoURI).then(() => {
+        if (options.logInfo) BurgerClient.logger.log('Connected to MongoDB.');
+        if (options.logInfo) BurgerClient.logger.log(`Ready! Logged in as ${this._client.user.tag}`);
+      }).catch(() => {
+        BurgerClient.logger.log('An error occurred when connecting to MongoDB.', 'ERROR');
         process.exit(1);
-      }
-
-      if (options.mongoURI) {
-        mongoose.connect(options.mongoURI).then(() => {
-          if (options.logInfo) BurgerClient.logger.log('Connected to MongoDB.');
-          if (options.logInfo) BurgerClient.logger.log(`Ready! Logged in as ${this._client.user.tag}`);
-        }).catch(() => {
-          BurgerClient.logger.log('An error occurred when connecting to MongoDB.', 'ERROR');
-          process.exit(1);
-        });
-      }
-    });
+      });
+    }
 
     this._options = options;
   }
 
   public async login(token: string) {
     await this._client.login(token);
+
+    this._client.guilds.fetch().then(() => {
+      if (!this._client.guilds.cache.has(this._options.guildId)) {
+        BurgerClient.logger.log('The bot is not a part of that guild.', 'CRITICAL');
+        process.exit(1);
+      }
+    });
+
     return this._client;
   }
 
