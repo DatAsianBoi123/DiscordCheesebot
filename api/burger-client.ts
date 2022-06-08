@@ -22,7 +22,6 @@ export class BurgerClient {
     if (options.mongoURI) {
       mongoose.connect(options.mongoURI).then(() => {
         if (options.logInfo) BurgerClient.logger.log('Connected to MongoDB.');
-        if (options.logInfo) BurgerClient.logger.log(`Ready! Logged in as ${this._client.user.tag}`);
       }).catch(() => {
         BurgerClient.logger.log('An error occurred when connecting to MongoDB.', 'ERROR');
         process.exit(1);

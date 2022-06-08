@@ -13,7 +13,9 @@ client.onReady(async () => {
 
   client.user.setActivity({ name: 'everything', type: 'WATCHING' });
 
-  // burgerClient.updatePermissions();
+  BurgerClient.logger.log(`Ready! Logged in as ${client.user.tag}`);
+
+// burgerClient.updatePermissions();
 });
 
 client.on('interactionCreate', async interaction => {
