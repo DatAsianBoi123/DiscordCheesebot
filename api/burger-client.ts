@@ -1,4 +1,4 @@
-import { Client, Collection, CommandInteraction, GuildMember, InteractionReplyOptions } from 'discord.js';
+import { Awaitable, Client, ClientEvents, ClientUser, Collection, CommandInteraction, GuildMember, InteractionReplyOptions } from 'discord.js';
 import { Logger } from './logger';
 import { IClientOptions, ICommand, IDeployCommandsOptions } from '../typings';
 import mongoose from 'mongoose';
@@ -14,16 +14,13 @@ export class BurgerClient {
   private _options: IClientOptions;
   private _commands = new Collection<string, ICommand>();
 
-  constructor(client: Client, options: IClientOptions, callback = () => {return;}) {
-    if (!client.isReady()) {
-      BurgerClient.logger.log('Client has not logged in yet.', 'CRITICAL');
-      process.exit(1);
-    }
+  constructor(intents: number[], options: IClientOptions) {
+    this._client = new Client({ intents });
 
     options.logInfo ??= true;
 
-    client.guilds.fetch().then(() => {
-      if (!client.guilds.cache.has(options.guildId)) {
+    this._client.guilds.fetch().then(() => {
+      if (!this._client.guilds.cache.has(options.guildId)) {
         BurgerClient.logger.log('The bot is not a part of that guild.', 'CRITICAL');
         process.exit(1);
       }
@@ -31,19 +28,28 @@ export class BurgerClient {
       if (options.mongoURI) {
         mongoose.connect(options.mongoURI).then(() => {
           if (options.logInfo) BurgerClient.logger.log('Connected to MongoDB.');
-          if (options.logInfo) BurgerClient.logger.log(`Ready! Logged in as ${client.user.tag}`);
-          callback();
+          if (options.logInfo) BurgerClient.logger.log(`Ready! Logged in as ${this._client.user.tag}`);
         }).catch(() => {
           BurgerClient.logger.log('An error occurred when connecting to MongoDB.', 'ERROR');
           process.exit(1);
         });
-      } else {
-        callback();
       }
     });
 
-    this._client = client;
     this._options = options;
+  }
+
+  public async login(token: string) {
+    await this._client.login(token);
+    return this._client;
+  }
+
+  public onReady(cb: (client: Client<true>) => Awaitable<void>) {
+    this._client.on('ready', cb);
+  }
+
+  public on<T extends keyof ClientEvents>(event: T, listener: (...arg: ClientEvents[T]) => Awaitable<void>) {
+    return this._client.on(event, listener);
   }
 
   public registerAllCommands(dir: string): ICommand[] | null {
@@ -264,8 +270,7 @@ export class BurgerClient {
     return !!command?.data && !!command?.type && !!command?.listeners?.onExecute;
   }
 
-  public static async login(client: Client, token: string, options: IClientOptions) {
-    await client.login(token);
-    return new this(client, options);
+  public get user(): ClientUser {
+    return this._client.user;
   }
 }
