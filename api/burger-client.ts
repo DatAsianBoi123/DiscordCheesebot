@@ -15,7 +15,7 @@ export class BurgerClient {
   private _commands = new Collection<string, ICommand>();
 
   constructor(intents: number[], options: IClientOptions) {
-    this._client = new Client({ intents });
+    this._client = new Client({ intents: [...intents] });
 
     options.logInfo ??= true;
 
