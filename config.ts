@@ -1,6 +1,7 @@
+import 'dotenv/config';
+
 export const TOKEN = process.env.token;
 export const CLIENT_ID = process.env.client_id;
-export const GUILD_ID = '738961884853829703';
-export const ADMIN_ROLE_ID = '738963940712906793';
+export const GUILD_ID = process.env.test_guild;
 export const API_KEY = process.env.apikey;
 export const MONGO_PASS = process.env.mongopass;
