@@ -13,6 +13,9 @@ export class BurgerClient {
   private _client: Client;
   private _options: IClientOptions;
   private _commands = new Collection<string, ICommand>();
+  private _dbReady = false;
+  private _clientReady = false;
+  private _readyFunc: (client: Client<true>) => Awaitable<void>;
 
   constructor(intents: number[], options: IClientOptions) {
     this._client = new Client({ intents });
@@ -20,15 +23,23 @@ export class BurgerClient {
     options.logInfo ??= true;
 
     if (options.mongoURI) {
-      mongoose.connect(options.mongoURI).then(() => {
+      (async () => {
+        await mongoose.connect(options.mongoURI).catch(() => {
+          throw new Error('An error occurred when connecting to MongoDB.');
+        });
+
         if (options.logInfo) BurgerClient.logger.log('Connected to MongoDB.');
-      }).catch(() => {
-        BurgerClient.logger.log('An error occurred when connecting to MongoDB.', 'ERROR');
-        process.exit(1);
+        this._dbReady = true;
+        this.tryReady();
       });
     }
 
     this._options = options;
+
+    this._client.on('ready', () => {
+      this._clientReady = true;
+      this.tryReady();
+    });
   }
 
   public async login(token: string) {
@@ -36,8 +47,7 @@ export class BurgerClient {
 
     this._client.guilds.fetch().then(() => {
       if (!this._client.guilds.cache.has(this._options.guildId)) {
-        BurgerClient.logger.log('The bot is not a part of that guild.', 'CRITICAL');
-        process.exit(1);
+        throw new Error('The bot is not a part of that guild.');
       }
     });
 
@@ -45,7 +55,7 @@ export class BurgerClient {
   }
 
   public onReady(cb: (client: Client<true>) => Awaitable<void>) {
-    this._client.on('ready', cb);
+    this._readyFunc = cb;
   }
 
   public on<T extends keyof ClientEvents>(event: T, listener: (...arg: ClientEvents[T]) => Awaitable<void>) {
@@ -145,9 +155,7 @@ export class BurgerClient {
 
     await command.listeners.onExecute({ interaction: interaction, channel: interaction.channel, args: interaction.options, client: interaction.client, guild: interaction.guild, user: interaction.user, member }).catch(error => {
       BurgerClient.logger.log(`An error occurred when executing command ${command.data.name}: ${error.message}`, 'ERROR');
-      if (command.listeners.onError) {
-        command.listeners.onError({ interaction, error });
-      } else {
+      if (!command.listeners.onError?.({ interaction, error })) {
         const reply: InteractionReplyOptions = {
           content: 'There was an error executing this command',
         };
@@ -272,5 +280,9 @@ export class BurgerClient {
 
   public get user(): ClientUser {
     return this._client.user;
+  }
+
+  private tryReady() {
+    if (this._clientReady && this._dbReady) this._readyFunc(this._client);
   }
 }
