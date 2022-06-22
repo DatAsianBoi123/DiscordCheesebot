@@ -1,11 +1,11 @@
 import { Intents } from 'discord.js';
-import { GUILD_ID, MONGO_PASS, TOKEN } from './config';
+import { GUILD_ID, MONGO_URI, TOKEN } from './config';
 import { BurgerClient } from './api/burger-client';
 
 const client = new BurgerClient([Intents.FLAGS.GUILDS], {
   guildId: GUILD_ID,
   adminRoleId: '738963940712906793',
-  mongoURI: `mongodb+srv://DatAsianBoi123:${MONGO_PASS}@mydiscordbot.xudyc.mongodb.net/discord-bot?retryWrites=true&w=majority`,
+  mongoURI: MONGO_URI,
 });
 
 client.onReady(async () => {
