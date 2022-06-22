@@ -4,7 +4,6 @@ import { IClientOptions, ICommand, IDeployCommandsOptions } from '../typings';
 import mongoose from 'mongoose';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
-import guildCommandModel from '../models/guild-command-model';
 import fs from 'fs';
 
 export class BurgerClient {
@@ -23,14 +22,12 @@ export class BurgerClient {
     options.logInfo ??= true;
 
     if (options.mongoURI) {
-      (async () => {
-        await mongoose.connect(options.mongoURI).catch(() => {
-          throw new Error('An error occurred when connecting to MongoDB.');
-        });
-
+      mongoose.connect(options.mongoURI).then(() => {
         if (options.logInfo) BurgerClient.logger.log('Connected to MongoDB.');
         this._dbReady = true;
         this.tryReady();
+      }).catch(() => {
+        throw new Error('An error occurred when connecting to MongoDB.');
       });
     }
 
@@ -267,10 +264,6 @@ export class BurgerClient {
         const { id, name, description, guild_id } = command;
         guildCommandModels.push({ id, name, description, guild_id });
       }
-
-      await guildCommandModel.model.deleteMany({});
-      await guildCommandModel.model.create(guildCommandModels);
-      if (options.logInfo) this.logger.log('Populated guild commands.');
     }
   }
 
