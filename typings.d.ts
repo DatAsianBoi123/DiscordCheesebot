@@ -1,19 +1,20 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { CacheType, Client, CommandInteraction, CommandInteractionOptionResolver, Guild, GuildMember, TextBasedChannel, ThreadChannelTypes, User } from 'discord.js';
+import { SlashCommandBuilder, SlashCommandSubcommandBuilder, SlashCommandOptionsOnlyBuilder, SlashCommandSubcommandGroupBuilder, SlashCommandSubcommandsOnlyBuilder } from '@discordjs/builders';
+import { CacheType, ChannelType, ChatInputCommandInteraction, Client, CommandInteraction, CommandInteractionOptionResolver, Guild, GuildMember, TextBasedChannel, User } from 'discord.js';
 
 interface ICallbackObject {
   channel: TextBasedChannel;
   client: Client;
-  guild?: Guild;
+  guild: Guild | null;
   args: Omit<CommandInteractionOptionResolver<CacheType>, 'getMessage' | 'getFocused'>;
+  subcommand: string | null;
   interaction: CommandInteraction;
   user: User;
-  member?: GuildMember;
+  member: GuildMember | null;
 }
 
 interface IErrorObject {
   error: Error;
-  interaction: CommandInteraction;
+  interaction: ChatInputCommandInteraction;
 }
 
 interface IListeners {
@@ -23,7 +24,8 @@ interface IListeners {
 
 interface ISkyblockProfile {
   profile_id: string;
-  members: object;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  members: Record<string, any>;
   community_upgrades: ICommunityUpgrades;
   cute_name: string;
   game_mode?: SkyblockGameModes;
@@ -64,10 +66,10 @@ interface IHypixelPlayer {
 }
 
 interface IHypixelSocialMedia {
-  [key: string]: string | boolean | object;
+  [key: string]: string | boolean | object | null;
 
   links: Record<string, string>;
-  prompt?: boolean;
+  prompt: boolean | null;
 }
 
 type HypixelDefaultFetchModel = {
@@ -95,9 +97,9 @@ export interface IDeployCommandsOptions {
 }
 
 export interface ICommand {
-  data: SlashCommandBuilder;
+  data: SlashCommandBuilder | SlashCommandSubcommandBuilder | SlashCommandOptionsOnlyBuilder | SlashCommandSubcommandGroupBuilder | SlashCommandSubcommandsOnlyBuilder;
   skip?: boolean;
-  disallowedTextChannels?: ('DM' | 'GUILD_TEXT' | 'GUILD_NEWS' | ThreadChannelTypes | 'GUILD_VOICE')[];
+  disallowedTextChannels?: ChannelType[];
   adminCommand?: boolean;
   type: 'GUILD' | 'GLOBAL';
   listeners: IListeners;

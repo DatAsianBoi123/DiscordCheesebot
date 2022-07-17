@@ -76,7 +76,7 @@ export class SkillsUtil {
     let level = 0;
 
     for (let i = 0; i < maxLevel; i++) {
-      level = totalXp > this.cumulativeXp[i] ? i : level;
+      level = totalXp > this.cumulativeXp[i as keyof typeof this.cumulativeXp] ? i : level;
     }
 
     return level;
@@ -86,6 +86,6 @@ export class SkillsUtil {
     if (level < 0) return 0;
     if (level > 60) return this.cumulativeXp[60];
 
-    return this.cumulativeXp[level];
+    return this.cumulativeXp[level as keyof typeof this.cumulativeXp];
   }
 }

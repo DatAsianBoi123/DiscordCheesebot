@@ -1,9 +1,14 @@
-import { Intents } from 'discord.js';
+import { ActivityType, GatewayIntentBits, InteractionType } from 'discord.js';
 import { GUILD_ID, MONGO_URI, TOKEN } from './config';
+import * as config from './config';
 import { BurgerClient } from './api/burger-client';
 
-const client = new BurgerClient([Intents.FLAGS.GUILDS], {
-  guildId: GUILD_ID,
+for (const key of (Object.keys(config) as (keyof typeof config)[])) {
+  if (!config[key]) throw new Error(`Config var ${key} does not exist`);
+}
+
+const client = new BurgerClient([GatewayIntentBits.Guilds], {
+  guildId: GUILD_ID as string,
   adminRoleId: '738963940712906793',
   mongoURI: MONGO_URI,
 });
@@ -11,17 +16,18 @@ const client = new BurgerClient([Intents.FLAGS.GUILDS], {
 client.onReady(async () => {
   client.registerAllCommands('./commands');
 
-  client.user.setActivity({ name: 'everything', type: 'WATCHING' });
+  client.user?.setActivity({ name: 'everything', type: ActivityType.Watching });
 
-  BurgerClient.logger.log(`Ready! Logged in as ${client.user.tag}`);
+  BurgerClient.logger.log(`Ready! Logged in as ${client.user?.tag}`);
 
-// burgerClient.updatePermissions();
+  client.updatePermissions();
 });
 
 client.on('interactionCreate', async interaction => {
-  if (!interaction.isCommand()) return;
+  if (interaction.type !== InteractionType.ApplicationCommand) return;
+  if (!interaction.isChatInputCommand()) return;
 
   await client.resolveCommand(interaction);
 });
 
-client.login(TOKEN);
+client.login(TOKEN as string);

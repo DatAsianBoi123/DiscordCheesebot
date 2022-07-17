@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 import { API_KEY } from '../config';
 import { ICommand, MinecraftUserFetchModel, SkyblockProfilesFetchModel } from '../typings';
 import { NumberUtil } from '../util/number-util';
@@ -40,38 +40,40 @@ module.exports = {
       const hypixelJSON = await hypixelData.json() as SkyblockProfilesFetchModel;
 
       if (!hypixelJSON.success) {
-        const errorEmbed = new MessageEmbed()
+        const errorEmbed = new EmbedBuilder()
           .setTitle('Error')
           .setDescription(`Code: **${hypixelData.status}**\nReason: ${hypixelJSON.cause}`)
-          .setColor('RED');
+          .setColor('Red');
 
         await interaction.editReply({ embeds: [errorEmbed] });
 
         return;
       }
 
-      if (!hypixelJSON.profiles) {
+      if (!hypixelJSON.profiles || hypixelJSON.profiles.length < 1) {
         await interaction.editReply('That player never joined skyblock');
 
         return;
       }
 
-      let profile = args.getString('profile') ? null : hypixelJSON.profiles[0];
+      let profile = hypixelJSON.profiles[0];
+      const profileArgument = args.getString('profile');
+      if (profileArgument) {
+        const foundProfile = hypixelJSON.profiles.find((playerProfile) => playerProfile.cute_name.toLowerCase() === profileArgument.toLowerCase());
 
-      if (!profile) {
-        profile = hypixelJSON.profiles.find((playerProfile) => playerProfile.cute_name.toLowerCase() === args.getString('profile').toLowerCase());
-
-        if (!profile) {
-          const errorEmbed = new MessageEmbed()
+        if (!foundProfile) {
+          const errorEmbed = new EmbedBuilder()
             .setTitle('Error')
             .setDescription(`Code: **404**\nReason: The profile ${args.getString('profile')} was not found.`)
             .setTimestamp()
-            .setColor('RED');
+            .setColor('Red');
 
           await interaction.editReply({ embeds: [errorEmbed] });
 
           return;
         }
+
+        profile = foundProfile;
       }
 
       const coinData = {
@@ -95,17 +97,17 @@ module.exports = {
 
       const coins = profile.members[mojangJSON.id].coin_purse;
       const purseWeight = coinData.goldIngotsPerCoin * coins * coinData.goldMetersPerIngot * coinData.weightOfGoldMeterInKilo;
-      let stage: string;
+      let stage: keyof typeof stages = 'Are you even trying?';
       for (stage in stages) {
         if (purseWeight >= stages[stage]) break;
       }
 
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
         .setTitle(`${mojangJSON.name}'s Asian Weight on ${profile.cute_name}`)
         .setDescription(`Purse Weight: **${NumberUtil.format(purseWeight, 3)} kilograms** (Thats about **${Math.round(purseWeight / miscellaneous.planeWeight).toLocaleString('en-US')} planes** in your purse!)\nStage: **${stage}**`)
         .setThumbnail(`https://mc-heads.net/body/${mojangJSON.id}`)
-        .addField('Variables Used', `Gold Ingots per Coin: ${coinData.goldIngotsPerCoin}\nGold Blocks per Ingot: ${(coinData.goldMetersPerIngot).toFixed(2)}\nWeight of Gold Block: ${coinData.weightOfGoldMeterInKilo.toLocaleString('en-US')}kg`)
-        .setColor('GREEN')
+        .addFields({ name: 'Variables Used', value: `Gold Ingots per Coin: ${coinData.goldIngotsPerCoin}\nGold Blocks per Ingot: ${(coinData.goldMetersPerIngot).toFixed(2)}\nWeight of Gold Block: ${coinData.weightOfGoldMeterInKilo.toLocaleString('en-US')}kg` })
+        .setColor('Green')
         .setTimestamp();
 
       interaction.editReply({ embeds: [embed] });

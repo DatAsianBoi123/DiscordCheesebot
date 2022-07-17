@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 import { API_KEY } from '../config';
 import accountLinksModel from '../models/account-links-model';
 import { HypixelPlayerFetchModel, ICommand, MinecraftUserFetchModel } from '../typings';
@@ -35,10 +35,10 @@ module.exports = {
       const hypixelJSON = await hypixelData.json() as HypixelPlayerFetchModel;
 
       if (!hypixelJSON.success) {
-        const errorEmbed = new MessageEmbed()
+        const errorEmbed = new EmbedBuilder()
           .setTitle('Error')
           .setDescription(`Code: **${hypixelData.status}**\nReason: ${hypixelJSON.cause}`)
-          .setColor('RED');
+          .setColor('Red');
 
         await interaction.editReply({ embeds: [errorEmbed] });
 
@@ -62,12 +62,12 @@ module.exports = {
         minecraft_uuid: mojangJSON.id,
       }, { upsert: true });
 
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
         .setTitle('Success!')
         .setDescription(`Successfully linked your discord account with the minecraft account ${mojangJSON.name}`)
         .setFooter({ text: `Minecraft UUID: ${mojangJSON.id}, Discord ID: ${user.id}` })
         .setTimestamp()
-        .setColor('GREEN');
+        .setColor('Green');
 
       interaction.editReply({ embeds: [embed] });
     },

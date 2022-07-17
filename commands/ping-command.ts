@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { ColorResolvable, MessageEmbed } from 'discord.js';
+import { ColorResolvable, EmbedBuilder } from 'discord.js';
 import { API_KEY } from '../config';
 import { ICommand } from '../typings';
 import fetch from 'node-fetch';
@@ -18,27 +18,20 @@ module.exports = {
       let pingColor: ColorResolvable;
 
       if (clientPing < 50) {
-        pingColor = 'GREEN';
+        pingColor = 'Green';
       } else if (clientPing < 100) {
-        pingColor = 'YELLOW';
+        pingColor = 'Yellow';
       } else {
-        pingColor = 'RED';
+        pingColor = 'Red';
       }
 
       const currentTime = Date.now();
       await fetch(`https://api.hypixel.net/key?key=${API_KEY}`);
       const apiPing = Date.now() - currentTime;
 
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
         .setTitle('🏓 Pong!')
-        .addField(
-          'Client Ping',
-          `${clientPing}ms`,
-        )
-        .addField(
-          'Hypixel API Latency',
-          `${apiPing}ms`,
-        )
+        .addFields({ name: 'Client Ping', value: `${clientPing}ms` }, { name: 'Hypixel API Latency', value: `${apiPing}ms` })
         .setColor(pingColor);
 
       interaction.reply({ embeds: [embed] });

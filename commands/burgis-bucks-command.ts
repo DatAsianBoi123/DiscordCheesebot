@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageEmbed } from 'discord.js';
+import { ChannelType, EmbedBuilder } from 'discord.js';
 import burgisBuckModel from '../models/burgis-buck-model';
 import { ICommand } from '../typings';
 
@@ -58,7 +58,7 @@ module.exports = {
     }),
 
   type: 'GUILD',
-  disallowedTextChannels: ['DM'],
+  disallowedTextChannels: [ChannelType.DM],
 
   listeners: {
     onExecute: async ({ interaction, args, user: author }) => {
@@ -69,18 +69,18 @@ module.exports = {
 
       switch (args.getSubcommand()) {
       case 'bal':
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
           .setTitle(user.username)
-          .addField('Balance', buckModel.balance.toString())
+          .addFields({ name: 'Balance', value: buckModel.balance.toString() })
           .setTimestamp()
-          .setColor('ORANGE');
+          .setColor('Orange');
 
         interaction.editReply({ embeds: [embed] });
 
         break;
 
       case 'set':
-        if (!interaction.memberPermissions?.has('MANAGE_GUILD')) return interaction.editReply('You do not have permission to use this command');
+        if (!interaction.memberPermissions?.has('ManageGuild')) return interaction.editReply('You do not have permission to use this command');
 
         const amount = args.getInteger('amount');
 
@@ -91,18 +91,18 @@ module.exports = {
         break;
 
       case 'operation':
-        if (!interaction.memberPermissions?.has('MANAGE_GUILD')) return interaction.editReply('You do not have permission to use this command');
+        if (!interaction.memberPermissions?.has('ManageGuild')) return interaction.editReply('You do not have permission to use this command');
 
         switch (args.getString('operation')) {
         case 'ADD':
-          await buckModel.update({ $set: { balance: buckModel.balance + args.getInteger('amount') } });
+          await buckModel.updateOne({ $set: { balance: buckModel.balance + args.getInteger('amount', true) } });
 
           interaction.editReply(`Successfully added ${args.getInteger('amount')} to ${user.username}'s account`);
 
           break;
 
         case 'SUBTRACT':
-          await buckModel.update({ $set: { balance: buckModel.balance - args.getInteger('amount') } });
+          await buckModel.updateOne({ $set: { balance: buckModel.balance - args.getInteger('amount', true) } });
 
           interaction.editReply(`Successfully subtracted ${args.getInteger('amount')} to ${user.username}'s account`);
 

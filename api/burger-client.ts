@@ -1,6 +1,6 @@
-import { Awaitable, Client, ClientEvents, ClientUser, Collection, CommandInteraction, GuildMember, InteractionReplyOptions } from 'discord.js';
+import { Awaitable, ChatInputCommandInteraction, Client, ClientEvents, ClientUser, Collection, GuildMember, InteractionReplyOptions } from 'discord.js';
 import { Logger } from './logger';
-import { IClientOptions, ICommand, IDeployCommandsOptions } from '../typings';
+import { IClientOptions, ICommand, IDeployCommandsOptions } from 'typings';
 import mongoose from 'mongoose';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
@@ -14,7 +14,7 @@ export class BurgerClient {
   private _commands = new Collection<string, ICommand>();
   private _dbReady = false;
   private _clientReady = false;
-  private _readyFunc: (client: Client<true>) => Awaitable<void>;
+  private _readyFunc: ((client: Client<true>) => Awaitable<void>) | null = null;
 
   constructor(intents: number[], options: IClientOptions) {
     this._client = new Client({ intents });
@@ -74,8 +74,9 @@ export class BurgerClient {
       let command: ICommand;
 
       try {
-        command = require.main.require(`${dir}/${file}`);
+        command = require.main?.require(`${dir}/${file}`);
       } catch (err) {
+        if (!(err instanceof Error)) continue;
         BurgerClient.logger.log(`An error occurred when registering the command in file ${file}: ${err.message}`, 'ERROR');
         continue;
       }
@@ -102,37 +103,30 @@ export class BurgerClient {
     this._commands.set(command.data.name, command);
   }
 
-  /**
-   * @deprecated
-   */
   public async updatePermissions() {
     if (this._options.logInfo) BurgerClient.logger.log('Updating guild command permissions...');
-    const commands = await this._client.guilds.cache.get(this._options.guildId).commands.fetch();
-    const adminCommands = this._commands.filter(command => command.adminCommand);
+    const guild = this._client.guilds.cache.get(this._options.guildId);
+    if (!guild || !guild.available) {
+      BurgerClient.logger.log(`Error accessing guild ${this._options.guildId}`, 'ERROR');
+      return;
+    }
+    const commands = await guild.commands.fetch();
+    const adminCommands = this._commands.filter(command => command.adminCommand ?? false);
 
-    // TODO: Bulk Update Permissions
     for (const [name] of adminCommands) {
       const found = commands.find(cmd => cmd.name === name);
       if (!found) {
         BurgerClient.logger.log(`Command not found: ${name}.`, 'WARNING');
         continue;
       }
-      await found.setDefaultPermission(false);
-      await found.permissions.set({ permissions: [
-        {
-          id: this._options.adminRoleId,
-          type: 'ROLE',
-          permission: true,
-        },
-      ] });
-
+      await found.setDefaultMemberPermissions('Administrator');
       if (this._options.logInfo) BurgerClient.logger.log(`Updated permissions for command ${name}.`);
     }
 
     if (this._options.logInfo) BurgerClient.logger.log('Done!');
   }
 
-  public async resolveCommand(interaction: CommandInteraction) {
+  public async resolveCommand(interaction: ChatInputCommandInteraction) {
     const command = this._commands.get(interaction.commandName);
 
     if (!command) {
@@ -144,13 +138,13 @@ export class BurgerClient {
     const disallowedTextChannels = command.disallowedTextChannels ?? [];
     const member = interaction.member as GuildMember;
 
-    if (disallowedTextChannels.includes(interaction.channel.type)) return interaction.reply('This command is not enabled here');
+    if (!interaction.channel || disallowedTextChannels.includes(interaction.channel.type)) return interaction.reply('This command is not enabled here');
     if (interaction.inGuild() && command.adminCommand && !member.roles.cache.has(this._options.adminRoleId)) {
       await interaction.reply('You do not have permission to use this command');
       return;
     }
 
-    await command.listeners.onExecute({ interaction: interaction, channel: interaction.channel, args: interaction.options, client: interaction.client, guild: interaction.guild, user: interaction.user, member }).catch(error => {
+    await command.listeners.onExecute({ interaction: interaction, channel: interaction.channel, args: interaction.options, subcommand: interaction.options.getSubcommand(false), client: interaction.client, guild: interaction.guild, user: interaction.user, member }).catch(error => {
       BurgerClient.logger.log(`An error occurred when executing command ${command.data.name}: ${error.message}`, 'ERROR');
       if (!command.listeners.onError?.({ interaction, error })) {
         const reply: InteractionReplyOptions = {
@@ -185,8 +179,9 @@ export class BurgerClient {
       let command: ICommand;
 
       try {
-        command = require.main.require(`${dir}/${file}`);
+        command = require.main?.require(`${dir}/${file}`);
       } catch (err) {
+        if (!(err instanceof Error)) continue;
         BurgerClient.logger.log(`An error occurred when registering the command in file ${file}: ${err.message}`, 'ERROR');
         continue;
       }
@@ -225,9 +220,6 @@ export class BurgerClient {
 
     const deployGuildCommands = async (guildCommands: unknown[]) => {
       await rest.put(Routes.applicationGuildCommands(options.userId, options.guildId), { body: guildCommands })
-        .then(allGuildCommands => {
-          deployedGuildCommands = allGuildCommands as unknown[];
-        })
         .catch(err => {
           BurgerClient.logger.log(`An error occurred when deploying guild commands: ${err.message}`, 'ERROR');
           return;
@@ -247,8 +239,6 @@ export class BurgerClient {
     const guildCommands = [];
     const globalCommands = [];
 
-    let deployedGuildCommands = [];
-
     for (const command of commands) {
       if (options.logInfo) BurgerClient.logger.log(`Loaded command ${command.data.name}.`);
       command.type === 'GUILD' ? guildCommands.push(command.data.toJSON()) : globalCommands.push(command.data.toJSON());
@@ -256,26 +246,17 @@ export class BurgerClient {
 
     await deployGuildCommands(guildCommands);
     await deployGlobalCommands(globalCommands);
-
-    if (mongoose.connection.readyState === 1) {
-      const guildCommandModels = [];
-
-      for (const command of deployedGuildCommands) {
-        const { id, name, description, guild_id } = command;
-        guildCommandModels.push({ id, name, description, guild_id });
-      }
-    }
   }
 
   public static isValid(command: ICommand) {
     return !!command?.data && !!command?.type && !!command?.listeners?.onExecute;
   }
 
-  public get user(): ClientUser {
+  public get user(): ClientUser | null {
     return this._client.user;
   }
 
   private tryReady() {
-    if (this._clientReady && this._dbReady) this._readyFunc(this._client);
+    if (this._clientReady && this._dbReady) this._readyFunc?.(this._client);
   }
 }

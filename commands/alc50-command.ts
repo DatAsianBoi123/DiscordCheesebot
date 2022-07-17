@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import { ICommand, MinecraftUserFetchModel, SkyblockProfilesFetchModel } from '../typings';
 import { API_KEY } from '../config';
 import fetch from 'node-fetch';
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 import { SkillsUtil } from '../util/skyblock-skill-util';
 import { NumberUtil } from '../util/number-util';
 
@@ -41,38 +41,40 @@ module.exports = {
       const hypixelJSON = await hypixelData.json() as SkyblockProfilesFetchModel;
 
       if (!hypixelJSON.success) {
-        const errorEmbed = new MessageEmbed()
+        const errorEmbed = new EmbedBuilder()
           .setTitle('Error')
           .setDescription(`Code: **${hypixelData.status}**\nReason: ${hypixelJSON.cause}`)
-          .setColor('RED');
+          .setColor('Red');
 
         await interaction.editReply({ embeds: [errorEmbed] });
 
         return;
       }
 
-      if (!hypixelJSON.profiles) {
+      if (!hypixelJSON.profiles || hypixelJSON.profiles.length < 1) {
         await interaction.editReply('That player never joined skyblock');
 
         return;
       }
 
-      let profile = args.getString('profile') ? null : hypixelJSON.profiles[0];
+      let profile = hypixelJSON.profiles[0];
+      const profileArgument = args.getString('profile');
+      if (profileArgument) {
+        const foundProfile = hypixelJSON.profiles.find((playerProfile) => playerProfile.cute_name.toLowerCase() === profileArgument.toLowerCase());
 
-      if (!profile) {
-        profile = hypixelJSON.profiles.find((playerProfile) => playerProfile.cute_name.toLowerCase() === args.getString('profile').toLowerCase());
-
-        if (!profile) {
-          const errorEmbed = new MessageEmbed()
+        if (!foundProfile) {
+          const errorEmbed = new EmbedBuilder()
             .setTitle('Error')
             .setDescription(`Code: **404**\nReason: The profile ${args.getString('profile')} was not found.`)
             .setTimestamp()
-            .setColor('RED');
+            .setColor('Red');
 
           await interaction.editReply({ embeds: [errorEmbed] });
 
           return;
         }
+
+        profile = foundProfile;
       }
 
       const player = profile.members[mojangJSON.id];
@@ -93,11 +95,10 @@ module.exports = {
         break;
       }
 
-      const skillEmbed = new MessageEmbed()
+      const skillEmbed = new EmbedBuilder()
         .setTitle(`Displaying Alchemy Stats for ${icon}${mojangJSON.name}`)
-        .addField(`Alchemy ${SkillsUtil.getLevel(alchemyXp, 'ALCHEMY')}`,
-          `${NumberUtil.format(alchemyXp, 2)} / ${NumberUtil.format(SkillsUtil.getXpForLevel(50), 2)} XP (${Math.round((alchemyXp / SkillsUtil.getXpForLevel(50)) * 10000) / 100}%) to Alchemy 50`)
-        .setColor('PURPLE')
+        .addFields({ name: `Alchemy ${SkillsUtil.getLevel(alchemyXp, 'ALCHEMY')}`, value: `${NumberUtil.format(alchemyXp, 2)} / ${NumberUtil.format(SkillsUtil.getXpForLevel(50), 2)} XP (${Math.round((alchemyXp / SkillsUtil.getXpForLevel(50)) * 10000) / 100}%) to Alchemy 50` })
+        .setColor('Purple')
         .setFooter({ text: `Profile: ${profile.cute_name}` })
         .setTimestamp(Date.now());
 
