@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder, SlashCommandOptionsOnlyBuilder, SlashCommandSubcommandGroupBuilder, SlashCommandSubcommandsOnlyBuilder } from '@discordjs/builders';
-import { CacheType, ChannelType, ChatInputCommandInteraction, Client, CommandInteraction, CommandInteractionOptionResolver, Guild, GuildMember, TextBasedChannel, User } from 'discord.js';
+import { CacheType, ChatInputCommandInteraction, Client, CommandInteractionOptionResolver, Guild, GuildMember, Partials, PermissionResolvable, TextBasedChannel, User } from 'discord.js';
 
 interface ICallbackObject {
   channel: TextBasedChannel;
@@ -7,7 +7,7 @@ interface ICallbackObject {
   guild: Guild | null;
   args: Omit<CommandInteractionOptionResolver<CacheType>, 'getMessage' | 'getFocused'>;
   subcommand: string | null;
-  interaction: CommandInteraction;
+  interaction: ChatInputCommandInteraction;
   user: User;
   member: GuildMember | null;
 }
@@ -82,8 +82,9 @@ type SkyblockGameModes = 'bingo' | 'ironman' | 'island';
 type BankTransactionActions = 'DEPOSIT' | 'WITHDRAW';
 
 export interface IClientOptions {
-  guildId: string;
-  adminRoleId: string;
+  intents?: number[];
+  partials?: Partials[];
+  testGuild: string;
   mongoURI?: string;
   logInfo?: boolean;
 }
@@ -99,8 +100,10 @@ export interface IDeployCommandsOptions {
 export interface ICommand {
   data: SlashCommandBuilder | SlashCommandSubcommandBuilder | SlashCommandOptionsOnlyBuilder | SlashCommandSubcommandGroupBuilder | SlashCommandSubcommandsOnlyBuilder;
   skip?: boolean;
-  disallowedTextChannels?: ChannelType[];
-  adminCommand?: boolean;
+  permissions?: {
+    default?: PermissionResolvable;
+    DMs?: boolean;
+  };
   type: 'GUILD' | 'GLOBAL';
   listeners: IListeners;
 }
