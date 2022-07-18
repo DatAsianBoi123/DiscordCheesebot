@@ -11,5 +11,4 @@ BurgerClient.deployCommands({
   userId: CLIENT_ID as string,
 }, commands).then(() => {
   BurgerClient.logger.log('Done!');
-  process.exit(0);
 });
