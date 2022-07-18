@@ -9,7 +9,7 @@ module.exports = {
     .setName('ping')
     .setDescription('Pings the bot'),
 
-  type: 'GUILD',
+  type: 'GLOBAL',
 
   listeners: {
     onExecute: async ({ interaction }) => {

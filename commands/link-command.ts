@@ -15,7 +15,7 @@ module.exports = {
         .setRequired(true);
     }),
 
-  type: 'GUILD',
+  type: 'GLOBAL',
 
   listeners: {
     onExecute: async ({ interaction, user, args }) => {
