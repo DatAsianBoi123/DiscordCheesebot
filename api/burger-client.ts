@@ -1,9 +1,9 @@
-import { Awaitable, ChatInputCommandInteraction, Client, ClientEvents, ClientUser, Collection, GuildMember, InteractionReplyOptions } from 'discord.js';
+import { ApplicationCommand, Awaitable, ChatInputCommandInteraction, Client, ClientEvents, ClientUser, Collection, GuildMember, InteractionReplyOptions, PermissionsBitField } from 'discord.js';
 import { Logger } from './logger';
 import { IClientOptions, ICommand, IDeployCommandsOptions } from 'typings';
 import mongoose from 'mongoose';
 import { REST } from '@discordjs/rest';
-import { Routes } from 'discord-api-types/v9';
+import { Routes } from 'discord-api-types/v10';
 import fs from 'fs';
 
 export class BurgerClient {
@@ -16,8 +16,10 @@ export class BurgerClient {
   private _clientReady = false;
   private _readyFunc: ((client: Client<true>) => Awaitable<void>) | null = null;
 
-  constructor(intents: number[], options: IClientOptions) {
-    this._client = new Client({ intents });
+  constructor(options: IClientOptions) {
+    options.intents ??= [];
+    options.partials ??= [];
+    this._client = new Client({ intents: options.intents, partials: options.partials });
 
     options.logInfo ??= true;
 
@@ -43,7 +45,7 @@ export class BurgerClient {
     await this._client.login(token);
 
     this._client.guilds.fetch().then(() => {
-      if (!this._client.guilds.cache.has(this._options.guildId)) {
+      if (!this._client.guilds.cache.has(this._options.testGuild)) {
         throw new Error('The bot is not a part of that guild.');
       }
     });
@@ -104,25 +106,51 @@ export class BurgerClient {
   }
 
   public async updatePermissions() {
-    if (this._options.logInfo) BurgerClient.logger.log('Updating guild command permissions...');
-    const guild = this._client.guilds.cache.get(this._options.guildId);
-    if (!guild || !guild.available) {
-      BurgerClient.logger.log(`Error accessing guild ${this._options.guildId}`, 'ERROR');
-      return;
-    }
-    const commands = await guild.commands.fetch();
-    const adminCommands = this._commands.filter(command => command.adminCommand ?? false);
+    const updatePermissionsFor = async (commands: Collection<string, ApplicationCommand>, filteredCommands: Collection<string, ICommand>) => {
+      for (const [name] of filteredCommands) {
+        const found = commands.find(cmd => cmd.name === name);
+        const commandData = this._commands.get(name);
+        if (!found) {
+          BurgerClient.logger.log(`The command ${name} was not found.`, 'WARNING');
+          continue;
+        }
+        if (!commandData) {
+          BurgerClient.logger.log(`The command ${name} is not registered.`, 'WARNING');
+          continue;
+        }
 
-    for (const [name] of adminCommands) {
-      const found = commands.find(cmd => cmd.name === name);
-      if (!found) {
-        BurgerClient.logger.log(`Command not found: ${name}.`, 'WARNING');
-        continue;
+        let updated = false;
+        if (found.defaultMemberPermissions?.bitfield !== commandData.permissions?.default ? PermissionsBitField.resolve(commandData.permissions?.default) : undefined) {
+          updated = true;
+          await found.setDefaultMemberPermissions(commandData.permissions?.default ?? null);
+        }
+
+        if (found.dmPermission !== null && found.dmPermission != (commandData.permissions?.DMs ?? true)) {
+          updated = true;
+          await found.setDMPermission(commandData.permissions?.DMs);
+        }
+        if (updated && this._options.logInfo) BurgerClient.logger.log(`Updated permissions for command ${name}.`);
       }
-      await found.setDefaultMemberPermissions('Administrator');
-      if (this._options.logInfo) BurgerClient.logger.log(`Updated permissions for command ${name}.`);
-    }
+    };
 
+    const updateGuildPermissions = async () => {
+      if (this._options.logInfo) BurgerClient.logger.log('Updating guild command permissions...');
+      const guild = this._client.guilds.cache.get(this._options.testGuild);
+      if (!guild || !guild.available) return BurgerClient.logger.log(`Error accessing guild ${this._options.testGuild}`, 'ERROR');
+      const commands = await guild.commands.fetch();
+      await updatePermissionsFor(commands, this._commands.filter(cmd => cmd.type === 'GUILD'));
+    };
+
+    const updateGlobalPermissions = async () => {
+      if (this._options.logInfo) BurgerClient.logger.log('Updating global command permissions...');
+      const commands = await this._client.application?.commands.fetch();
+      if (!commands) return BurgerClient.logger.log('Client does not have an application', 'ERROR');
+      await updatePermissionsFor(commands, this._commands.filter(cmd => cmd.type === 'GLOBAL'));
+    };
+
+    await updateGuildPermissions();
+    if (this._options.logInfo) BurgerClient.logger.log('Done!');
+    await updateGlobalPermissions();
     if (this._options.logInfo) BurgerClient.logger.log('Done!');
   }
 
@@ -135,13 +163,18 @@ export class BurgerClient {
       return;
     }
 
-    const disallowedTextChannels = command.disallowedTextChannels ?? [];
-    const member = interaction.member as GuildMember;
+    const member = interaction.member;
 
-    if (!interaction.channel || disallowedTextChannels.includes(interaction.channel.type)) return interaction.reply('This command is not enabled here');
-    if (interaction.inGuild() && command.adminCommand && !member.roles.cache.has(this._options.adminRoleId)) {
-      await interaction.reply('You do not have permission to use this command');
-      return;
+    if (!interaction.channel) return interaction.reply('This command is not enabled here');
+    if (member) {
+      if (!(member instanceof GuildMember)) return interaction.reply('Wow! You reached a supposedly unreachable if statement! Please try again later');
+
+      if (command.permissions?.default && !member.permissions.has(command.permissions.default)) {
+        BurgerClient.logger.log(`User ${member.user.tag} in guild ${member.guild.id} tried to use a command they weren't supposed to! Updating all permissions...`, 'WARNING');
+        await this.updatePermissions();
+        await interaction.reply('You do not have permission to use this command');
+        return;
+      }
     }
 
     await command.listeners.onExecute({ interaction: interaction, channel: interaction.channel, args: interaction.options, subcommand: interaction.options.getSubcommand(false), client: interaction.client, guild: interaction.guild, user: interaction.user, member }).catch(error => {
@@ -250,6 +283,10 @@ export class BurgerClient {
 
   public static isValid(command: ICommand) {
     return !!command?.data && !!command?.type && !!command?.listeners?.onExecute;
+  }
+
+  public get discordClient() {
+    return this._client;
   }
 
   public get user(): ClientUser | null {
