@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { ChannelType, EmbedBuilder } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 import burgisBuckModel from '../models/burgis-buck-model';
 import { ICommand } from '../typings';
 
@@ -57,8 +57,10 @@ module.exports = {
         });
     }),
 
-  type: 'GUILD',
-  disallowedTextChannels: [ChannelType.DM],
+  type: 'GLOBAL',
+  permissions: {
+    DMs: false,
+  },
 
   listeners: {
     onExecute: async ({ interaction, args, user: author }) => {
