@@ -2,8 +2,9 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import { EmbedBuilder } from 'discord.js';
 import { API_KEY } from '../config';
 import accountLinksModel from '../models/account-links-model';
-import { HypixelPlayerFetchModel, ICommand, MinecraftUserFetchModel } from '../typings';
+import { HypixelPlayerFetchModel, MinecraftUserFetchModel } from '../typings';
 import fetch from 'node-fetch';
+import { ICommand } from 'burgerclient';
 
 module.exports = {
   data: new SlashCommandBuilder()

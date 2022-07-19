@@ -1,7 +1,7 @@
-import { BurgerClient } from './api/burger-client';
+import { BurgerClient } from 'burgerclient';
 import { CLIENT_ID, GUILD_ID, TOKEN } from './config';
 
-const commands = BurgerClient.allCommandsInDir('./commands');
+const commands = BurgerClient.allCommandsInDir('./commands', true);
 
 if (commands === null) process.exit(1);
 

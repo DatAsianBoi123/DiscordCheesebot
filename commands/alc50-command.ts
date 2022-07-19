@@ -1,10 +1,11 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { ICommand, MinecraftUserFetchModel, SkyblockProfilesFetchModel } from '../typings';
+import { MinecraftUserFetchModel, SkyblockProfilesFetchModel } from '../typings';
 import { API_KEY } from '../config';
 import fetch from 'node-fetch';
 import { EmbedBuilder } from 'discord.js';
 import { SkillsUtil } from '../util/skyblock-skill-util';
 import { NumberUtil } from '../util/number-util';
+import { ICommand } from 'burgerclient';
 
 module.exports = {
   data: new SlashCommandBuilder()

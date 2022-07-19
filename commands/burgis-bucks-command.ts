@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { EmbedBuilder } from 'discord.js';
 import burgisBuckModel from '../models/burgis-buck-model';
-import { ICommand } from '../typings';
+import { ICommand } from 'burgerclient';
 
 module.exports = {
   data: new SlashCommandBuilder()
