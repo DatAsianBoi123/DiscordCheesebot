@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/rest": "^1.0.0",
+    "@types/node-fetch": "^2.6.2",
     "burgerclient": "^1.1.1",
     "chalk": "~4.1.2",
     "discord-api-types": "^0.36.2",
@@ -24,7 +25,6 @@
     "node": "16.x"
   },
   "devDependencies": {
-    "@types/node-fetch": "^2.6.2",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.30.7",
     "eslint": "^8.20.0"
