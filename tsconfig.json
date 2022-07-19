@@ -5,9 +5,8 @@
     "esModuleInterop": true,
     "downlevelIteration": true,
     "target": "ES6",
-    "moduleResolution": "NodeNext",
-    "module": "NodeNext",
-    "strictNullChecks": true,
-    "baseUrl": "."
+    "moduleResolution": "Node",
+    // "module": "Node16",
+    "strictNullChecks": true
   }
 }
