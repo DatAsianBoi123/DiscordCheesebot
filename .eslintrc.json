@@ -52,5 +52,6 @@
 		"spaced-comment": "error",
 		"@typescript-eslint/type-annotation-spacing": ["error"],
 		"yoda": "error"
-	}
+	},
+	"ignorePatterns": ["out"]
 }

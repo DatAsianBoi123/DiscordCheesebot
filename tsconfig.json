@@ -6,7 +6,8 @@
     "downlevelIteration": true,
     "target": "ES6",
     "moduleResolution": "Node",
-    // "module": "Node16",
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "outDir": "out"
   }
 }
