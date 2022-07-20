@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node .",
+    "start": "node -r ts-node/register --max-old-space-size=1024 .",
     "reloadcommands": "ts-node deploy-commands.ts"
   },
   "author": "",
