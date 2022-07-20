@@ -12,7 +12,7 @@
   "dependencies": {
     "@discordjs/rest": "^1.0.0",
     "@types/node-fetch": "^2.6.2",
-    "burgerclient": "^1.1.4",
+    "burgerclient": "^1.1.5",
     "chalk": "~4.1.2",
     "discord-api-types": "^0.36.2",
     "discord.js": "^14.0.3",
