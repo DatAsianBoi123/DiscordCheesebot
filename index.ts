@@ -17,7 +17,7 @@ const client = new BurgerClient({
 
 client.onReady(async onlineClient => {
   const timeBegin = Date.now();
-  client.registerAllCommands(__dirname + '/commands');
+  client.registerAllCommands('./commands');
   await client.updatePermissions();
 
   onlineClient.user.setActivity({ name: 'everything', type: ActivityType.Watching });
