@@ -1,4 +1,4 @@
-import { ActivityType, GatewayIntentBits, InteractionType, Partials } from 'discord.js';
+import { ActivityType, GatewayIntentBits, Partials } from 'discord.js';
 import { GUILD_ID, MONGO_URI, TOKEN } from './config';
 import * as config from './config';
 import { BurgerClient } from 'burgerclient';
@@ -26,7 +26,6 @@ client.onReady(async onlineClient => {
 });
 
 client.on('interactionCreate', async interaction => {
-  if (interaction.type !== InteractionType.ApplicationCommand) return;
   if (!interaction.isChatInputCommand()) return;
 
   await client.resolveCommand(interaction);
