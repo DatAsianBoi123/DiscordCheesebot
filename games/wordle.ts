@@ -46,7 +46,7 @@ export class WordleGame {
     const actionRows = [
       new ActionRowBuilder<MessageActionRowComponentBuilder>()
         .addComponents(new ButtonBuilder().setLabel('Guess Word').setCustomId('guess').setStyle(ButtonStyle.Primary))
-        .addComponents(new ButtonBuilder().setLabel('View Available Words').setCustomId('viewWords').setStyle(ButtonStyle.Secondary)),
+        .addComponents(new ButtonBuilder().setLabel('View Available Letters').setCustomId('viewWords').setStyle(ButtonStyle.Secondary)),
       new ActionRowBuilder<MessageActionRowComponentBuilder>()
         .addComponents(new ButtonBuilder().setLabel('Quit').setCustomId('quit').setStyle(ButtonStyle.Danger)),
     ];
