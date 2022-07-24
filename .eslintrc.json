@@ -11,13 +11,18 @@
 	},
 	"rules": {
 		"arrow-spacing": ["warn", { "before": true, "after": true }],
-		"brace-style": ["error", "1tbs", { "allowSingleLine": true }],
-		"comma-dangle": ["error", "always-multiline"],
+		"brace-style": "off",
+		"@typescript-eslint/brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+		"comma-dangle": "off",
 		"@typescript-eslint/comma-dangle": ["error", "always-multiline"],
 		"comma-spacing": "error",
 		"comma-style": "error",
 		"curly": ["error", "multi-line", "consistent"],
 		"dot-location": ["error", "property"],
+		"@typescript-eslint/consistent-type-assertions": ["error", {
+			"assertionStyle": "as",
+			"objectLiteralTypeAssertions": "never"
+		}],
 		"handle-callback-err": "off",
 		"indent": ["error", 2],
 		"keyword-spacing": "error",
