@@ -71,3 +71,5 @@ export type HypixelPlayerFetchModel = HypixelDefaultFetchModel & {
 };
 
 export type SkillResolvable = 'FARMING' | 'MINING' | 'COMBAT' | 'FORAGING' | 'FISHING' | 'ENCHANTING' | 'ALCHEMY' | 'TAMING';
+
+export type WordleTile = 'unknown' | 'absent' | 'present' | 'correct';

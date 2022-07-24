@@ -2,39 +2,41 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import { EmbedBuilder } from 'discord.js';
 import burgisBuckModel from '../models/burgis-buck-model';
 import { ICommand } from 'burgerclient';
+import fetch from 'node-fetch';
+import { WordleGame } from '../games/wordle';
 
-module.exports = {
+const command: ICommand = {
   data: new SlashCommandBuilder()
     .setName('burgisbucks')
     .setDescription('All burgis buck related commands')
-    .addSubcommand(subcommand => {
-      return subcommand.setName('bal')
+    .addSubcommand(subcommand =>
+      subcommand.setName('bal')
         .setDescription('Displays a user\'s current balance')
-        .addUserOption(option => {
-          return option.setName('user')
+        .addUserOption(option =>
+          option.setName('user')
             .setDescription('The user the command is directed towards')
-            .setRequired(false);
-        });
-    })
-    .addSubcommand(subcommand => {
-      return subcommand.setName('set')
+            .setRequired(false),
+        ),
+    )
+    .addSubcommand(subcommand =>
+      subcommand.setName('set')
         .setDescription('Sets a user\'s burgis bucks to an amount')
-        .addUserOption(option => {
-          return option.setName('user')
+        .addUserOption(option =>
+          option.setName('user')
             .setDescription('The user the command is directed towards')
-            .setRequired(true);
-        })
-        .addIntegerOption(option => {
-          return option.setName('amount')
+            .setRequired(true),
+        )
+        .addIntegerOption(option =>
+          option.setName('amount')
             .setDescription('The amount to set by')
-            .setRequired(true);
-        });
-    })
-    .addSubcommand(subcommand => {
-      return subcommand.setName('operation')
+            .setRequired(true),
+        ),
+    )
+    .addSubcommand(subcommand =>
+      subcommand.setName('operation')
         .setDescription('Performs an operation on a user')
-        .addStringOption(option => {
-          return option.setName('operation')
+        .addStringOption(option =>
+          option.setName('operation')
             .setDescription('The operation')
             .addChoices({
               name: 'add',
@@ -43,19 +45,20 @@ module.exports = {
               name: 'subtract',
               value: 'SUBTRACT',
             })
-            .setRequired(true);
-        })
-        .addUserOption(option => {
-          return option.setName('user')
+            .setRequired(true),
+        )
+        .addUserOption(option =>
+          option.setName('user')
             .setDescription('The user')
-            .setRequired(true);
-        })
-        .addIntegerOption(option => {
-          return option.setName('amount')
+            .setRequired(true),
+        )
+        .addIntegerOption(option =>
+          option.setName('amount')
             .setDescription('The amount')
-            .setRequired(true);
-        });
-    }),
+            .setRequired(true),
+        ),
+    )
+    .addSubcommand(option => option.setName('wordle').setDescription('Play a game of wordle for some money')),
 
   type: 'GLOBAL',
   permissions: {
@@ -63,14 +66,14 @@ module.exports = {
   },
 
   listeners: {
-    onExecute: async ({ interaction, args, user: author }) => {
+    onExecute: async ({ interaction, args, user: author, subcommand }) => {
       await interaction.deferReply();
 
       const user = args.getUser('user') ?? author;
       const buckModel = await burgisBuckModel.model.findOne({ id: user.id }) ?? await burgisBuckModel.model.create({ id: user.id, balance: 0 });
 
-      switch (args.getSubcommand()) {
-      case 'bal':
+      switch (subcommand) {
+      case 'bal': {
         const embed = new EmbedBuilder()
           .setTitle(user.username)
           .addFields({ name: 'Balance', value: buckModel.balance.toString() })
@@ -80,39 +83,35 @@ module.exports = {
         interaction.editReply({ embeds: [embed] });
 
         break;
+      }
 
-      case 'set':
-        if (!interaction.memberPermissions?.has('ManageGuild')) return interaction.editReply('You do not have permission to use this command');
+      case 'wordle': {
+        const words: string = (await (await fetch('https://random-word-api.herokuapp.com/word?length=5&number=5')).json());
+        let index = 0;
+        let isAWord = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${words[index]}`);
 
-        const amount = args.getInteger('amount');
-
-        await burgisBuckModel.model.updateOne({ id: user.id }, { $set: { balance: amount } }, { upsert: true });
-
-        interaction.editReply(`Successfully set ${user.username}'s burgis bucks to ${amount}`);
-
-        break;
-
-      case 'operation':
-        if (!interaction.memberPermissions?.has('ManageGuild')) return interaction.editReply('You do not have permission to use this command');
-
-        switch (args.getString('operation')) {
-        case 'ADD':
-          await buckModel.updateOne({ $set: { balance: buckModel.balance + args.getInteger('amount', true) } });
-
-          interaction.editReply(`Successfully added ${args.getInteger('amount')} to ${user.username}'s account`);
-
-          break;
-
-        case 'SUBTRACT':
-          await buckModel.updateOne({ $set: { balance: buckModel.balance - args.getInteger('amount', true) } });
-
-          interaction.editReply(`Successfully subtracted ${args.getInteger('amount')} to ${user.username}'s account`);
-
-          break;
+        while (isAWord.status === 404 && index < 10) {
+          index++;
+          isAWord = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${words[index]}`);
         }
+
+        if (isAWord.status === 404) return interaction.editReply('Could not find word. Try again later');
+
+        const game = WordleGame.newGame(author.id, words[index]);
+
+        if (!game) return interaction.editReply('You have already started a game of wordle');
+
+        await game.start(interaction);
 
         break;
       }
+      }
+    },
+    onError: ({ error, interaction }) => {
+      interaction.editReply('An error ocurred');
+      throw error;
     },
   },
-} as ICommand;
+};
+
+module.exports = command;
