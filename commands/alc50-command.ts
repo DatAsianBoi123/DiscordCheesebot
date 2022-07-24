@@ -7,7 +7,7 @@ import { SkillsUtil } from '../util/skyblock-skill-util';
 import { NumberUtil } from '../util/number-util';
 import { ICommand } from 'burgerclient';
 
-module.exports = {
+const command: ICommand = {
   data: new SlashCommandBuilder()
     .setName('alc50')
     .setDescription('Shows how much xp is needed for alchemy 50, as well as cost')
@@ -20,7 +20,7 @@ module.exports = {
       return option.setName('profile')
         .setDescription('The player\'s profile')
         .setRequired(false);
-    }),
+    }) as SlashCommandBuilder,
 
   type: 'GLOBAL',
 
@@ -106,4 +106,6 @@ module.exports = {
       interaction.editReply({ embeds: [skillEmbed] });
     },
   },
-} as ICommand;
+};
+
+module.exports = command;

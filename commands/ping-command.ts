@@ -4,7 +4,7 @@ import { API_KEY } from '../config';
 import { ICommand } from 'burgerclient';
 import fetch from 'node-fetch';
 
-module.exports = {
+const command: ICommand = {
   data: new SlashCommandBuilder()
     .setName('ping')
     .setDescription('Pings the bot'),
@@ -37,4 +37,6 @@ module.exports = {
       interaction.reply({ embeds: [embed] });
     },
   },
-} as ICommand;
+};
+
+module.exports = command;

@@ -6,7 +6,7 @@ import { NumberUtil } from '../util/number-util';
 import fetch from 'node-fetch';
 import { ICommand } from 'burgerclient';
 
-module.exports = {
+const command: ICommand = {
   data: new SlashCommandBuilder()
     .setName('weight')
     .setDescription('Calculates how much your purse weighs')
@@ -19,7 +19,7 @@ module.exports = {
       return option.setName('profile')
         .setDescription('The player\'s profile')
         .setRequired(false);
-    }),
+    }) as SlashCommandBuilder,
 
   type: 'GLOBAL',
 
@@ -114,4 +114,6 @@ module.exports = {
       interaction.editReply({ embeds: [embed] });
     },
   },
-} as ICommand;
+};
+
+module.exports = command;

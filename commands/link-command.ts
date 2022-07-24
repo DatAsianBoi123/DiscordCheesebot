@@ -6,7 +6,7 @@ import { HypixelPlayerFetchModel, MinecraftUserFetchModel } from '../typings';
 import fetch from 'node-fetch';
 import { ICommand } from 'burgerclient';
 
-module.exports = {
+const command: ICommand = {
   data: new SlashCommandBuilder()
     .setName('link')
     .setDescription('Links a minecraft account to your discord account')
@@ -14,7 +14,7 @@ module.exports = {
       return option.setName('name')
         .setDescription('The name of the minecraft account')
         .setRequired(true);
-    }),
+    }) as SlashCommandBuilder,
 
   type: 'GLOBAL',
 
@@ -73,4 +73,6 @@ module.exports = {
       interaction.editReply({ embeds: [embed] });
     },
   },
-} as ICommand;
+};
+
+module.exports = command;
