@@ -110,6 +110,7 @@ export class WordleGame {
           const buckModel = await burgisBuckModel.model.findOne({ id: this.userId }) ?? await burgisBuckModel.model.create({ id: this.userId, balance: 0 });
           await buckModel.updateOne({ $set: { balance: buckModel.balance + gainedCoins } });
           collected.followUp(`You won! Here, have ${gainedCoins} Burgis Bucks`);
+          return;
         }
 
         this.currentRow++;
