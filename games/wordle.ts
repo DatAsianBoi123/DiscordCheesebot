@@ -77,48 +77,49 @@ export class WordleGame {
         collected.reply({ content: this.availableLetters.join(', '), ephemeral: true });
       } else if (collected.customId === 'guess') {
         await collected.showModal(guessModal);
-        const submitted = await collected.awaitModalSubmit({ time: 15000, filter: i => i.customId === 'guessModal' }).catch(() => {
-          collected.followUp({ content: 'You took too long to answer', ephemeral: true });
-          return;
-        });
-        if (!submitted) return;
+        await collected.awaitModalSubmit({ time: 15000, filter: i => i.customId === 'guessModal' })
+          .then(async submitted => {
+            const guessedWord = submitted.fields.getTextInputValue('guessInput');
 
-        const guessedWord = submitted.fields.getTextInputValue('guessInput');
+            if (this.guessedWords.find(word => word.localeCompare(guessedWord, undefined, { sensitivity: 'accent' }) === 0)) {
+              await submitted.reply({ content: `You already guessed the word ${guessedWord}`, ephemeral: true });
+              return;
+            }
 
-        if (this.guessedWords.find(word => word.localeCompare(guessedWord, undefined, { sensitivity: 'accent' }) === 0)) {
-          collected.followUp(`You already guessed the word ${guessedWord}`);
-          return;
-        }
+            const wordData = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${guessedWord}`);
 
-        const wordData = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${guessedWord}`);
+            if (wordData.status === 404) {
+              await submitted.reply({ content: `${guessedWord} isn't a word, dummy!`, ephemeral: true });
+              return;
+            }
 
-        if (wordData.status === 404) {
-          await submitted.reply({ content: `${guessedWord} isn't a word, dummy!`, ephemeral: true });
-          return;
-        }
+            this.guessWord(guessedWord);
 
-        this.guessWord(guessedWord);
+            await submitted.reply({ content: `You guessed the word ${guessedWord}`, ephemeral: true });
 
-        await submitted.reply({ content: `You guessed the word ${guessedWord}`, ephemeral: true });
+            const updatedCanvas = await this.generateImage();
+            await collected.editReply({ files: [updatedCanvas.toBuffer()] });
 
-        const updatedCanvas = await this.generateImage();
-        await collected.editReply({ files: [updatedCanvas.toBuffer()] });
+            if (guessedWord.localeCompare(this.target, undefined, { sensitivity: 'accent' }) === 0) {
+              await this.end();
+              const gainedCoins = Math.floor(Math.random() * 50) + 50;
+              const buckModel = await burgisBuckModel.model.findOne({ id: this.userId }) ?? await burgisBuckModel.model.create({ id: this.userId, balance: 0 });
+              await buckModel.updateOne({ $set: { balance: buckModel.balance + gainedCoins } });
+              collected.followUp(`You won! Here, have ${gainedCoins} Burgis Bucks`);
+              return;
+            }
 
-        if (guessedWord.localeCompare(this.target, undefined, { sensitivity: 'accent' }) === 0) {
-          await this.end();
-          const gainedCoins = Math.floor(Math.random() * 50) + 50;
-          const buckModel = await burgisBuckModel.model.findOne({ id: this.userId }) ?? await burgisBuckModel.model.create({ id: this.userId, balance: 0 });
-          await buckModel.updateOne({ $set: { balance: buckModel.balance + gainedCoins } });
-          collected.followUp(`You won! Here, have ${gainedCoins} Burgis Bucks`);
-          return;
-        }
+            this.currentRow++;
 
-        this.currentRow++;
-
-        if (this.currentRow === 6) {
-          await this.end();
-          collected.followUp(`You lost! The correct word was ${this.target}`);
-        }
+            if (this.currentRow === 6) {
+              await this.end();
+              collected.followUp(`You lost! The correct word was ${this.target}`);
+            }
+          })
+          .catch(async () => {
+            await collected.followUp({ content: 'You took too long to answer', ephemeral: true });
+            return;
+          });
       }
     });
 
@@ -135,8 +136,10 @@ export class WordleGame {
       val.letter = newWords[i];
       val.color = connections[i];
 
-      if (connections[i] === 'absent') this.availableLetters.splice(this.availableLetters.indexOf(newWords[i]), 1);
+      const letterIndex = this.availableLetters.indexOf(newWords[i]);
+      if (connections[i] === 'absent' && letterIndex != -1) this.availableLetters.splice(letterIndex, 1);
     });
+    this.guessedWords.push(guess);
   }
 
   public calculateConnections(word: string) {
