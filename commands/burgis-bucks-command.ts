@@ -18,7 +18,22 @@ const command: ICommand = {
             .setRequired(false),
         ),
     )
-    .addSubcommand(option => option.setName('wordle').setDescription('Play a game of wordle for some money')),
+    .addSubcommand(subcommand => subcommand.setName('wordle').setDescription('Play a game of wordle for some money'))
+    .addSubcommand(subcommand =>
+      subcommand.setName('pay')
+        .setDescription('Pays a user')
+        .addUserOption(option =>
+          option.setName('user')
+            .setDescription('The user to pay')
+            .setRequired(true),
+        )
+        .addIntegerOption(option =>
+          option.setName('amount')
+            .setDescription('The amount to pay')
+            .setMinValue(0)
+            .setRequired(true),
+        ),
+    ),
 
   type: 'GLOBAL',
   permissions: {
@@ -30,7 +45,8 @@ const command: ICommand = {
       await interaction.deferReply();
 
       const user = args.getUser('user') ?? author;
-      const buckModel = await burgisBuckModel.model.findOne({ id: user.id }) ?? await burgisBuckModel.model.create({ id: user.id, balance: 0 });
+
+      const buckModel = await burgisBuckModel.model.findOne({ id: user.id }).exec() ?? await burgisBuckModel.model.create({ id: user.id, balance: 0 });
 
       switch (subcommand) {
       case 'bal': {
@@ -41,6 +57,20 @@ const command: ICommand = {
           .setColor('Orange');
 
         interaction.editReply({ embeds: [embed] });
+
+        break;
+      }
+
+      case 'pay': {
+        const amount = args.getInteger('amount', true);
+        const payer = await burgisBuckModel.model.findOne({ id: author.id }).exec() ?? await burgisBuckModel.model.create({ id: author.id, balance: 0 });
+
+        if (amount > payer.balance) return interaction.editReply('You do not have that much money');
+
+        await buckModel.updateOne({ $set: { balance: buckModel.balance + amount } }).exec();
+        await payer.updateOne({ $set: { balance: payer.balance - amount } }).exec();
+
+        interaction.editReply(`Successfully gave ${user.username} ${amount} Burgis Bucks`);
 
         break;
       }
@@ -66,10 +96,6 @@ const command: ICommand = {
         break;
       }
       }
-    },
-    onError: ({ error, interaction }) => {
-      interaction.editReply('An error ocurred');
-      throw error;
     },
   },
 };
