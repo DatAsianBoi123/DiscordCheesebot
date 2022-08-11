@@ -4,15 +4,14 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "node -r ts-node/register --max-old-space-size=1024 .",
-    "reloadcommands": "node -r ts-node/register --max-old-space-size=1024 deploy-commands"
+    "start": "node -r ts-node/register --max-old-space-size=1024 ."
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@discordjs/rest": "^1.0.0",
     "@types/node-fetch": "^2.6.2",
-    "burgerclient": "^1.1.8",
+    "burgerclient": "^1.2.8",
     "canvas": "^2.9.3",
     "chalk": "~4.1.2",
     "discord-api-types": "^0.36.2",

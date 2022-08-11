@@ -15,14 +15,15 @@ const client = new BurgerClient({
   mongoURI: MONGO_URI,
 });
 
-client.onReady(async onlineClient => {
+client.onReady(async clientUser => {
   const timeBegin = Date.now();
   client.registerAllCommands('./commands');
+  await client.updateCommands();
   await client.updatePermissions();
 
-  onlineClient.user.setActivity({ name: 'everything', type: ActivityType.Watching });
+  clientUser.user.setActivity({ name: 'everything', type: ActivityType.Watching });
 
-  BurgerClient.logger.log(`Ready! Logged in as ${client.user?.tag} (${Math.round((Date.now() - timeBegin) * 100) / 100 / 1000}s)`);
+  BurgerClient.logger.log(`Ready! Logged in as ${clientUser.user.tag} (${Math.round((Date.now() - timeBegin) * 100) / 100 / 1000}s)`);
 });
 
 client.on('interactionCreate', async interaction => {
