@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "tsc && node --enable-source-maps ./out/index"
+    "start": "tsc && node --enable-source-maps --max-old-space-size=1024 ./out/index"
   },
   "author": "",
   "license": "ISC",
