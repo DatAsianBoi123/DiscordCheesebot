@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "build": "tsc",
-    "start": "node --enable-source-maps ./out/index"
+    "start": "node --enable-source-maps ./build/index"
   },
   "author": "",
   "license": "ISC",
