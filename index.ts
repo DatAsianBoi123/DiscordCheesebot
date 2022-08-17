@@ -8,7 +8,7 @@ for (const key of (Object.keys(config) as (keyof typeof config)[])) {
 }
 
 const client = new BurgerClient({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.DirectMessages],
+  intents: [GatewayIntentBits.Guilds],
   typescript: true,
   partials: [Partials.Channel],
   testGuild: GUILD_ID as string,
