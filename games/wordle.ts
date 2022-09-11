@@ -1,12 +1,17 @@
 import { BurgerClient } from 'burgerclient';
-import { createCanvas, loadImage } from 'canvas';
+import { createCanvas, loadImage, registerFont } from 'canvas';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, Collection, ComponentType, MessageActionRowComponentBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
 import fetch from 'node-fetch';
 import burgisBuckModel from '../models/burgis-buck-model';
 import { WordleTile } from '../typings';
+import path from 'path';
 
 export class WordleGame {
   public static readonly activeGames = new Collection<string, WordleGame>();
+
+  static {
+    registerFont(path.resolve('assets', 'fonts', 'Roboto', 'Roboto-Regular.ttf'), { family: 'Roboto' });
+  }
 
   private userId: string;
   private target: string;
@@ -214,7 +219,7 @@ export class WordleGame {
 
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.font = '30px sans-serif';
+        ctx.font = '30px "Roboto"';
         ctx.fillStyle = 'white';
         ctx.fillText(this.board[y][x].letter.toUpperCase(), canvasX, canvasY);
       }
